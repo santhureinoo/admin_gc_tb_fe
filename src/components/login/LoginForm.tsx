@@ -1,7 +1,8 @@
 import { LoginUserAction } from "@/serverActions/actions";
-import Logo from "./common/Logo";
-import ServerTextField from "./common/ServerTextField";
 
+import TextField from "../common/text_field";
+import Logo from "../common/logo";
+// import ShowPasswordIcon from "@/assets/icons/show_password_icon.svg";
 function LoginForm() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -15,17 +16,19 @@ function LoginForm() {
             Enter your account information to log in back into your account
           </p>
           <form action={LoginUserAction}>
-            <ServerTextField
+            <TextField
               textFieldHeader="Email"
               textFieldName="email"
               textFieldType="text"
               placeHolderText="Enter your email"
             />
-            <ServerTextField
+            <TextField
               textFieldHeader="Password"
               textFieldName="password"
               textFieldType="password"
               placeHolderText="Enter your password"
+              extraHintText="Forgot Password?"
+              icon={true}
             />
             <button className="btn w-full bg-primary text-white hover:bg-primary border-none">
               Log in
