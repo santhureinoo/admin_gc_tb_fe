@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ShowPasswordIcon from "@/assets/icons/show_password_icon.svg";
 import { useAppSelector } from "@/redux/store";
 // import { ReactComponent as IconType } from "react";
+
+import dynamic from "next/dynamic";
 
 type TextFieldProps = {
   textFieldHeader: string;
@@ -25,7 +27,6 @@ function TextField({
 
   const toggleShowText = () => {
     setShowText((prev) => !prev);
-    console.log("Clicked");
   };
 
   return (

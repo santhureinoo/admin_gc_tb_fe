@@ -1,7 +1,9 @@
-import { LoginUserAction } from "@/serverActions/actions";
+"use client";
 
+import { LoginUserAction } from "@/serverActions/actions";
 import TextField from "../common/text_field";
 import Logo from "../common/logo";
+
 // import ShowPasswordIcon from "@/assets/icons/show_password_icon.svg";
 function LoginForm() {
   return (

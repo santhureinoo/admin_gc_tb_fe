@@ -15,10 +15,12 @@ const config: Config = {
       },
       colors: {
         primary: {
-          DEFAULT: "#992964", // Primary color
-          light: "#3B82F6", // Lighter shade of primary
+          DEFAULT: "#992964",
+          light: "#3B82F6",
           dark: "#1E40AF",
-          pink200: "#F6CCDD", // Darker shade of primary
+          pink100: "#FBE8EF",
+          pink200: "#F6CCDD",
+          pink600: "#992964",
         },
         secondary: {
           DEFAULT: "#15B0AC", // Secondary color
