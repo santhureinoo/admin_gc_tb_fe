@@ -5,6 +5,7 @@ type SidebarOptionProps = {
   route: string;
   setActivePageFunc: (route: string) => void;
 };
+
 import { useRouter } from "next/navigation";
 
 function SidebarOption({

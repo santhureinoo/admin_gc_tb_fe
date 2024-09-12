@@ -11,7 +11,7 @@ function Sidebar() {
   const [activePage, setActivePage] = useState<string>(pathName);
 
   return (
-    <div className="h-screen w-[268px] p-3 bg-neutralGrey0 sticky top-0">
+    <div className="h-screen max-w-[268px] min-w-[268px] p-3 bg-neutralGrey0 sticky top-0">
       <Logo />
       {SIDE_BAR_OPTIONS.map((option, index) => (
         <SidebarOption

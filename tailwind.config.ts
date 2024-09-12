@@ -23,15 +23,22 @@ const config: Config = {
           pink600: "#992964",
         },
         secondary: {
-          DEFAULT: "#15B0AC", // Secondary color
-          light: "#FB923C", // Lighter shade of secondary
-          dark: "#C2410C", // Darker shade of secondary
+          DEFAULT: "#15B0AC",
+          blueGreen: "#15B0AC",
+          light: "#FB923C",
+          dark: "#C2410C",
         },
         neutralGrey0: {
           DEFAULT: "#FFFFFF",
         },
+        neutralGrey200: {
+          DEFAULT: "#F6F6F6",
+        },
         neutralGrey400: {
           DEFAULT: "#9D9D9D",
+        },
+        neutralGrey600: {
+          DEFAULT: "#555555",
         },
         neutralGrey800: {
           DEFAULT: "#171717",
