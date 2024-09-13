@@ -21,6 +21,7 @@ const config: Config = {
           pink100: "#FBE8EF",
           pink200: "#F6CCDD",
           pink600: "#992964",
+          pink800: "#31071D",
         },
         secondary: {
           DEFAULT: "#15B0AC",
@@ -33,6 +34,9 @@ const config: Config = {
         },
         neutralGrey200: {
           DEFAULT: "#F6F6F6",
+        },
+        neutralGrey500: {
+          DEFAULT: "#787878",
         },
         neutralGrey400: {
           DEFAULT: "#9D9D9D",
