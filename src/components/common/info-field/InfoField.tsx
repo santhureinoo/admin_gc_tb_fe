@@ -14,7 +14,7 @@ function InfoField({ title, value, isRequired, isFile }: infoFieldPropsTypes) {
         {title} {isRequired ? <span className="text-red-500">*</span> : ""}
       </p>
       {isFile ? (
-        <p className="flex  items-center justify-between font-[500] bg-neutralGrey200 px-[20px] py-[10px] rounded-md text-black">
+        <p className="flex  items-center justify-between font-[500] bg-neutralGrey200 px-[20px] py-[10px] rounded-md text-black max-w-[300px]">
           {value} <span className="font-[400] text-neutralGrey600">525KB</span>
         </p>
       ) : (

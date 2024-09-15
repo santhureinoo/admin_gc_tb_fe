@@ -1,12 +1,17 @@
 "use client";
 import Badge from "@/components/common/badge";
+import { CancelButton, RejectButton } from "@/components/common/buttons";
 import Dropdown from "@/components/common/dropdown";
 import { InfoCardList } from "@/components/common/info-card";
+import { ApproveModal, RejectModal } from "@/components/common/modals";
 import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
+import { MODALS } from "@/constants";
+import { openModal } from "@/utils";
 import { useEffect, useState } from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function Home() {
   const [tableDatas, setTableDatas] = useState();
@@ -54,54 +59,44 @@ export default function Home() {
                 },
                 { name: "Reject", value: "Reject" },
               ]}
+              onSelect={openModal}
             />
           </div>
           <CustomTable
             headersList={[
-              // { name: "Name", bodyKeyName: "name" },
-              // { name: "Email", bodyKeyName: "email" },
-              // { name: "Phone Number", bodyKeyName: "phoneNumber" },
-              // { name: "Applied date", bodyKeyName: "appliedDate" },
-              // { name: "Status", bodyKeyName: "status" },
-              // { name: "Job Position", bodyKeyName: "jobPosition" },
-              // { name: "View", bodyKeyName: "view" },
+              { name: "Name", bodyKeyName: "name" },
+              { name: "Email", bodyKeyName: "email" },
+              { name: "Phone Number", bodyKeyName: "phoneNumber" },
+              { name: "Applied date", bodyKeyName: "appliedDate" },
               {
-                name: "id",
-                bodyKeyName: "id",
+                name: "Status",
+                bodyKeyName: "status",
                 ComponentName: "Dropdown",
               },
               {
-                name: "Title",
-                bodyKeyName: "title",
+                name: "Job Position",
+                bodyKeyName: "jobPosition",
                 ComponentName: "Badge",
               },
-              { name: "User Id", bodyKeyName: "userId" },
+              { name: "View", bodyKeyName: "view" },
+              // {
+              //   name: "id",
+              //   bodyKeyName: "id",
+              //   ComponentName: "Dropdown",
+              // },
+              // {
+              //   name: "Title",
+              //   bodyKeyName: "title",
+              //   ComponentName: "Badge",
+              // },
+              // { name: "User Id", bodyKeyName: "userId" },
             ]}
             data={tableDatas}
           />
-
           <Pagination />
-          <button
-            className="btn"
-            onClick={() => {
-              const element = document.getElementById(
-                "my_modal_2"
-              ) as HTMLDialogElement;
-
-              element.showModal();
-            }}
-          >
-            open modal
-          </button>
-          <dialog id="my_modal_2" className="modal">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg">Hello!</h3>
-              <p className="py-4">Press ESC key or click outside to close</p>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
+          {/* Modals (modal id must be unique) */}
+          <RejectModal modalId={MODALS.rejectModalId} />
+          <ApproveModal modalId={MODALS.approveModalId} />
         </div>
       </div>
     </div>

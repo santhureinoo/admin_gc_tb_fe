@@ -8,7 +8,15 @@ import { usePathname } from "next/navigation";
 
 function Sidebar() {
   const pathName = usePathname();
+
   const [activePage, setActivePage] = useState<string>(pathName);
+
+  useEffect(() => {
+    if (pathName.includes("application-info")) {
+      // *** Job applications ****
+      setActivePage(SIDE_BAR_OPTIONS[0].route);
+    }
+  }, [pathName]);
 
   return (
     <div className="h-screen max-w-[268px] min-w-[268px] p-3 bg-neutralGrey0 sticky top-0">

@@ -38,8 +38,8 @@ function ApplicatoinInfo() {
         <p className="text-black font-[400] text-[14px]">
           Job Applications / Applicant's info
         </p>
-        <div className="bg-white p-[24px] my-[16px] min-h-screen">
-          <div className="sticky top-0 bg-white">
+        <div className="bg-white pt-[10px] px-[20px] my-[16px] min-h-screen">
+          <div className="sticky top-0 pt-[10px] bg-white">
             <div className="flex items-center justify-between">
               <div>
                 <Header title="Mark Simpson" />
@@ -88,7 +88,6 @@ function ApplicatoinInfo() {
               </nav>
             </ScrollSpy>
           </div>
-
           <ApplicantDetail />
           <WorkerDetail />
           <Certificate />

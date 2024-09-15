@@ -1,26 +1,28 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ShowPasswordIcon from "@/assets/icons/show_password_icon.svg";
+import { FieldError } from "react-hook-form";
 
 type TextFieldProps = {
   textFieldHeader: string;
-  textFieldName: string;
   textFieldType: string;
   placeHolderText: string;
   extraHintText?: string;
   icon?: any;
+  register: any;
+  error?: FieldError;
 };
 
 function TextField({
   textFieldHeader,
-  textFieldName,
   textFieldType,
   placeHolderText,
   extraHintText,
   icon,
+  register,
+  error,
 }: TextFieldProps) {
   const [showText, setShowText] = useState<boolean>(false);
-
   const toggleShowText = () => {
     setShowText((prev) => !prev);
   };
@@ -30,7 +32,7 @@ function TextField({
       <h3 className="text-neutralGrey800 font-[500]">{textFieldHeader}</h3>
       <label className="input flex items-center bg-neutralGrey0 p-0 border-neutralGrey400">
         <input
-          name={textFieldName}
+          {...register}
           type={
             textFieldType === "password"
               ? showText
@@ -47,6 +49,7 @@ function TextField({
       </label>
 
       <p className="text-end font-light">{extraHintText}</p>
+      {error && <p className="text-red-500">{error.message}</p>}
     </div>
   );
 }

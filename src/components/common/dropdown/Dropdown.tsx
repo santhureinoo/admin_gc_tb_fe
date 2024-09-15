@@ -1,4 +1,5 @@
 "use client";
+import { MODALS } from "@/constants";
 import React, { useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 
@@ -11,9 +12,10 @@ type DropdownProps = {
   dropdownList: DropdownValue[];
   value: string;
   position?: string;
+  onSelect?: (value: string) => void;
 };
 
-function Dropdown({ value, dropdownList, position }: DropdownProps) {
+function Dropdown({ value, dropdownList, position, onSelect }: DropdownProps) {
   const [selectedName, setSelectedName] = useState<string>(value);
 
   const handleClick = (selectedValue: string) => {
@@ -23,6 +25,14 @@ function Dropdown({ value, dropdownList, position }: DropdownProps) {
       elem?.blur();
     }
     setSelectedName(selectedValue);
+    if (onSelect !== undefined) {
+      if (selectedValue == "Approve") {
+        onSelect(MODALS.approveModalId);
+      }
+      if (selectedValue == "Reject") {
+        onSelect(MODALS.rejectModalId);
+      }
+    }
   };
 
   return (

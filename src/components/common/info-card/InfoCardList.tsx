@@ -4,7 +4,7 @@ import ShowPasswordIcon from "@/assets/icons/show_password_icon.svg";
 
 function InfoCardList() {
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="grid grid-cols-4 gap-2 my-[10px]">
       <InfoCard title="Applies today" infoCount="30" icon={ShowPasswordIcon} />
       <InfoCard
         title="Pending applicants"

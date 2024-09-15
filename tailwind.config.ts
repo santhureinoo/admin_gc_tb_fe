@@ -29,6 +29,20 @@ const config: Config = {
           light: "#FB923C",
           dark: "#C2410C",
         },
+        neutralGrey: {
+          DEFAULT: "#FFFFFF",
+          grey200: "#F6F6F6",
+          grey400: "#9D9D9D",
+          grey600: "#555555",
+          grey700: "#353535",
+          grey800: "#171717",
+        },
+        error: {
+          error500: "#EF4444",
+        },
+        success: {
+          success400: "#22C55E",
+        },
         neutralGrey0: {
           DEFAULT: "#FFFFFF",
         },
@@ -43,6 +57,9 @@ const config: Config = {
         },
         neutralGrey600: {
           DEFAULT: "#555555",
+        },
+        neutralGrey700: {
+          DEFAULT: "#353535",
         },
         neutralGrey800: {
           DEFAULT: "#171717",
