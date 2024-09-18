@@ -1,13 +1,11 @@
 "use client";
 
-import { LoginUserAction } from "@/serverActions/actions";
 import Logo from "../common/logo";
 import { TextField } from "../common/text-field";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 
 type loginFormData = {
   email: string;
@@ -35,7 +33,9 @@ function LoginForm() {
 
   const handleLogin = (data: loginFormData) => {
     const { email, password } = data;
-    console.log(email, password);
+    if (Object.keys(errors).length === 0) {
+      router.push("/");
+    }
   };
 
   return (
@@ -66,7 +66,7 @@ function LoginForm() {
               register={register("password")}
               error={errors.password}
             />
-            <button className="btn w-full bg-primary text-white hover:bg-primary border-none">
+            <button className="btn w-full bg-primary text-white hover:bg-primary border-none animate-none">
               Log in
             </button>
           </form>

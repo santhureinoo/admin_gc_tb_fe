@@ -22,6 +22,6 @@ export const SIDE_BAR_OPTIONS = [
     id: 3,
     name: "Logout",
     icon: ShowPasswordIcon,
-    route: "/jobApplications",
+    route: "/login",
   },
 ];

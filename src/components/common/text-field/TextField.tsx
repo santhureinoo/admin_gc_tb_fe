@@ -30,7 +30,11 @@ function TextField({
   return (
     <div className="flex flex-col gap-2 my-[20px]">
       <h3 className="text-neutralGrey800 font-[500]">{textFieldHeader}</h3>
-      <label className="input flex items-center bg-neutralGrey0 p-0 border-neutralGrey400">
+      <label
+        className={`input flex items-center bg-neutralGrey0 p-0 ${
+          error ? "border-red-500" : "border-neutralGrey400"
+        } `}
+      >
         <input
           {...register}
           type={
