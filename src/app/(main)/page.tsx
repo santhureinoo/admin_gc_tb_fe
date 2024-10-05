@@ -1,20 +1,50 @@
 "use client";
-import Badge from "@/components/common/badge";
-import { CancelButton, RejectButton } from "@/components/common/buttons";
 import Dropdown from "@/components/common/dropdown";
 import { InfoCardList } from "@/components/common/info-card";
-import { ApproveModal, RejectModal } from "@/components/common/modals";
 import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
-import { MODALS } from "@/constants";
 import { openModal } from "@/utils";
 import { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
 
 export default function Home() {
+  const [testDatas, setTestDatas] = useState([
+    {
+      name: "b",
+      email: "b@gmail.com",
+      phoneNumber: "+66 123123",
+      appliedDate: "22/12/2024",
+      status: "Rejected",
+      jobPosition: "dummy",
+    },
+    {
+      name: "a",
+      email: "a@gmail.com",
+      phoneNumber: "+66 3333112",
+      appliedDate: "22/12/2024",
+      status: "Rejected",
+      jobPosition: "dummy",
+    },
+    {
+      name: "c",
+      email: "c@gmail.com",
+      phoneNumber: "+66 444444111",
+      appliedDate: "22/12/2024",
+      status: "Rejected",
+      jobPosition: "dummy",
+    },
+    {
+      name: "d",
+      email: "d@gmail.com",
+      phoneNumber: "+66 55512312",
+      appliedDate: "22/12/2024",
+      status: "Rejected",
+      jobPosition: "dummy",
+    },
+  ]);
   const [tableDatas, setTableDatas] = useState();
+
   const fetchRandomData = async () => {
     fetch("https://jsonplaceholder.typicode.com/albums")
       .then((response) => response.json())
@@ -46,28 +76,64 @@ export default function Home() {
             ]}
             hasCount
           />
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
             <SearchTextField />
-            <Dropdown
-              position={"dropdown-end"}
-              value="Move To"
-              dropdownList={[
-                { name: "Approve", value: "Approve" },
-                {
-                  name: "Missing Info",
-                  value: "Missing Info",
-                },
-                { name: "Reject", value: "Reject" },
-              ]}
-              onSelect={openModal}
-            />
+            <div className="flex items-center gap-3">
+              <Dropdown
+                position={"dropdown-end"}
+                value="All applicants"
+                dropdownList={[
+                  { name: "All applicants", value: "All applicants" },
+                  {
+                    name: "Australian Residents",
+                    value: "Australian Residents",
+                  },
+                  {
+                    name: "Non-Australian Residents",
+                    value: "Non Australian Residents",
+                  },
+                ]}
+                onSelect={openModal}
+              />
+              <Dropdown
+                position={"dropdown-end"}
+                value="Move To"
+                dropdownList={[
+                  { name: "Approve", value: "Approve" },
+                  {
+                    name: "Missing Info",
+                    value: "Missing Info",
+                  },
+                  { name: "Reject", value: "Reject" },
+                ]}
+                onSelect={openModal}
+              />
+            </div>
           </div>
           <CustomTable
             headersList={[
-              { name: "Name", bodyKeyName: "name" },
-              { name: "Email", bodyKeyName: "email" },
-              { name: "Phone Number", bodyKeyName: "phoneNumber" },
-              { name: "Applied date", bodyKeyName: "appliedDate" },
+              {
+                name: "Name",
+                bodyKeyName: "name",
+                sortable: true,
+                sortableType: "string",
+              },
+              {
+                name: "Email",
+                bodyKeyName: "email",
+                sortable: true,
+                sortableType: "number",
+              },
+              {
+                name: "Phone Number",
+                bodyKeyName: "phoneNumber",
+                sortable: true,
+              },
+              {
+                name: "Applied date",
+                bodyKeyName: "appliedDate",
+                sortable: true,
+              },
               {
                 name: "Status",
                 bodyKeyName: "status",
@@ -78,7 +144,7 @@ export default function Home() {
                 bodyKeyName: "jobPosition",
                 ComponentName: "Badge",
               },
-              { name: "View", bodyKeyName: "view" },
+              // { name: "View", bodyKeyName: "view" },
               // {
               //   name: "id",
               //   bodyKeyName: "id",
@@ -91,12 +157,14 @@ export default function Home() {
               // },
               // { name: "User Id", bodyKeyName: "userId" },
             ]}
-            data={tableDatas}
+            data={testDatas}
+            sortingOnClick={(data) => {
+              const newData = data;
+              console.log("*** new Data**** ", newData);
+              setTestDatas(() => newData);
+            }}
           />
           <Pagination />
-          {/* Modals (modal id must be unique) */}
-          <RejectModal modalId={MODALS.rejectModalId} />
-          <ApproveModal modalId={MODALS.approveModalId} />
         </div>
       </div>
     </div>

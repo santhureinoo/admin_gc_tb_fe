@@ -38,7 +38,9 @@ const config: Config = {
           grey800: "#171717",
         },
         error: {
+          error200: "#FECACA",
           error500: "#EF4444",
+          error600: "#B91C1C",
         },
         success: {
           success400: "#22C55E",

@@ -1,8 +1,9 @@
 import React from "react";
-
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight} from "react-icons/md";
 function Pagination() {
   return (
-    <div className="join flex items-end justify-end mr-[30px] my-[10px]">
+    <div className="join flex items-center justify-end mr-[30px] my-[10px]">
+      <MdKeyboardArrowLeft className="w-[25px] h-[25px] cursor-pointer"/>
       {new Array(5).fill("").map((el, index) => (
         <p
           key={index}
@@ -14,7 +15,10 @@ function Pagination() {
         >
           {index + 1}
         </p>
+
+
       ))}
+            <MdKeyboardArrowRight className="w-[25px] h-[25px] cursor-pointer"/>
     </div>
   );
 }

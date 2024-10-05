@@ -22,7 +22,7 @@ function StatusBarList({
   const [statusActiveName, setStatusActiveName] = useState<string>(activeName);
 
   return (
-    <div className="flex ">
+    <div className="flex  max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-380px)] overflow-x-auto">
       {statusBarList.map((statusBar, index) => (
         <StatusBar
           key={index}

@@ -9,7 +9,7 @@ function Profile() {
       className="border-b-[1px] border-b-neutralGrey300 py-[30px]"
     >
       <Header title="Profile" />
-      <div className="grid grid-cols-3 gap-[24px] mt-[24px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[24px]">
         <InfoField
           title="Languages"
           value="English, Arabic, Cantonese, Chinese, Japanese, Taiwanese"

@@ -61,7 +61,7 @@ function ApplicatoinInfo() {
               />
             </div>
             {/* Job position list */}
-            <div className="flex gap-2 mt-2 mb-[20px]">
+            <div className="flex flex-wrap gap-2 mt-2 mb-[20px]">
               <Badge name="Nurse" />
               <Badge name="Enrolled Nurse" />
               <Badge name="Community Services Assistant (CSA/PCA)" />

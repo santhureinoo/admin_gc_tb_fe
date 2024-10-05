@@ -1,12 +1,13 @@
 "use client";
 
-import { ActionButton, CancelButton } from "@/components/common/buttons";
+import { CancelButton } from "@/components/common/buttons";
 import Logo from "@/components/common/logo";
 import { TextAreaField } from "@/components/common/text-field";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { showToast } from "@/utils";
 
 type resubmitEmailFormData = {
   message: string;
@@ -32,6 +33,17 @@ function ResubmitEmailForm() {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
+      <button
+        onClick={() => {
+          showToast(
+            "success",
+            "This applicant has been moved to missing infos by the admin."
+          );
+        }}
+      >
+        Click
+      </button>
+
       <form
         onSubmit={handleSubmit(handleLogin)}
         className="flex flex-col shadow-md p-[24px] rounded-md w-[50vw]"

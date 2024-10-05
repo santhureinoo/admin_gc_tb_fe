@@ -40,7 +40,7 @@ function Dropdown({ value, dropdownList, position, onSelect }: DropdownProps) {
       <div
         tabIndex={0}
         role="button"
-        className="btn bg-neutralGrey200 hover:bg-neutralGrey200 animate-none border-none"
+        className="btn bg-transparent hover:bg-neutralGrey200 animate-none border border-neutralGrey-grey400"
       >
         <div className="flex gap-2">
           {selectedName} <AiFillCaretDown />

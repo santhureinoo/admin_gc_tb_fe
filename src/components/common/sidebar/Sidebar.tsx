@@ -18,8 +18,10 @@ function Sidebar() {
     }
   }, [pathName]);
 
+  const handleLogout = () => {};
+
   return (
-    <div className="h-screen max-w-[268px] min-w-[268px] p-3 bg-neutralGrey0 sticky top-0">
+    <div className="h-screen flex flex-col items-center md:items-start p-3 bg-neutralGrey0 sticky top-0 max-w-[90px] min-w-[90px] md:max-w-[268px] md:min-w-[268px]">
       <Logo />
       {SIDE_BAR_OPTIONS.map((option, index) => (
         <SidebarOption

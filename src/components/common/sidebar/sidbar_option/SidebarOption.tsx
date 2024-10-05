@@ -6,6 +6,8 @@ type SidebarOptionProps = {
   setActivePageFunc: (route: string) => void;
 };
 
+import { MODALS } from "@/constants";
+import { openModal } from "@/utils";
 import { useRouter } from "next/navigation";
 
 function SidebarOption({
@@ -18,6 +20,11 @@ function SidebarOption({
   const router = useRouter();
 
   const handleNavigate = () => {
+    if (name == "Logout") {
+      openModal(MODALS.logoutModalId);
+      setActivePageFunc(route);
+      return;
+    }
     router.push(route);
     setActivePageFunc(route);
   };
@@ -25,7 +32,7 @@ function SidebarOption({
   return (
     <div
       onClick={handleNavigate}
-      className={`flex items-center gap-2 mb-[10px] px-[24px] py-[12px] rounded-md cursor-pointer ${
+      className={`w-full flex items-center gap-2 mb-[10px] px-[24px] py-[12px] rounded-md cursor-pointer ${
         isActive ? "bg-primary-pink100" : "bg-transparent"
       } 
       `}
@@ -36,7 +43,7 @@ function SidebarOption({
         } `}
       />
       <p
-        className={`text-[14px] ${
+        className={`text-[14px] hidden md:block ${
           isActive
             ? "font-[500] text-primary-pink600"
             : "font-[300] text-neutralGrey800"

@@ -15,7 +15,7 @@ function IDReview() {
           Primary documents (Total points -{" "}
           <span className="text-primary-pink600">70</span> points)
         </p>
-        <div className="grid grid-cols-3 gap-[24px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
           <InfoField
             title="Foreign Passport (Current)"
             value="my certificate.jpg"
@@ -86,7 +86,7 @@ function IDReview() {
           Secondary documents (Total points -{" "}
           <span className="text-primary-pink600">70</span> points)
         </p>
-        <div className="grid grid-cols-3 gap-[24px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
           <InfoField
             title="Department of Veterans' Affairs (DVA) Card"
             value="my certificate.jpg"

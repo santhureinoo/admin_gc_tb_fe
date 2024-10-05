@@ -25,7 +25,7 @@ function StatusBar({
       } `}
     >
       <h3
-        className={`text-[16px] leading-[26px] ${
+        className={`text-[16px] leading-[26px] whitespace-nowrap ${
           isActive == true
             ? "font-[500] text-neutralGrey800"
             : "font-[400] text-black"

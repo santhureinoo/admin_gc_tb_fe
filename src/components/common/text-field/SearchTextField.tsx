@@ -2,7 +2,7 @@ import React from "react";
 
 function SearchTextField() {
   return (
-    <label className="input bg-neutralGrey0 input-bordered flex items-center gap-2 w-[400px] my-[20px]">
+    <label className="input bg-neutralGrey0 border-neutralGrey-grey400 input-bordered flex items-center gap-2 w-[400px] my-[20px]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
