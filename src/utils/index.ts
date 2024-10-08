@@ -61,3 +61,10 @@ export const sortByProperty = (
 //       return toast(content, optionsToApply);
 //   }
 // };
+
+export const getPaginationTotalPages = (
+  dataCounts: number,
+  pageSize: number
+) => {
+  return Math.ceil(dataCounts / pageSize);
+};

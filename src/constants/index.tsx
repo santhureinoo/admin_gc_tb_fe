@@ -2,6 +2,14 @@ import { IoMailOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { AiOutlineFileExcel } from "react-icons/ai";
+
+export type APPLICATIONS_STATUS =
+  | "PENDING"
+  | "MISSING_INFO"
+  | "REUPLOADED"
+  | "APPROVED"
+  | "INTERVIEW";
+
 export const MODALS = {
   rejectModalId: "modal_1",
   approveModalId: "modal_2",

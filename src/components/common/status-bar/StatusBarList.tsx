@@ -2,34 +2,41 @@
 
 import React, { useState } from "react";
 import StatusBar from "./StatusBar";
+import { APPLICATIONS_STATUS } from "@/constants";
 
 type StatusBarValue = {
   name: string;
-  value: string;
+  value: APPLICATIONS_STATUS;
+  count?: number;
 };
 
 type StatusBarListProps = {
-  activeName: string; // to check status bar is active or not
+  activeValue: string; // to check status bar is active or not
   statusBarList: StatusBarValue[];
   hasCount: boolean; // to check status bar has counts
+  setActiveStatusFunc: (statusBarName: APPLICATIONS_STATUS) => void;
+  setDataCounts: (count: number) => void;
 };
 
 function StatusBarList({
-  activeName,
+  activeValue,
   statusBarList,
   hasCount,
+  setActiveStatusFunc,
+  setDataCounts,
 }: StatusBarListProps) {
-  const [statusActiveName, setStatusActiveName] = useState<string>(activeName);
-
   return (
     <div className="flex  max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-380px)] overflow-x-auto">
       {statusBarList.map((statusBar, index) => (
         <StatusBar
           key={index}
           statusBarName={statusBar.name}
-          setActiveStatusFunc={() => {}}
-          isActive={index == 0}
+          statusBarValue={statusBar.value}
+          setActiveStatusFunc={setActiveStatusFunc}
+          isActive={activeValue == statusBar.value}
           hasCount={hasCount}
+          count={statusBar.count}
+          setDataCounts={setDataCounts}
         />
       ))}
     </div>

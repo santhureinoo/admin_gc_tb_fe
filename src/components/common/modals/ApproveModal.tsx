@@ -1,13 +1,23 @@
+"use client";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { ApproveButton, CancelButton, RejectButton } from "../buttons";
 import { closeModal } from "@/utils";
+import { useAppSelector } from "@/redux/store";
 
 type ApproveModalProps = {
   modalId: string;
 };
 
 function ApproveModal({ modalId }: ApproveModalProps) {
+  const { selectedApplications } = useAppSelector(
+    (state) => state.selectedApplications
+  );
+
+  const handleApprove = () => {
+    console.log(selectedApplications);
+  };
+
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box bg-white">
@@ -26,7 +36,7 @@ function ApproveModal({ modalId }: ApproveModalProps) {
         </p>
         <div className="flex items-center justify-end mt-[24px] gap-3">
           <CancelButton onClick={() => closeModal(modalId)} />
-          <ApproveButton />
+          <ApproveButton title="Approve All" onClick={handleApprove} />
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">

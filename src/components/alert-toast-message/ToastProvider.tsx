@@ -1,5 +1,6 @@
 "use client";
 
+import ReduxProvider from "@/redux/Provider";
 // import "react-toastify/dist/ReactToastify.css";
 import "../../app/globals.css";
 // import { ToastContainer } from "react-toastify";
@@ -12,7 +13,7 @@ interface ToastProviderProps {
 
 export default function ToastProvider({ children }: ToastProviderProps) {
   return (
-    <div>
+    <ReduxProvider>
       {children}
       {/* All Modals */}
       {/* Modals (modal id must be unique) */}
@@ -20,6 +21,6 @@ export default function ToastProvider({ children }: ToastProviderProps) {
       <RejectModal modalId={MODALS.rejectModalId} />
       <ApproveModal modalId={MODALS.approveModalId} />
       {/* <ToastContainer /> */}
-    </div>
+    </ReduxProvider>
   );
 }

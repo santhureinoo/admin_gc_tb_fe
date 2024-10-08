@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-
 :root {
   --toastify-icon-color-success: #4caf50;
   /* Green for success */

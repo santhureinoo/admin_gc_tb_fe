@@ -1,10 +1,14 @@
+import { APPLICATIONS_STATUS } from "@/constants";
 import React from "react";
 
 type StatusBarProps = {
   statusBarName: string;
   isActive: boolean;
-  setActiveStatusFunc: (statusBarName: string) => void;
+  statusBarValue: APPLICATIONS_STATUS;
+  setActiveStatusFunc: (statusBarValue: APPLICATIONS_STATUS) => void;
+  setDataCounts: (count: number) => void;
   hasCount?: boolean;
+  count?: number;
 };
 
 function StatusBar({
@@ -12,9 +16,13 @@ function StatusBar({
   isActive,
   setActiveStatusFunc,
   hasCount,
+  count,
+  statusBarValue,
+  setDataCounts,
 }: StatusBarProps) {
   const handleChangeActiveStaus = () => {
-    setActiveStatusFunc(statusBarName);
+    setActiveStatusFunc(statusBarValue);
+    setDataCounts(count as number);
   };
 
   return (
@@ -41,7 +49,7 @@ function StatusBar({
               : "bg-neutralGrey200 font-[400]"
           } `}
         >
-          21
+          {count}
         </p>
       ) : null}
     </div>
