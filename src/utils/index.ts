@@ -6,10 +6,6 @@ export const createFileFromBlob = (
   fileName: string,
   fileType: any
 ) => {
-  console.log("createFileFromBlob trigger");
-  console.log(blob);
-  console.log(fileName);
-  console.log(fileType);
   const file = new File([blob], fileName, { type: fileType });
   return file;
 };

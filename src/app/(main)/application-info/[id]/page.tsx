@@ -34,7 +34,6 @@ function ApplicatoinInfo() {
     const data = await getApplicationDetails({
       caseId: parseInt(id as string),
     });
-    console.log("applicatoin data", data);
     setApplicationDetails(data);
   };
 

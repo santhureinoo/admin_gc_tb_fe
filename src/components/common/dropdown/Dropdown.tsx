@@ -182,6 +182,14 @@ function Dropdown({
         tabIndex={0}
         className="dropdown-content menu bg-white rounded-box z-50 w-52 p-2 shadow"
       >
+        {/* {dropdownList
+          .filter((el) => el.value != value && el.value != "PENDING")
+          .map((ddList, index) => (
+            <li key={index} onClick={() => handleClick(ddList.value)}>
+              <a>{ddList.name}</a>
+            </li>
+          ))} */}
+
         {dropdownList.map((ddList, index) => (
           <li key={index} onClick={() => handleClick(ddList.value)}>
             <a>{ddList.name}</a>

@@ -88,7 +88,6 @@ function CheckDetail() {
     (state) => state.selectedApplications
   );
   function getSelectedAndMissingFields(title: string, fields: any) {
-    // console.log("** fields ***", fields);
     // Extract the selected fields (those that have a true value)
     const selectedFields = fields
       .filter((field: any) => Object.values(field)[0] === true)

@@ -37,15 +37,11 @@ function InfoField({
 
     const s3ImageResponse = await axios(response?.fileDetails[0]?.s3Url);
 
-    console.log("*** s3 image response ***", s3ImageResponse?.data);
-
     const fileResponse = createFileFromBlob(
       s3ImageResponse?.data,
       fileName,
       s3FileType
     );
-
-    console.log("**** file ****", fileResponse);
 
     handleDownload(fileResponse, s3FileType);
   };

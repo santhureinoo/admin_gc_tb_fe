@@ -67,7 +67,7 @@ export default function Home() {
 
   const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
-    console.log(duplicateId);
+
     if (duplicateId == undefined) {
       dispatch(addApplications(id));
     }
@@ -95,7 +95,7 @@ export default function Home() {
   useEffect(() => {
     fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
-  console.log("applications", applications);
+
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
