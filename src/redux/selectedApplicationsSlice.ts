@@ -2,21 +2,36 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type selectedApplicationsType = {
   selectedApplications: number[];
+  isStatusChanged: boolean;
+  selectedApplicantUserId: string;
 };
 
 const initialState: selectedApplicationsType = {
   selectedApplications: [],
+  isStatusChanged: false,
+  selectedApplicantUserId: "",
 };
 
 export const selectedApplications = createSlice({
   name: "selectedApplications",
   initialState,
   reducers: {
+    setSelectedApplicantUserId: (state, action: PayloadAction<string>) => {
+      state.selectedApplicantUserId = action.payload;
+    },
+    addSingleApplications: (state, action: PayloadAction<number>) => {
+      state.selectedApplications = [action.payload];
+    },
     addApplications: (state, action: PayloadAction<number>) => {
       state.selectedApplications = [
         ...state.selectedApplications,
         action.payload,
       ];
+    },
+    // this is for when we click the table header checkbox
+    addAllApplications: (state, action: PayloadAction<number[]>) => {
+      const allIds = action.payload;
+      state.selectedApplications = allIds;
     },
     removeApplications: (state, action: PayloadAction<number>) => {
       const copiedApplications = [...state.selectedApplications];
@@ -25,13 +40,20 @@ export const selectedApplications = createSlice({
       );
       state.selectedApplications = filterdApplications;
     },
-    clearApplications: (state, action: PayloadAction<number>) => {
+    clearApplications: (state) => {
       state.selectedApplications = [];
+      state.isStatusChanged = !state.isStatusChanged;
     },
   },
 });
 
-export const { addApplications, removeApplications, clearApplications } =
-  selectedApplications.actions;
+export const {
+  addApplications,
+  removeApplications,
+  clearApplications,
+  addAllApplications,
+  addSingleApplications,
+  setSelectedApplicantUserId,
+} = selectedApplications.actions;
 
 export default selectedApplications.reducer;

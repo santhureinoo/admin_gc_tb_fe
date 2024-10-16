@@ -1,14 +1,20 @@
 "use client";
-import { getApplications, getDashboarSummary } from "@/actions/applications";
+import {
+  getApplications,
+  getDashboarSummary,
+  updateApplicationsStatus,
+} from "@/actions/applications";
 import Dropdown from "@/components/common/dropdown";
 import { InfoCardList } from "@/components/common/info-card";
 import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
-import { APPLICATIONS_STATUS } from "@/constants";
+import { APPLICATIONS_STATUS, PAGINATION_PER_PAGE } from "@/constants";
 import {
+  addAllApplications,
   addApplications,
+  clearApplications,
   removeApplications,
 } from "@/redux/selectedApplicationsSlice";
 import { useAppSelector } from "@/redux/store";
@@ -23,10 +29,12 @@ export default function Home() {
   const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] =
     useState<APPLICATIONS_STATUS>("PENDING");
+  const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
+  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
   // redux
   const dispatch = useDispatch();
-  const { selectedApplications } = useAppSelector(
+  const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
 
@@ -35,11 +43,11 @@ export default function Home() {
     const data = await getApplications({
       filter: {
         status: currentStatus, // application status [PENDING, MISSING_INFO, REUPLOADED, APPROVED, INTERVIEW]
-        isAuResident: null, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
+        isAuResident: isAuResident, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
       },
       page: {
-        currentPage: 1, // current user seleced page
-        pageSize: 1, // number of applications to be fetch per page
+        currentPage: currentSelectedPage, // current user seleced page
+        pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
       },
       search: searchApplicationText, // seaerch by FirstName, LastName, Phone, AppliedPosition
     });
@@ -49,15 +57,17 @@ export default function Home() {
   const fetchDashboardSummary = async () => {
     const data = await getDashboarSummary({
       filter: {
-        isAuResident: null, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
+        isAuResident: isAuResident, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
       },
       search: "", // seaerch by FirstName, LastName, Phone, AppliedPosition
     });
     setDashboardSummary(data);
+    setDataCounts(data?.FILTERED_PENDING);
   };
 
   const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
+    console.log(duplicateId);
     if (duplicateId == undefined) {
       dispatch(addApplications(id));
     }
@@ -66,11 +76,26 @@ export default function Home() {
     }
   };
 
+  const handleClickAllCheckBox = () => {
+    const allApplicationsId = applications.map((app: any) => app.applicationId);
+
+    if (selectedApplications.length > 0) {
+      dispatch(clearApplications());
+    } else {
+      dispatch(addAllApplications(allApplicationsId));
+    }
+  };
+
   useEffect(() => {
     fetchDashboardApplications();
     fetchDashboardSummary();
-  }, [currentStatus, searchApplicationText]);
+    // dispatch(clearApplications());
+  }, [searchApplicationText, isStatusChanged, isAuResident]);
 
+  useEffect(() => {
+    fetchDashboardApplications();
+  }, [currentStatus, currentSelectedPage]);
+  console.log("applications", applications);
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
@@ -113,6 +138,7 @@ export default function Home() {
             hasCount
             setActiveStatusFunc={(status) => {
               setCurrentStatus(status);
+              setCurrentSelectedPage(1); // This is for to reset current Selected pagination to first page (when we change active status)
             }}
             setDataCounts={(count) => {
               setDataCounts(count);
@@ -137,7 +163,18 @@ export default function Home() {
                     value: "Non Australian Residents",
                   },
                 ]}
-                onSelect={openModal}
+                onSelect={(selectedValue) => {
+                  if (selectedValue == "All applicants") {
+                    setIsAuResident(null);
+                  }
+                  if (selectedValue == "Australian Residents") {
+                    setIsAuResident(true);
+                  }
+                  if (selectedValue == "Non Australian Residents") {
+                    setIsAuResident(false);
+                  }
+                }}
+                notStatus
               />
               {/* Move to */}
               {selectedApplications.length > 0 ? (
@@ -147,12 +184,12 @@ export default function Home() {
                   value=""
                   dropdownList={[
                     // { name: "Move To", value: "Move to" },
-                    { name: "Approve", value: "Approve" },
+                    { name: "Approve", value: "APPROVED" },
                     {
-                      name: "Missing Info",
-                      value: "Missing Info",
+                      name: "Interview",
+                      value: "INTERVIEW",
                     },
-                    { name: "Reject", value: "Reject" },
+                    { name: "Reject", value: "REJECT" },
                   ]}
                   onSelect={openModal}
                 />
@@ -160,7 +197,7 @@ export default function Home() {
             </div>
           </div>
           <CustomTable
-            selectedRowsCount={selectedApplications.length}
+            selectedRowsId={selectedApplications}
             headersList={[
               {
                 name: "Name",
@@ -201,8 +238,13 @@ export default function Home() {
               setApplications(() => newData);
             }}
             checkBoxOnClick={handleClickCheckBox}
+            allCheckBoxOnClick={handleClickAllCheckBox}
           />
-          <Pagination totalCounts={dataCounts} />
+          <Pagination
+            totalCounts={dataCounts}
+            setCurrentSelectedPage={setCurrentSelectedPage}
+            currentSelectedPage={currentSelectedPage}
+          />
         </div>
       </div>
     </div>

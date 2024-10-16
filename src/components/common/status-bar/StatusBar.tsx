@@ -21,8 +21,8 @@ function StatusBar({
   setDataCounts,
 }: StatusBarProps) {
   const handleChangeActiveStaus = () => {
-    setActiveStatusFunc(statusBarValue);
     setDataCounts(count as number);
+    setActiveStatusFunc(statusBarValue);
   };
 
   return (

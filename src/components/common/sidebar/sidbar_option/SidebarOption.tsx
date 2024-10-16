@@ -1,3 +1,5 @@
+"use client";
+
 type SidebarOptionProps = {
   icon: any;
   name: string;

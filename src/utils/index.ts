@@ -1,5 +1,19 @@
 // import { toast, ToastContent, ToastOptions, Slide, Id } from "react-toastify";
 
+// to get file from s3
+export const createFileFromBlob = (
+  blob: any,
+  fileName: string,
+  fileType: any
+) => {
+  console.log("createFileFromBlob trigger");
+  console.log(blob);
+  console.log(fileName);
+  console.log(fileType);
+  const file = new File([blob], fileName, { type: fileType });
+  return file;
+};
+
 export const openModal = (modalId: string) => {
   const element = document.getElementById(modalId) as HTMLDialogElement;
   element.showModal();
@@ -26,6 +40,30 @@ export const sortByProperty = (
 
   return sortedArray;
 };
+
+export const dateFormat = (dat: string) => {
+  const date = new Date(dat);
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
+  const year = date.getFullYear();
+
+  const formattedDate = `${day}/${month}/${year}`;
+
+  return formattedDate ?? "";
+};
+
+export async function getEncryptedToken(token: string) {
+  return token;
+}
+
+export async function getDecryptedAccessToken(token: string) {
+  return token;
+}
+
+export async function getDecryptedRefreshToken(token: string) {
+  return token;
+}
 
 // **** For toast messages ****
 // export const defaultToastOptions: ToastOptions = {

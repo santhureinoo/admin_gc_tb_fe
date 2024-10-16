@@ -4,6 +4,10 @@ import { AiOutlineClose } from "react-icons/ai";
 import { ApproveButton, CancelButton, RejectButton } from "../buttons";
 import { closeModal } from "@/utils";
 import { useAppSelector } from "@/redux/store";
+import { updateApplicationsStatus } from "@/actions/applications";
+import { useDispatch } from "react-redux";
+import { clearApplications } from "@/redux/selectedApplicationsSlice";
+import { setAlert } from "@/redux/alertSlice";
 
 type ApproveModalProps = {
   modalId: string;
@@ -14,8 +18,31 @@ function ApproveModal({ modalId }: ApproveModalProps) {
     (state) => state.selectedApplications
   );
 
-  const handleApprove = () => {
-    console.log(selectedApplications);
+  const dispatch = useDispatch();
+  const handleApprove = async () => {
+    try {
+      await updateApplicationsStatus({
+        action: "APPROVED",
+        application_id_list: selectedApplications,
+      });
+      dispatch(clearApplications());
+      closeModal(modalId);
+      dispatch(
+        setAlert({
+          alertType: "success",
+          alertMessage: `This applicant has been approved by the admin, now you can move this user to interview phase.`,
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setAlert({
+          alertType: "error",
+          alertMessage: `Something went wrong.`,
+        })
+      );
+      closeModal(modalId);
+      dispatch(clearApplications());
+    }
   };
 
   return (

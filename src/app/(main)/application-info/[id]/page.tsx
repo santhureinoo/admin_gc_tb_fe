@@ -4,7 +4,7 @@ import Badge from "@/components/common/badge";
 import Dropdown from "@/components/common/dropdown";
 import Header from "@/components/common/header";
 import ScrollSpy from "react-scrollspy-navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ApplicantDetail,
@@ -17,8 +17,31 @@ import {
   Profile,
   WorkerDetail,
 } from "@/components/applicant-info";
+import { dateFormat, openModal } from "@/utils";
+import { useParams } from "next/navigation";
+import { getApplicationDetails } from "@/actions/applications";
+import { useAppSelector } from "@/redux/store";
+import { getS3DownloadUrls } from "@/actions/aws";
 
 function ApplicatoinInfo() {
+  const { id } = useParams();
+  const { selectedApplications } = useAppSelector(
+    (state) => state.selectedApplications
+  );
+  const [applicationDetails, setApplicationDetails] = useState<any>({});
+
+  const fetchApplicationDetails = async () => {
+    const data = await getApplicationDetails({
+      caseId: parseInt(id as string),
+    });
+    console.log("applicatoin data", data);
+    setApplicationDetails(data);
+  };
+
+  useEffect(() => {
+    fetchApplicationDetails();
+  }, [id, selectedApplications]);
+
   const nav = [
     { href: "#section-a1", title: "Applicant Details" },
     { href: "#section-a2", title: "Worker Details" },
@@ -31,41 +54,52 @@ function ApplicatoinInfo() {
     { href: "#section-a9", title: "ID Review" },
   ];
 
+  const fullName =
+    applicationDetails?.firstName + " " + applicationDetails?.lastName;
+
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
       <div className="px-[24px] py-[20px]">
         <p className="text-black font-[400] text-[14px]">
-          Job Applications / Applicant's info
+          Job Applications / Applicant&apos;s info
         </p>
         <div className="bg-white pt-[10px] px-[20px] my-[16px] min-h-screen">
           <div className="sticky top-0 pt-[10px] bg-white">
             <div className="flex items-center justify-between">
               <div>
-                <Header title="Mark Simpson" />
+                <Header title={fullName} />
                 <p className="text-neutralGrey600 font-[400] text-[14px]">
-                  Applied date- 22/12/2024
+                  Applied date-{" "}
+                  {dateFormat(applicationDetails?.submissionDate as string)}
                 </p>
               </div>
+
               <Dropdown
+                fixLabel={applicationDetails?.applicationStatus}
                 position={"dropdown-end"}
-                value="Move To"
+                value={applicationDetails?.applicationStatus}
                 dropdownList={[
-                  { name: "Approve", value: "Approve" },
+                  // { name: "Pending", value: "PENDING" },
+                  { name: "Approve", value: "APPROVED" },
                   {
                     name: "Missing Info",
-                    value: "Missing Info",
+                    value: "MISSING_INFO",
                   },
-                  { name: "Reject", value: "Reject" },
+                  { name: "Reject", value: "REJECT" },
+                  { name: "Interview", value: "INTERVIEW" },
                 ]}
+                onSelect={openModal}
+                applicationId={id as string}
+                singleFileUpload
+                userId={applicationDetails?.userId}
               />
             </div>
             {/* Job position list */}
             <div className="flex flex-wrap gap-2 mt-2 mb-[20px]">
-              <Badge name="Nurse" />
-              <Badge name="Enrolled Nurse" />
-              <Badge name="Community Services Assistant (CSA/PCA)" />
-              <Badge name="Others" />
+              {applicationDetails?.positionApplyingFor?.map((pos: string) => (
+                <Badge name={pos} key={pos} />
+              ))}
             </div>
             <ScrollSpy
               activeClass="border-b-primary-pink600"
@@ -88,15 +122,15 @@ function ApplicatoinInfo() {
               </nav>
             </ScrollSpy>
           </div>
-          <ApplicantDetail />
-          <WorkerDetail />
-          <Certificate />
+          <ApplicantDetail applicationDetails={applicationDetails} />
+          <WorkerDetail applicationDetails={applicationDetails} />
+          <Certificate applicationDetails={applicationDetails} />
           <ApplicantVideo />
-          <Profile />
-          <EmergencyContact />
-          <FinancialInfo />
-          <Availability />
-          <IDReview />
+          <Profile applicationDetails={applicationDetails} />
+          <EmergencyContact applicationDetails={applicationDetails} />
+          <FinancialInfo applicationDetails={applicationDetails} />
+          <Availability applicationDetails={applicationDetails} />
+          <IDReview applicationDetails={applicationDetails} />
         </div>
       </div>
     </div>

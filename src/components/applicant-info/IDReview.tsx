@@ -2,7 +2,10 @@ import React from "react";
 import Header from "../common/header";
 import InfoField from "../common/info-field";
 
-function IDReview() {
+type IDReviewProps = {
+  applicationDetails: any;
+};
+function IDReview({ applicationDetails }: IDReviewProps) {
   return (
     <div
       id={"section-a9"}

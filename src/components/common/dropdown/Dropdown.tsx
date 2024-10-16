@@ -2,7 +2,16 @@
 import { MODALS } from "@/constants";
 import React, { useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import {
+  addSingleApplications,
+  clearApplications,
+  setSelectedApplicantUserId,
+} from "@/redux/selectedApplicationsSlice";
+import { setAlert } from "@/redux/alertSlice";
+import { updateApplicationsStatus } from "@/actions/applications";
+import { useAppSelector } from "@/redux/store";
 type DropdownValue = {
   name: string;
   value: string;
@@ -15,6 +24,10 @@ type DropdownProps = {
   position?: string;
   onSelect?: (value: string) => void;
   fixLabel?: string;
+  applicationId?: string;
+  singleFileUpload?: boolean;
+  userId?: string;
+  notStatus?: boolean; // which is for to get just the dropdown value that we selected
 };
 
 function Dropdown({
@@ -23,10 +36,19 @@ function Dropdown({
   position,
   onSelect,
   fixLabel,
+  applicationId,
+  singleFileUpload,
+  notStatus,
+  userId,
 }: DropdownProps) {
-  const [selectedValue, setSelectedValue] = useState<string>(value);
+  const { selectedApplications } = useAppSelector(
+    (state) => state.selectedApplications
+  );
 
-  const handleClick = (selectedValue: string) => {
+  const [selectedValue, setSelectedValue] = useState<string>(value);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const handleClick = async (selectedValue: string) => {
     // to close dropdown when we click on li (*** for daisyui ***)
     const elem = document.activeElement as HTMLElement;
     if (elem) {
@@ -34,15 +56,80 @@ function Dropdown({
     }
 
     setSelectedValue(selectedValue);
+
     if (onSelect !== undefined) {
-      if (selectedValue == "Approve") {
+      // ***
+      if (notStatus) {
+        onSelect(selectedValue);
+        return;
+      }
+      // *** for all status ***
+      // for approved status
+      if (selectedValue == "APPROVED") {
+        if (singleFileUpload) {
+          dispatch(addSingleApplications(parseInt(applicationId as string)));
+        }
         onSelect(MODALS.approveModalId);
       }
-      if (selectedValue == "Reject") {
+
+      // for REJECT status
+      if (selectedValue == "REJECT") {
+        if (singleFileUpload) {
+          dispatch(addSingleApplications(parseInt(applicationId as string)));
+        }
         onSelect(MODALS.rejectModalId);
       }
+
+      // for missing info status
       if (selectedValue == "MISSING_INFO") {
-        onSelect(MODALS.rejectModalId);
+        dispatch(setSelectedApplicantUserId(userId as string));
+        router.push(`/missing-info/${applicationId}`);
+      }
+
+      // for interview status
+      if (selectedValue == "INTERVIEW") {
+        if (singleFileUpload) {
+          try {
+            const data = await updateApplicationsStatus({
+              action: "INTERVIEW",
+              application_id_list: [parseInt(applicationId as string)],
+            });
+
+            dispatch(clearApplications());
+            dispatch(
+              setAlert({
+                alertType: "success",
+                alertMessage: `Applicant has been moved to interview by the admin.`,
+              })
+            );
+          } catch (error: any) {
+            setAlert({
+              alertType: "error",
+              alertMessage: `Something went wrong!`,
+            });
+          }
+        }
+        // for multiples applactions
+        else {
+          try {
+            const data = await updateApplicationsStatus({
+              action: "INTERVIEW",
+              application_id_list: selectedApplications,
+            });
+            dispatch(clearApplications());
+            dispatch(
+              setAlert({
+                alertType: "success",
+                alertMessage: `Selected Applicants has been moved to interview by the admin.`,
+              })
+            );
+          } catch (error: any) {
+            setAlert({
+              alertType: "error",
+              alertMessage: `Something went wrong!`,
+            });
+          }
+        }
       }
     }
   };
@@ -52,28 +139,28 @@ function Dropdown({
   )[0]?.name;
 
   const bgColor =
-    selectedValue == "PENDING"
+    selectedValue == "PENDING" || fixLabel == "PENDING"
       ? "bg-[#F6F6F6]"
-      : selectedValue == "MISSING_INFO"
+      : selectedValue == "MISSING_INFO" || fixLabel == "MISSING_INFO"
       ? "bg-[#FEF2F2]"
-      : selectedValue == "REUPLOADED"
+      : selectedValue == "REUPLOADED" || fixLabel == "REUPLOADED"
       ? "bg-[#FFFBEB]"
-      : selectedValue == "APPROVED"
+      : selectedValue == "APPROVED" || fixLabel == "APPROVED"
       ? "bg-[#F0FDF4]"
-      : selectedValue == "INTERVIEW"
+      : selectedValue == "INTERVIEW" || fixLabel == "INTERVIEW"
       ? "bg-[#F4F0FD]"
       : "bg-transparent";
 
   const textColor =
-    selectedValue == "PENDING"
+    selectedValue == "PENDING" || fixLabel == "PENDING"
       ? "text-[#353535]"
-      : selectedValue == "MISSING_INFO"
+      : selectedValue == "MISSING_INFO" || fixLabel == "MISSING_INFO"
       ? "text-[#EF4444]"
-      : selectedValue == "REUPLOADED"
+      : selectedValue == "REUPLOADED" || fixLabel == "REUPLOADED"
       ? "text-[#D97706]"
-      : selectedValue == "APPROVED"
+      : selectedValue == "APPROVED" || fixLabel == "APPROVED"
       ? "text-[#16A34A]"
-      : selectedValue == "INTERVIEW"
+      : selectedValue == "INTERVIEW" || fixLabel == "INTERVIEW"
       ? "text-[#260B63]"
       : "text-black";
 

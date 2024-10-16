@@ -2,7 +2,7 @@ import { fetchWrapper } from "@/helper/fetchWrapper";
 
 export const getApplications = async (payload: any) => {
   const response: any = await fetchWrapper.POST(
-    true,
+    false,
     "admin/application/get-dashboard-applications",
     payload
   );
@@ -12,8 +12,36 @@ export const getApplications = async (payload: any) => {
 
 export const getDashboarSummary = async (payload: any) => {
   const response: any = await fetchWrapper.POST(
-    true,
+    false,
     "admin/application/get-dashboard-summary",
+    payload
+  );
+
+  return await response?.data;
+};
+
+export const updateApplicationsStatus = async (payload: any) => {
+  const response: any = await fetchWrapper.POST(
+    false,
+    "admin/application/update-application-status",
+    payload
+  );
+  return await response?.data;
+};
+
+export const getApplicationDetails = async (payload: any) => {
+  const response: any = await fetchWrapper.POST(
+    false,
+    "admin/application/get-application-details",
+    payload
+  );
+  return await response?.data;
+};
+
+export const setMissingApplicationInfo = async (payload: any) => {
+  const response: any = await fetchWrapper.POST(
+    false,
+    "admin/application/set-missing-info",
     payload
   );
 

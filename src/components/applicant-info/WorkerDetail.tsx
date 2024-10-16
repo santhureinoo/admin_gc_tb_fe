@@ -2,8 +2,12 @@ import React from "react";
 import Header from "../common/header";
 import InfoField from "../common/info-field";
 import Badge from "../common/badge";
+import { dateFormat } from "@/utils";
 
-function WorkerDetail() {
+type WorkerDetailProps = {
+  applicationDetails: any;
+};
+function WorkerDetail({ applicationDetails }: WorkerDetailProps) {
   return (
     <div
       id={"section-a2"}
@@ -11,11 +15,26 @@ function WorkerDetail() {
     >
       <Header title="Worker Details" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[24px]">
-        <InfoField title="First name" value="Mark" isRequired />
-        <InfoField title="Last Name" value="Mark" isRequired />
-        <InfoField title="Date of birth" value="22/12/2024" />
-        <InfoField title="Email(Primary)" value="ggtoetoe@gmail.com" />
-        <InfoField title="Phone number" value="+95 9 7960 823 22" isRequired />
+        <InfoField
+          title="First name"
+          value={applicationDetails?.firstName}
+          isRequired
+        />
+        <InfoField
+          title="Last Name"
+          value={applicationDetails?.lastName}
+          isRequired
+        />
+        <InfoField
+          title="Date of birth"
+          value={dateFormat(applicationDetails?.dateOfBirth)}
+        />
+        <InfoField title="Email(Primary)" value={applicationDetails?.email} />
+        <InfoField
+          title="Phone number"
+          value={applicationDetails?.phoneNumber}
+          isRequired
+        />
       </div>
       <div className="mt-[24px]">
         <p className="font-[500] text-neutralGrey600 mb-[10px]">
@@ -24,27 +43,50 @@ function WorkerDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
           <InfoField
             title="Street address"
-            value="Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678."
+            value={applicationDetails?.streetAddress}
             isRequired
           />
-          <InfoField title="Suburb" value="Robert Robertson" isRequired />
-          <InfoField title="Country" value="Australia" isRequired />
-          <InfoField title="State" value="Alsaka" isRequired />
-          <InfoField title="Postal Code" value="123123" isRequired />
+          <InfoField
+            title="Suburb"
+            value={applicationDetails?.suburb}
+            isRequired
+          />
+          <InfoField
+            title="Country"
+            value={applicationDetails?.country}
+            isRequired
+          />
+          <InfoField
+            title="State"
+            value={applicationDetails?.state}
+            isRequired
+          />
+          <InfoField
+            title="Postal Code"
+            value={applicationDetails?.postalCode}
+            isRequired
+          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] my-[24px]">
-          <InfoField title="Do you have primary job?" value="Yes" isRequired />
-          <InfoField title="Company name" value="Harien company" isRequired />
+          <InfoField
+            title="Do you have primary job?"
+            value={applicationDetails?.primaryJobFlag == true ? "Yes" : "No"}
+            isRequired
+          />
+          <InfoField
+            title="Company name"
+            value={applicationDetails?.primaryJobListed}
+            isRequired
+          />
         </div>
         <div className="mt-[24px]">
           <p className="font-[500] text-neutralGrey600">
             Position apply for? <span className="text-red-500">*</span>
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
-            <Badge name="Nurse" />
-            <Badge name="Enrolled Nurse" />
-            <Badge name="Community Services Assistant (CSA/PCA)" />
-            <Badge name="Others" />
+            {applicationDetails?.positionApplyingFor?.map((pos: any) => (
+              <Badge key={pos} name={pos} />
+            ))}
           </div>
         </div>
       </div>

@@ -7,7 +7,9 @@ import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
 import { MODALS } from "@/constants";
 import {
+  addAllApplications,
   addApplications,
+  clearApplications,
   removeApplications,
 } from "@/redux/selectedApplicationsSlice";
 import { useAppSelector } from "@/redux/store";
@@ -32,11 +34,10 @@ function RejectedApplications() {
       },
       page: {
         currentPage: 1, // current user seleced page
-        pageSize: 1, // number of applications to be fetch per page
+        pageSize: 5, // number of applications to be fetch per page
       },
       search: searchApplicationText, // seaerch by FirstName, LastName, Phone, AppliedPosition
     });
-    console.log("*** data ****", data);
     setRejectedApplications(data);
   };
 
@@ -47,6 +48,18 @@ function RejectedApplications() {
     }
     if (duplicateId) {
       dispatch(removeApplications(id));
+    }
+  };
+
+  const handleClickAllCheckBox = () => {
+    const allApplicationsId = rejectedApplications.map(
+      (app: any) => app.applicationId
+    );
+
+    if (selectedApplications.length > 0) {
+      dispatch(clearApplications());
+    } else {
+      dispatch(addAllApplications(allApplicationsId));
     }
   };
 
@@ -72,7 +85,7 @@ function RejectedApplications() {
           </div>
 
           <CustomTable
-            selectedRowsCount={selectedApplications.length}
+            selectedRowsId={selectedApplications}
             headersList={[
               {
                 name: "Name",
@@ -113,6 +126,7 @@ function RejectedApplications() {
               setRejectedApplications(() => newData);
             }}
             checkBoxOnClick={handleClickCheckBox}
+            allCheckBoxOnClick={handleClickAllCheckBox}
           />
 
           {/* <Pagination /> */}

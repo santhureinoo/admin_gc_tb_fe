@@ -6,13 +6,19 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { login } from "@/actions/auth";
+import { setCookie } from "cookies-next";
+import { ACCESS_TOKEN, CURRENT_USER_ID, REFRESH_TOKEN } from "@/constants";
+import { getEncryptedToken } from "@/utils";
+import { useDispatch } from "react-redux";
+import { setAlert } from "@/redux/alertSlice";
 type loginFormData = {
   email: string;
   password: string;
 };
 
 function LoginForm() {
+  const dispatch = useDispatch();
   const schema: ZodType<loginFormData> = z.object({
     email: z.string().email(),
     password: z
@@ -31,9 +37,28 @@ function LoginForm() {
     resolver: zodResolver(schema),
   });
 
-  const handleLogin = (data: loginFormData) => {
+  const handleLogin = async (data: loginFormData) => {
     const { email, password } = data;
-    if (Object.keys(errors).length === 0) {
+    const response = await login({ email, password });
+    if (response?.access_token) {
+      setCookie(ACCESS_TOKEN, await getEncryptedToken(response?.access_token), {
+        maxAge: response?.expires_in,
+      });
+      setCookie(
+        REFRESH_TOKEN,
+        await getEncryptedToken(response.refresh_token),
+        { maxAge: response?.refresh_expires_in }
+      );
+      setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
+        maxAge: response?.refresh_expires_in,
+      });
+
+      dispatch(
+        setAlert({
+          alertType: "success",
+          alertMessage: `Welcome ${response?.user_first_name}`,
+        })
+      );
       router.push("/");
     }
   };

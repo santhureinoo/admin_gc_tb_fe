@@ -3,6 +3,15 @@ import { IoIosLogOut } from "react-icons/io";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { AiOutlineFileExcel } from "react-icons/ai";
 
+// cookie naming
+export const ACCESS_TOKEN = "_auth_gc_access";
+export const REFRESH_TOKEN = "_auth_gc_refresh";
+export const CURRENT_USER_ID = "_auth_gc_currentId";
+export const REFRESH_TOKEN_URL = "auth/refresh";
+
+export const LOGOUT_URL = "auth/logout";
+
+export const PAGINATION_PER_PAGE = 5;
 export type APPLICATIONS_STATUS =
   | "PENDING"
   | "MISSING_INFO"

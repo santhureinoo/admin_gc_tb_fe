@@ -1,68 +1,72 @@
-// import {
-//   API_URL,
-//   getDecryptedAccessToken,
-//   getDecryptedRefreshToken,
-//   getEncryptedToken,
-//   PUBLIC_ROUTES,
-// } from "@/helper/constant";
+import {
+  ACCESS_TOKEN,
+  CURRENT_USER_ID,
+  LOGOUT_URL,
+  REFRESH_TOKEN,
+  REFRESH_TOKEN_URL,
+} from "@/constants";
+import {
+  getDecryptedAccessToken,
+  getDecryptedRefreshToken,
+  getEncryptedToken,
+} from "@/utils";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
-export default async function ValidateToken(pathname: string) {
-  //   const accessToken = getCookie("_auth_access") ?? "";
-  //   const userId = getCookie("_auth_id") ?? "";
-  //   const decryptedAccessToken = await getDecryptedAccessToken(accessToken);
-  //   const response = await (
-  //     await fetch(API_URL + "auth/check-access-token/", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Bearer " + decryptedAccessToken,
-  //       },
-  //     })
-  //   ).json();
-  //   if (
-  //     !response.active &&
-  //     !PUBLIC_ROUTES.includes(pathname) &&
-  //     pathname != "/"
-  //   ) {
-  //     const refreshToken = getCookie("_auth_refresh") ?? "";
-  //     const decryptedRefreshToken = await getDecryptedRefreshToken(refreshToken);
-  //     const response = await fetch(API_URL + "auth/refresh", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         refresh_token: decryptedRefreshToken,
-  //       }),
-  //     });
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       deleteCookie("_auth_access");
-  //       if (userId != "") {
-  //         setCookie(
-  //           "_auth_access",
-  //           await getEncryptedToken(data.access_token, userId)
-  //         );
-  //         window.location.href = pathname;
-  //       } else {
-  //         console.log("Something went wrong!");
-  //       }
-  //     } else {
-  //       await fetch(API_URL + "auth/logout", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           refresh_token: decryptedRefreshToken,
-  //         }),
-  //       });
-  //       deleteCookie("_auth_id");
-  //       deleteCookie("_auth_username");
-  //       deleteCookie("_auth_fullname");
-  //       deleteCookie("_auth_access");
-  //       deleteCookie("_auth_refresh");
-  //       window.location.href = "/login";
-  //     }
-  //   }
+export default async function ValidateToken() {
+  const accessToken = getCookie(ACCESS_TOKEN) ?? "";
+  const refreshToken = getCookie(REFRESH_TOKEN) ?? "";
+  const userId = getCookie(CURRENT_USER_ID) ?? "";
+
+  const decryptedAccessToken = await getDecryptedAccessToken(accessToken);
+  const decryptedRefreshToken = await getDecryptedRefreshToken(refreshToken);
+
+  if (decryptedRefreshToken) {
+    if (!decryptedAccessToken) {
+      // refresh access token
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + REFRESH_TOKEN_URL,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            refresh_token: decryptedRefreshToken,
+          }),
+        }
+      );
+      if (response.ok && userId != "") {
+        console.log("accessToken renewing");
+        // update accessToken
+        const data = await response.json();
+        deleteCookie(ACCESS_TOKEN);
+        setCookie(ACCESS_TOKEN, await getEncryptedToken(data.access_token), {
+          maxAge: data.expires_in,
+        });
+        //location.reload();
+      } else {
+        // logout and delete cookies and user redux
+        await fetch(process.env.NEXT_PUBLIC_API_URL + LOGOUT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            refresh_token: decryptedRefreshToken,
+          }),
+        });
+        deleteCookie(ACCESS_TOKEN);
+        deleteCookie(REFRESH_TOKEN);
+        deleteCookie(CURRENT_USER_ID);
+        return true;
+      }
+    }
+  } else {
+    // delete all token and remove current User
+    console.log("decryptedRefreshToken null");
+    deleteCookie(ACCESS_TOKEN);
+    deleteCookie(REFRESH_TOKEN);
+    deleteCookie(CURRENT_USER_ID);
+    return false;
+  }
 }

@@ -12,13 +12,14 @@ function Sidebar() {
   const [activePage, setActivePage] = useState<string>(pathName);
 
   useEffect(() => {
-    if (pathName.includes("application-info")) {
+    if (
+      pathName.includes("application-info") ||
+      pathName.includes("send-resubmit-email")
+    ) {
       // *** Job applications ****
       setActivePage(SIDE_BAR_OPTIONS[0].route);
     }
   }, [pathName]);
-
-  const handleLogout = () => {};
 
   return (
     <div className="h-screen flex flex-col items-center md:items-start p-3 bg-neutralGrey0 sticky top-0 max-w-[90px] min-w-[90px] md:max-w-[268px] md:min-w-[268px]">

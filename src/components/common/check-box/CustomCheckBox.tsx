@@ -3,15 +3,17 @@ import React from "react";
 type CustomCheckBox = {
   title: string;
   isOptional?: boolean;
+  register?: any;
 };
 
-function CustomCheckBox({ title, isOptional }: CustomCheckBox) {
+function CustomCheckBox({ title, isOptional, register }: CustomCheckBox) {
   return (
     <div className="form-control">
       <label className="cursor-pointer flex items-start gap-2">
         <input
+          {...register}
           type="checkbox"
-          className="checkbox border-neutralGrey-grey400 w-[18px] h-[18px] rounded-md"
+          className="checkbox bg-white border border-neutralGrey-grey400 [--chkbg:#15B0AC] [--chkfg:#FFFFFF] checked:border-none checkbox-sm"
         />
         <span className="font-[500] text-[16px] text-neutralGrey-grey700 text-left mt-[-3px]">
           {title}

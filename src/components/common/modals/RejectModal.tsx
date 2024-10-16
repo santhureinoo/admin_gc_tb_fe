@@ -2,12 +2,31 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { CancelButton, RejectButton } from "../buttons";
 import { closeModal } from "@/utils";
+import { useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { updateApplicationsStatus } from "@/actions/applications";
+import { clearApplications } from "@/redux/selectedApplicationsSlice";
 
 type RejectModalProps = {
   modalId: string;
 };
 
 function RejectModal({ modalId }: RejectModalProps) {
+  const { selectedApplications } = useAppSelector(
+    (state) => state.selectedApplications
+  );
+
+  const dispatch = useDispatch();
+
+  const handleReject = async () => {
+    const data = await updateApplicationsStatus({
+      action: "REJECTED",
+      application_id_list: selectedApplications,
+    });
+    dispatch(clearApplications());
+    closeModal(modalId);
+  };
+
   return (
     <dialog id={modalId} className="modal">
       <div className="modal-box bg-white">
@@ -26,7 +45,7 @@ function RejectModal({ modalId }: RejectModalProps) {
         </p>
         <div className="flex items-center justify-end mt-[24px] gap-3">
           <CancelButton onClick={() => closeModal(modalId)} />
-          <RejectButton title="Reject" />
+          <RejectButton title="Reject" onClick={handleReject} />
         </div>
       </div>
       <form method="dialog" className="modal-backdrop">
