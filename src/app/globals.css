@@ -2,32 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+:root {
+  --toastify-icon-color-success: #4caf50;
+  /* Green for success */
+  --toastify-icon-color-error: #f44336;
+  /* Red for error */
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+  background-color: white;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.Toastify__toast--success {
+  border: 1px solid #86EFAC !important;
+  border-radius: 10px !important;
+  background: #F0FDF4 !important;
+  color: #171717 !important;
+  /* width: 400px; */
+}
+
+
+.Toastify__toast--error {
+  border: 1px solid #86EFAC !important;
+  border-radius: 10px !important;
+  background: red !important;
+  color: white !important;
+  /* width: 400px; */
+}
+
+.Toastify__toast-icon {
+  color: var(--toastify-icon-color-success);
+}
+
+.Toastify__close-button {
+  color: #555555 !important;
 }

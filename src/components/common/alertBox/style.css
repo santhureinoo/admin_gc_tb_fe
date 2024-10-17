@@ -1,0 +1,24 @@
+/* styles.css */
+.alert {
+    /* @apply text-center text-neutral-grey-800 font-body-3; */
+    display: flex;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 0.6rem;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    justify-content: space-between;
+}
+.alert-success {
+    color: black;
+    background-color: #F0FDF4;
+    border-color: #86EFAC;
+}
+.alert-error {
+    color: #721c24;
+    background-color: #FEF2F2;
+    border-color: #f5c6cb;
+}
+/* Similarly for alert-info and alert-warning */

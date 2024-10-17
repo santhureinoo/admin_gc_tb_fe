@@ -1,0 +1,32 @@
+.main-div {
+    @apply pt-[1.5rem] px-0 pb-[3rem] leading-[normal];
+}
+
+.inner-main-div {
+    @apply flex justify-center pl-5 pr-5;
+}
+
+.auth-card-section {
+    @apply w-[707px] flex flex-col rounded-2xl bg-red-500 pt-7 pb-8 px-6 text-center;
+}
+
+.auth-card-content {
+    @apply flex flex-col gap-8;
+}
+
+.auth-card-content-header {
+    @apply flex flex-col gap-9;
+
+    .logo-div {
+        @apply px-1 flex flex-col pb-[3.5px];
+    }
+
+    .title-div {
+        @apply flex flex-col gap-4;
+    }
+
+}
+
+.auth-card-footer {
+    @apply text-[18px];
+}
