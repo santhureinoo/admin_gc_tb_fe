@@ -1,7 +1,7 @@
 import { getS3DownloadUrls } from "@/actions/aws";
 import { createFileFromBlob } from "@/utils";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 type infoFieldPropsTypes = {
   title: string;
@@ -22,6 +22,8 @@ function InfoField({
   s3FileKey,
   s3FileType,
 }: infoFieldPropsTypes) {
+  const [fileSize, setFileSize] = useState<any>();
+
   const fetchS3DownloadUrls = async () => {
     const response = await getS3DownloadUrls({
       userId: userId,
@@ -33,44 +35,48 @@ function InfoField({
       ],
     });
 
+    const s3Url = response?.fileDetails[0]?.s3Url;
     const fileName = response?.fileDetails[0]?.originalFilename;
 
-    const s3ImageResponse = await axios(response?.fileDetails[0]?.s3Url);
-
-    const fileResponse = createFileFromBlob(
-      s3ImageResponse?.data,
-      fileName,
-      s3FileType
-    );
-
-    handleDownload(fileResponse, s3FileType);
+    handleDownload(s3Url, fileName, s3FileType as string);
   };
 
-  const handleDownload = (file: any, fileType: any) => {
-    const reader = new FileReader();
+  const handleDownload = (
+    s3Url: string,
+    fileName: string,
+    fileType: string
+  ) => {
+    fetch(s3Url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // const fileData = createFileFromBlob(response, fileName, fileType);
+        // console.log("*** file data ***", fileData);
+        return response.blob(); // Fetches the file as a blob
+      })
+      .then((blob) => {
+        const fileSizeInKB = Math.round(blob.size / 1024);
+        setFileSize(fileSizeInKB);
 
-    // When the file reading is done
-    reader.onload = () => {
-      // Create a blob from the file data
-      const blob = new Blob([file], { type: fileType });
+        const finalFileName = fileName + fileType;
+        // Create URL for the blob
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = finalFileName; // Set the correct file name and extension
 
-      // Create a download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.name; // Set the filename
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
 
-      // Append link to the body and trigger download
-      document.body.appendChild(link);
-      link.click();
-
-      // Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    };
-
-    // Read the file as an array buffer
-    reader.readAsArrayBuffer(file);
+        // Clean up
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error("Error fetching the file:", error);
+      });
   };
 
   const renderText = () => {
@@ -86,9 +92,12 @@ function InfoField({
       return (
         <p
           onClick={fetchS3DownloadUrls}
-          className="flex  items-center justify-between font-[500] bg-neutralGrey200 px-[20px] py-[10px] rounded-md text-black max-w-[300px]"
+          className="flex items-center justify-between font-[500] bg-neutralGrey200 px-[20px] py-[10px] rounded-md text-black max-w-[300px] cursor-pointer"
         >
-          {value} <span className="font-[400] text-neutralGrey600">525KB</span>
+          {value}{" "}
+          <span className="font-[400] text-neutralGrey600 text-nowrap">
+            {fileSize ? fileSize + "KB" : ""}
+          </span>
         </p>
       );
     }
@@ -97,6 +106,7 @@ function InfoField({
       return <p className="font-[500] text-neutralGrey800">{value}</p>;
     }
   };
+
   return (
     <div className="flex flex-col gap-2">
       <p className="font-[500] text-neutralGrey600">

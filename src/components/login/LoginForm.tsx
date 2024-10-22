@@ -39,28 +39,38 @@ function LoginForm() {
 
   const handleLogin = async (data: loginFormData) => {
     const { email, password } = data;
-    const response = await login({ email, password });
-    if (response?.access_token) {
-      setCookie(ACCESS_TOKEN, await getEncryptedToken(response?.access_token), {
-        maxAge: response?.expires_in,
-      });
-      setCookie(
-        REFRESH_TOKEN,
-        await getEncryptedToken(response.refresh_token),
-        { maxAge: response?.refresh_expires_in }
-      );
-      setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
-        maxAge: response?.refresh_expires_in,
-      });
-
+    try {
+      const response = await login({ email, password });
+      if (response?.access_token) {
+        setCookie(ACCESS_TOKEN, await getEncryptedToken(response?.access_token), {
+          maxAge: response?.expires_in,
+        });
+        setCookie(
+          REFRESH_TOKEN,
+          await getEncryptedToken(response.refresh_token),
+          { maxAge: response?.refresh_expires_in }
+        );
+        setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
+          maxAge: response?.refresh_expires_in,
+        });
+  
+        dispatch(
+          setAlert({
+            alertType: "success",
+            alertMessage: `Welcome ${response?.user_first_name}`,
+          })
+        );
+        router.push("/");
+      }
+    } catch (error) {
       dispatch(
         setAlert({
-          alertType: "success",
-          alertMessage: `Welcome ${response?.user_first_name}`,
+          alertType: "error",
+          alertMessage: "Something went wrong",
         })
       );
-      router.push("/");
     }
+
   };
 
   return (
