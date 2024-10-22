@@ -21,7 +21,6 @@ import { dateFormat, openModal } from "@/utils";
 import { useParams } from "next/navigation";
 import { getApplicationDetails } from "@/actions/applications";
 import { useAppSelector } from "@/redux/store";
-import { getS3DownloadUrls } from "@/actions/aws";
 
 function ApplicatoinInfo() {
   const { id } = useParams();
@@ -40,6 +39,8 @@ function ApplicatoinInfo() {
   useEffect(() => {
     fetchApplicationDetails();
   }, [id, selectedApplications]);
+
+  console.log("*** application details ***", applicationDetails);
 
   const nav = [
     { href: "#section-a1", title: "Applicant Details" },
@@ -124,7 +125,7 @@ function ApplicatoinInfo() {
           <ApplicantDetail applicationDetails={applicationDetails} />
           <WorkerDetail applicationDetails={applicationDetails} />
           <Certificate applicationDetails={applicationDetails} />
-          <ApplicantVideo />
+          <ApplicantVideo applicationDetails={applicationDetails} />
           <Profile applicationDetails={applicationDetails} />
           <EmergencyContact applicationDetails={applicationDetails} />
           <FinancialInfo applicationDetails={applicationDetails} />

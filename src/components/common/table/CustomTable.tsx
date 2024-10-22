@@ -33,13 +33,12 @@ function CustomTable({
   allCheckBoxOnClick,
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
-
   const router = useRouter();
 
   return (
-    <div className="w-full max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-380px)]">
+    <div className="w-full max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-360px)]">
       <div className="p-3">
-        <div className="overflow-x-auto h-full max-h-[calc(100vh-300px)]">
+        <div className="overflow-x-auto h-full min-h-[300px] max-h-[calc(100vh-300px)]">
           <table className="table-auto w-full border-collapse border border-slate-200">
             <thead className="text-[13px] sticky top-0 z-40">
               <tr className="border border-slate-200">
