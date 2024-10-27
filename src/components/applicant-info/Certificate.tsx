@@ -323,19 +323,19 @@ function Certificate({ applicationDetails }: CertificateProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
           <InfoField
             title="Visa Status"
-            value={applicationDetails?.sec_visa_status?.visa}
+            value={applicationDetails?.sec_visa_status?.visa ?? "Not found"}
             isRequired
           />
           <InfoField
             title="I am an Australian resident / citzen"
-            value="Not required"
+            value={applicationDetails?.sec_visa_status?.visa ? "Not Required": "Yes"}
           />
           <InfoField
             title="Passport or cetizenship document"
             value="Not required"
           />
           <InfoField
-            title="Vivo document"
+            title="Visa document"
             value={
               applicationDetails?.sec_visa_status?.file?.originalFilename +
               "." +
