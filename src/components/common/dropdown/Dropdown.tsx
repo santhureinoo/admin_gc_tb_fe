@@ -82,6 +82,7 @@ function Dropdown({
 
       // for missing info status
       if (selectedValue == "MISSING_INFO") {
+        console.log("**** user Id is here ****", userId);
         dispatch(setSelectedApplicantUserId(userId as string));
         router.push(`/missing-info/${applicationId}`);
       }

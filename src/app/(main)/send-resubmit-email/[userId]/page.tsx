@@ -8,12 +8,16 @@ import { useForm } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sendEmail } from "@/actions/mail";
+import { useAppSelector } from "@/redux/store";
 
 type resubmitEmailFormData = {
   message: string;
 };
 
 function ResubmitEmailForm() {
+  const { selectedApplicantUserId } = useAppSelector(
+    (state) => state.selectedApplications
+  );
   const schema: ZodType<resubmitEmailFormData> = z.object({
     message: z.string().min(1, { message: "Message is required" }).max(300),
   });
@@ -29,9 +33,8 @@ function ResubmitEmailForm() {
   const handleSendEmail = async (data: resubmitEmailFormData) => {
     const { message } = data;
     const response = await sendEmail({
-      userId: "06024035-f50b-4d4a-b579-78fbbd17f0a6", // [mendatory, number]
-      message_body: { message },
-      // [mendatory, string, max 300]
+      userId: selectedApplicantUserId,
+      message_body:  message,
     });
   };
 
