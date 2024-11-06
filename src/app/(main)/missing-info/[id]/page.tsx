@@ -105,12 +105,12 @@ function CheckDetail() {
 
     // Check if all fields are selected
     if (selectedFields.length === fields.length) {
-      return `${title}, ${joinWithAnd(selectedFields)} is wrong|${pipeName}.`;
+      return `${title}, ${joinWithAnd(selectedFields)} is wrong.`;
     }
 
     // If some fields are selected, return those that are selected
     if (selectedFields.length > 0) {
-      return `${title}, ${joinWithAnd(selectedFields)} is wrong|${pipeName}.`;
+      return `${title}, ${joinWithAnd(selectedFields)} is wrong.`;
     }
   }
 
@@ -187,22 +187,21 @@ function CheckDetail() {
     // Qualifications & Certificates
     if (certificate == true) {
       certificateRemarks.push(
-        "Qualifications & Certificates, Certificate is wrong.|certType"
+        "Qualifications & Certificates, Certificate is wrong."
       );
     }
-
     // Registered nurse
     if (registerNurseNumber == true && registerNurseExpiryDate == true) {
       certificateRemarks.push(
-        "Registered nurses, Registration number and Expiry date is wrong.|EnrolledNurse_FormerEnrolledNurse_Australia_ExpDate"
+        "Registered Nurse (Australia), Registration number and Expiry date is wrong."
       );
     } else if (registerNurseNumber == true) {
       certificateRemarks.push(
-        "Registered nurses, Registration number is wrong.|EnrolledNurse_FormerEnrolledNurse_Australia_RegNum"
+        "Registered Nurse (Australia), Registration number is wrong."
       );
     } else if (registerNurseExpiryDate == true) {
       certificateRemarks.push(
-        "Registered nurses, Expiry date is wrong.|RegisteredNurse_Australia_ExpDate"
+        "Registered Nurse (Australia), Expiry date is wrong."
       );
     }
 
@@ -212,60 +211,60 @@ function CheckDetail() {
       registerEnrollNurseExpiryDate == true
     ) {
       certificateRemarks.push(
-        "Enrolled nurse/former enrolled nurse (Australia), Registration number and Expiry date is wrong.|RegisteredNurse_Australia_RegNum"
+        "Enrolled Nurse/Former Enrolled Nurse (Australia), Registration number and Expiry date is wrong."
       );
     } else if (registerEnrollNurseNumber == true) {
       certificateRemarks.push(
-        "Enrolled nurse/former enrolled nurse (Australia), Registration number is wrong.|RegisteredNurse_Australia_RegNum"
+        "Enrolled Nurse/Former Enrolled Nurse (Australia), Registration number is wrong."
       );
     } else if (registerEnrollNurseExpiryDate == true) {
       certificateRemarks.push(
-        "Enrolled nurse/former enrolled nurse (Australia), Expiry date is wrong.|RegisteredNurse_Australia_RegNum"
+        "Enrolled Nurse/Former Enrolled Nurse (Australia), Expiry date is wrong."
       );
     }
 
     // First Aid Certificate
     if (firstAidCertificateFile == true && firstAidExpiryDate == true) {
       certificateRemarks.push(
-        "First Aid Certificate, Certificate and Expiry date is wrong.|FirstAidCertificateExpDate"
+        "First Aid Certificate, Certificate and Expiry date is wrong."
       );
     } else if (firstAidCertificateFile == true) {
       certificateRemarks.push(
-        "First Aid Certificate, Certificate is wrong.|FirstAidCertificateExpDate"
+        "First Aid Certificate, Certificate is wrong."
       );
     } else if (firstAidExpiryDate == true) {
       certificateRemarks.push(
-        "First Aid Certificate, Expiry date is wrong.|FirstAidCertificateExpDate"
+        "First Aid Certificate, Expiry date is wrong."
       );
     }
 
     // CPR Certificate
     if (cprCertificateFile == true && cprExpiryDate == true) {
       certificateRemarks.push(
-        "CPR Certificate, Certificate and Expiry date is wrong.|CPRCertificateExpDate"
+        "CPR Certificate, Certificate and Expiry date is wrong."
       );
     } else if (cprCertificateFile == true) {
       certificateRemarks.push(
-        "CPR Certificate, Certificate is wrong.|CPRCertificateExpDate"
+        "CPR Certificate, Certificate is wrong."
       );
     } else if (cprExpiryDate == true) {
       certificateRemarks.push(
-        "CPR Certificate, Expiry date is wrong.|CPRCertificateExpDate"
+        "CPR Certificate, Expiry date is wrong."
       );
     }
 
     // Food handling Certificate
     if (foodHandlingCertificateFile == true && foodHandlingExpiryDate == true) {
       certificateRemarks.push(
-        "Food handling Certificate, Certificate and Expiry date is wrong.|FoodHandlingCertificateExpDate"
+        "Food Handling Certificate, Certificate and Expiry date is wrong."
       );
     } else if (foodHandlingCertificateFile == true) {
       certificateRemarks.push(
-        "Food handling Certificate, Certificate is wrong.|FoodHandlingCertificateExpDate"
+        "Food Handling Certificate, Certificate is wrong."
       );
     } else if (foodHandlingExpiryDate == true) {
       certificateRemarks.push(
-        "Food handling Certificate, Expiry date is wrong.|FoodHandlingCertificateExpDate"
+        "Food Handling Certificate, Expiry date is wrong."
       );
     }
 
@@ -275,38 +274,38 @@ function CheckDetail() {
       responsibleAlcholExpiryDate == true
     ) {
       certificateRemarks.push(
-        "Responsible service of alcohol Certificaite, Certificate and Expiry date is wrong.|ResponsibleServiceofAlcoholCertificateExpDate"
+        "Responsible Service of Alcohol Certificate, Certificate and Expiry date is wrong."
       );
     } else if (responsibleAlcholCertificateFile == true) {
       certificateRemarks.push(
-        "Responsible service of alcohol Certificaite, Certificate is wrong.|ResponsibleServiceofAlcoholCertificateExpDate"
+        "Responsible Service of Alcohol Certificate, Certificate is wrong."
       );
     } else if (responsibleAlcholExpiryDate == true) {
       certificateRemarks.push(
-        "Responsible service of alcohol Certificaite, Expiry date is wrong.|ResponsibleServiceofAlcoholCertificateExpDate"
+        "Responsible Service of Alcohol Certificate, Expiry date is wrong."
       );
     }
 
     // Manual handling Certificate
     if (manualHandlingCertificateFile == true) {
       certificateRemarks.push(
-        "Manual handling Certificate, Certificate is wrong.|ManualHandlingCertificate"
+        "Manual Handling Certificate, Certificate is wrong."
       );
     }
 
     // Medication Certificate
     if (medicationCertificateFile == true) {
-      certificateRemarks.push("Medication Certificate, Certificate is wrong.|MedicationCertificate");
+      certificateRemarks.push("Medication Certificate, Certificate is wrong.");
     }
 
     // Police Check
     if (policeCheckCertificateFile == true) {
-      certificateRemarks.push("Police Check, Certificate is wrong.|policeCheck_file");
+      certificateRemarks.push("Police Check, Certificate is wrong.");
     }
 
     // Curriculum Vitae (CV)
     if (CVFile == true) {
-      certificateRemarks.push("Curriculum Vitae (CV), CV is wrong.|CV");
+      certificateRemarks.push("Curriculum Vitae (CV), CV is wrong.");
     }
 
     const cvRf1Fields = [
@@ -408,14 +407,14 @@ function CheckDetail() {
     // Driver license
     if (
       getSelectedAndMissingFields(
-        "Driver license",
+        "Driver's License",
         driverLicenseCertificateFields,
         "Driver_License"
       ) != undefined
     ) {
       certificateRemarks.push(
         getSelectedAndMissingFields(
-          "Driver license",
+          "Driver's License",
           driverLicenseCertificateFields,
           "Driver_License"
         ) as string
@@ -425,7 +424,7 @@ function CheckDetail() {
     // Vaccination Certificates (COVID-19)
     if (vaccinationCertificateFile == true) {
       certificateRemarks.push(
-        "Vaccination Certificates (COVID-19), Certificate is wrong|covid"
+        "Vaccination Certificate (COVID-19), Certificate is wrong"
       );
     }
 
@@ -437,7 +436,7 @@ function CheckDetail() {
     if (australianPassport == true) {
       poiRemarks.push("AUSTRALIAN_PASSPORT");
       proofOfIdentityRemarks.push(
-        "Australian Passport (current or expired last 2 years but not cancelled) is wrong"
+        "Australian Passport (Current or expired last 2 years but not cancelled) is wrong"
       );
     }
     if (australianCitizenshipCertificate == true) {
@@ -461,7 +460,7 @@ function CheckDetail() {
     if (australianDriverLicence == true) {
       poiRemarks.push("AUSTRALIAN_DRIVER_LICENSE");
       proofOfIdentityRemarks.push(
-        "Australian Driver Licence/Learner's Permit is wrong"
+        "Australian Driver License/Learner's Permit is wrong"
       );
     }
     if (australianTertiaryStudentIdentificationCard == true) {
@@ -486,7 +485,7 @@ function CheckDetail() {
     if (defenceForceIdentityCard == true) {
       poiRemarks.push("DEFENSE_FORCE_ID_CARD");
       proofOfIdentityRemarks.push(
-        "Defence Force Identity Card (with photo or signature) is wrong"
+        "Defense Force Identity Card (with photo or signature) is wrong"
       );
     }
     if (departmentOfVeteransAffairs == true) {
@@ -537,7 +536,7 @@ function CheckDetail() {
     }
     if (bankStatement == true) {
       poiRemarks.push("BANK_STATEMENT");
-      proofOfIdentityRemarks.push("Bank statement is wrong");
+      proofOfIdentityRemarks.push("Bank Statement (Showing transactions) is wrong");
     }
     if (propertyLeaseAgreement == true) {
       poiRemarks.push("PROPERTY_LEASE_AGREEMENT");
@@ -551,16 +550,16 @@ function CheckDetail() {
     }
     if (australianMortgageDocuments == true) {
       poiRemarks.push("AUSTRALIAN_MORTGAGE_DOCUMENTS");
-      proofOfIdentityRemarks.push("Australian Mortgage Documents is wrong");
+      proofOfIdentityRemarks.push("Australian Mortgage Documents - Current Address is wrong");
     }
     if (ratingAuthority == true) {
       poiRemarks.push("RATING_AUTHORITY");
-      proofOfIdentityRemarks.push("Rating Authority - eg, Land Rates is wrong");
+      proofOfIdentityRemarks.push("Rating Authority - Current address eg Land Rates is wrong");
     }
     if (utilityBillElectricity == true) {
       poiRemarks.push("UTILITY_BILL");
       proofOfIdentityRemarks.push(
-        "Utility Bill - electricity, gas, telephone (less than 12 months old) is wrong"
+        "Utility Bill - electricity, gas, telephone - Current address (less than 12 months old) is wrong"
       );
     }
     if (referenceFromIndigenousOrganisation == true) {
@@ -572,7 +571,7 @@ function CheckDetail() {
     if (documentsIssuedOutsideAustralia == true) {
       poiRemarks.push("DOCUMENTS_ISSUED_OUTSIDE_AUSTRALIA");
       proofOfIdentityRemarks.push(
-        "Documents issued outside Australia (equivalent to Australian documents). Must have official translation attached is wrong"
+        "Documents issued outside Australia (equivalent to Australian documents).Must have official translation attached is wrong"
       );
     }
     if (otherForeignSingleDocument == true) {
@@ -659,11 +658,11 @@ function CheckDetail() {
 
 
     try {
-      // const response = await setMissingApplicationInfo(payload);
-      // setAlert({
-      //   alertType: "success",
-      //   alertMessage: `Successfuly added the missing info deatils to this application.`,
-      // });
+      const response = await setMissingApplicationInfo(payload);
+      setAlert({
+        alertType: "success",
+        alertMessage: `Successfuly added the missing info deatils to this application.`,
+      });
       router.push(`/send-resubmit-email/${selectedApplicantUserId}`);
     } catch (error) {
       dispatch(
