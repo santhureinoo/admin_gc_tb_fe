@@ -167,6 +167,7 @@ function CustomTable({
                               onSelect={openModal}
                               applicationId={el?.applicationId}
                               singleFileUpload
+                              userId={el?.userId}
                             />
                           )}
                         </td>
