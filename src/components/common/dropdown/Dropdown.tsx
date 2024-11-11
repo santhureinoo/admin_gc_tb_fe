@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import {
   addSingleApplications,
   clearApplications,
+  setSelectedApplicantDetail,
   setSelectedApplicantUserId,
 } from "@/redux/selectedApplicationsSlice";
 import { setAlert } from "@/redux/alertSlice";
@@ -28,6 +29,7 @@ type DropdownProps = {
   singleFileUpload?: boolean;
   userId?: string;
   notStatus?: boolean; // which is for to get just the dropdown value that we selected
+  applicationDetails?: any;
 };
 
 function Dropdown({
@@ -40,6 +42,7 @@ function Dropdown({
   singleFileUpload,
   notStatus,
   userId,
+  applicationDetails,
 }: DropdownProps) {
   const { selectedApplications } = useAppSelector(
     (state) => state.selectedApplications
@@ -83,6 +86,9 @@ function Dropdown({
       // for missing info status
       if (selectedValue == "MISSING_INFO") {
         dispatch(setSelectedApplicantUserId(userId as string));
+        if (applicationDetails !== null) {
+          dispatch(setSelectedApplicantDetail(applicationDetails));
+        }
         router.push(`/missing-info/${applicationId}`);
       }
 

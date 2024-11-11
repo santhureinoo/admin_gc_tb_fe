@@ -1,5 +1,7 @@
 // import { toast, ToastContent, ToastOptions, Slide, Id } from "react-toastify";
 
+import { APPLIED_POSITIONS } from "@/constants";
+
 // to get file from s3
 export const createFileFromBlob = (
   blob: any,
@@ -61,44 +63,19 @@ export async function getDecryptedRefreshToken(token: string) {
   return token;
 }
 
-// **** For toast messages ****
-// export const defaultToastOptions: ToastOptions = {
-//   position: "top-right",
-//   autoClose: 4000,
-//   hideProgressBar: true,
-//   closeOnClick: true,
-//   pauseOnHover: true,
-//   draggable: true,
-//   progress: undefined,
-//   theme: "colored",
-//   transition: Slide,
-// };
-// type ToastType = "success" | "error" | "info" | "warning" | "default";
-// export const showToast = (
-//   type: ToastType,
-//   content: ToastContent,
-//   options: Partial<ToastOptions> = {}
-// ): Id => {
-//   const optionsToApply = { ...defaultToastOptions, ...options };
-//   switch (type) {
-//     case "success":
-//       return toast.success(content, optionsToApply);
-//     case "error":
-//       return toast.error(content, optionsToApply);
-//     case "info":
-//       return toast.info(content, optionsToApply);
-//     case "warning":
-//       return toast.warn(content, optionsToApply);
-//     case "default":
-//       return toast(content, optionsToApply);
-//     default:
-//       return toast(content, optionsToApply);
-//   }
-// };
-
 export const getPaginationTotalPages = (
   dataCounts: number,
   pageSize: number
 ) => {
   return Math.ceil(dataCounts / pageSize);
+};
+
+// *** this is for to render based on applied position ***
+export const isShow = (positions: any, certificateName: string) => {
+  const appliedPositions = positions;
+  const toFilterPositions = APPLIED_POSITIONS[certificateName];
+  const isIncluded = toFilterPositions.some((element: any) =>
+    appliedPositions.includes(element)
+  );
+  return isIncluded;
 };
