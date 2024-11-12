@@ -5,8 +5,10 @@ import { Accordion, AccordionSubTitle } from "@/components/common/accordion";
 import { CancelButton, RejectButton } from "@/components/common/buttons";
 import CustomCheckBox from "@/components/common/check-box";
 import Logo from "@/components/common/logo";
+import { APPLIED_POSITIONS } from "@/constants";
 import { setAlert } from "@/redux/alertSlice";
 import { useAppSelector } from "@/redux/store";
+import { isShow } from "@/utils";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -84,13 +86,20 @@ function CheckDetail() {
   const { register, handleSubmit, reset } = useForm({
     defaultValues,
   });
-  const { selectedApplicantUserId } = useAppSelector(
+  const { selectedApplicantUserId, selectedApplicationDetail } = useAppSelector(
     (state) => state.selectedApplications
   );
 
-  console.log("selectedApplicantUserId", selectedApplicantUserId);
+  console.log(
+    "*** selected application details ***",
+    selectedApplicationDetail
+  );
 
-  function getSelectedAndMissingFields(title: string, fields: any, pipeName: string) {
+  function getSelectedAndMissingFields(
+    title: string,
+    fields: any,
+    pipeName: string
+  ) {
     // Extract the selected fields (those that have a true value)
     const selectedFields = fields
       .filter((field: any) => Object.values(field)[0] === true)
@@ -229,13 +238,9 @@ function CheckDetail() {
         "First Aid Certificate, Certificate and Expiry date is wrong."
       );
     } else if (firstAidCertificateFile == true) {
-      certificateRemarks.push(
-        "First Aid Certificate, Certificate is wrong."
-      );
+      certificateRemarks.push("First Aid Certificate, Certificate is wrong.");
     } else if (firstAidExpiryDate == true) {
-      certificateRemarks.push(
-        "First Aid Certificate, Expiry date is wrong."
-      );
+      certificateRemarks.push("First Aid Certificate, Expiry date is wrong.");
     }
 
     // CPR Certificate
@@ -244,13 +249,9 @@ function CheckDetail() {
         "CPR Certificate, Certificate and Expiry date is wrong."
       );
     } else if (cprCertificateFile == true) {
-      certificateRemarks.push(
-        "CPR Certificate, Certificate is wrong."
-      );
+      certificateRemarks.push("CPR Certificate, Certificate is wrong.");
     } else if (cprExpiryDate == true) {
-      certificateRemarks.push(
-        "CPR Certificate, Expiry date is wrong."
-      );
+      certificateRemarks.push("CPR Certificate, Expiry date is wrong.");
     }
 
     // Food handling Certificate
@@ -536,7 +537,9 @@ function CheckDetail() {
     }
     if (bankStatement == true) {
       poiRemarks.push("BANK_STATEMENT");
-      proofOfIdentityRemarks.push("Bank Statement (Showing transactions) is wrong");
+      proofOfIdentityRemarks.push(
+        "Bank Statement (Showing transactions) is wrong"
+      );
     }
     if (propertyLeaseAgreement == true) {
       poiRemarks.push("PROPERTY_LEASE_AGREEMENT");
@@ -550,11 +553,15 @@ function CheckDetail() {
     }
     if (australianMortgageDocuments == true) {
       poiRemarks.push("AUSTRALIAN_MORTGAGE_DOCUMENTS");
-      proofOfIdentityRemarks.push("Australian Mortgage Documents - Current Address is wrong");
+      proofOfIdentityRemarks.push(
+        "Australian Mortgage Documents - Current Address is wrong"
+      );
     }
     if (ratingAuthority == true) {
       poiRemarks.push("RATING_AUTHORITY");
-      proofOfIdentityRemarks.push("Rating Authority - Current address eg Land Rates is wrong");
+      proofOfIdentityRemarks.push(
+        "Rating Authority - Current address eg Land Rates is wrong"
+      );
     }
     if (utilityBillElectricity == true) {
       poiRemarks.push("UTILITY_BILL");
@@ -656,7 +663,6 @@ function CheckDetail() {
       poi_remark_msg: proofOfIdentityRemarks,
     };
 
-
     try {
       const response = await setMissingApplicationInfo(payload);
       setAlert({
@@ -695,53 +701,85 @@ function CheckDetail() {
           </p>
           {/* Certificate */}
           <Accordion title="Certificate">
-            <AccordionSubTitle title="Qualifications & Certificates" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("certificate")}
-              />
-            </div>
-            <AccordionSubTitle title=" Registered nurse" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Registered number"
-                isOptional
-                register={register("registerNurseNumber")}
-              />
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("registerNurseExpiryDate")}
-              />
-            </div>
-            <AccordionSubTitle title="Enrolled nurse/former enrolled nurse (Australia)" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Registered number"
-                isOptional
-                register={register("registerEnrollNurseNumber")}
-              />
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("registerEnrollNurseExpiryDate")}
-              />
-            </div>
-            <AccordionSubTitle title="First Aid Certificate" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("firstAidCertificateFile")}
-              />
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("firstAidExpiryDate")}
-              />
-            </div>
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Qualification and certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Qualifications & Certificates" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("certificate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Registered Nurse (Australia)"
+            ) ? (
+              <>
+                <AccordionSubTitle title=" Registered nurse" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Registered number"
+                    isOptional
+                    register={register("registerNurseNumber")}
+                  />
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("registerNurseExpiryDate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Enrolled Nurse/Former Enrolled Nurse (Australia)"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Enrolled nurse/former enrolled nurse (Australia)" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Registered number"
+                    isOptional
+                    register={register("registerEnrollNurseNumber")}
+                  />
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("registerEnrollNurseExpiryDate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "First Aid Certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="First Aid Certificate" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("firstAidCertificateFile")}
+                  />
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("firstAidExpiryDate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
             <AccordionSubTitle title="CPR Certificate" isOptional />
             <div className="grid grid-cols-3 gap-5">
               <CustomCheckBox
@@ -755,64 +793,113 @@ function CheckDetail() {
                 register={register("cprExpiryDate")}
               />
             </div>
-            <AccordionSubTitle title="Food handling Certificate" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("foodHandlingCertificateFile")}
-              />
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("foodHandlingExpiryDate")}
-              />
-            </div>
-            <AccordionSubTitle title="Responsible service of alcohol Certificaite" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("responsibleAlcholCertificateFile")}
-              />
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("responsibleAlcholExpiryDate")}
-              />
-            </div>
-            <AccordionSubTitle title="Manual handling Certificate" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("manualHandlingCertificateFile")}
-              />
-            </div>
-            <AccordionSubTitle title="Medication Certificate" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("medicationCertificateFile")}
-              />
-            </div>
-            <AccordionSubTitle title="Police Check" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("policeCheckCertificateFile")}
-              />
-            </div>
-            <AccordionSubTitle title="Curriculum Vitae (CV)" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Upload CV"
-                isOptional
-                register={register("CVFile")}
-              />
-            </div>
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Food Handling Certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Food handling Certificate" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("foodHandlingCertificateFile")}
+                  />
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("foodHandlingExpiryDate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Responsible Service of Alcohol Certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Responsible service of alcohol Certificaite" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("responsibleAlcholCertificateFile")}
+                  />
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("responsibleAlcholExpiryDate")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Manual Handling Certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Manual handling Certificate" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("manualHandlingCertificateFile")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Medication Certificate"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Medication Certificate" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("medicationCertificateFile")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Police Check"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Police Check" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("policeCheckCertificateFile")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Curriculum Vitae (CV)"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Curriculum Vitae (CV)" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Upload CV"
+                    isOptional
+                    register={register("CVFile")}
+                  />
+                </div>
+              </>
+            ) : null}
+
             <AccordionSubTitle title="Reference 1" isOptional />
             <div className="grid grid-cols-3 gap-5">
               <CustomCheckBox
@@ -869,34 +956,58 @@ function CheckDetail() {
                 register={register("cvRf2RelationShip")}
               />
             </div>
-            <AccordionSubTitle title="Visa Status" />
-            <div className="grid grid-cols-2 gap-5">
-              <CustomCheckBox
-                title="Passport or citizenship document or Vivo document"
-                register={register("visaStatus")}
-              />
-            </div>
-            <AccordionSubTitle title="Driver license" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Expiry date"
-                isOptional
-                register={register("driverLicenseExpiryDate")}
-              />
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("driverLicenseCertificateFile")}
-              />
-            </div>
-            <AccordionSubTitle title="Vaccination Certificates (COVID-19)" />
-            <div className="grid grid-cols-3 gap-5">
-              <CustomCheckBox
-                title="Certificate"
-                isOptional
-                register={register("vaccinationCertificateFile")}
-              />
-            </div>
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Visa Status"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Visa Status" />
+                <div className="grid grid-cols-2 gap-5">
+                  <CustomCheckBox
+                    title="Passport or citizenship document or Vivo document"
+                    register={register("visaStatus")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Driver's License"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Driver license" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Expiry date"
+                    isOptional
+                    register={register("driverLicenseExpiryDate")}
+                  />
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("driverLicenseCertificateFile")}
+                  />
+                </div>
+              </>
+            ) : null}
+
+            {isShow(
+              selectedApplicationDetail?.positionApplyingFor,
+              "Vaccination Certificate (COVID-19)"
+            ) ? (
+              <>
+                <AccordionSubTitle title="Vaccination Certificates (COVID-19)" />
+                <div className="grid grid-cols-3 gap-5">
+                  <CustomCheckBox
+                    title="Certificate"
+                    isOptional
+                    register={register("vaccinationCertificateFile")}
+                  />
+                </div>
+              </>
+            ) : null}
           </Accordion>
           {/* Video */}
           <Accordion title="Applicant video">

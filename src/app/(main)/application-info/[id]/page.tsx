@@ -57,8 +57,6 @@ function ApplicatoinInfo() {
   const fullName =
     applicationDetails?.firstName + " " + applicationDetails?.lastName;
 
-
-    console.log("application details" , applicationDetails);
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
@@ -95,6 +93,7 @@ function ApplicatoinInfo() {
                 applicationId={id as string}
                 singleFileUpload
                 userId={applicationDetails?.userId}
+                applicationDetails={applicationDetails}
               />
             </div>
             {/* Job position list */}

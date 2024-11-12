@@ -4,18 +4,23 @@ type selectedApplicationsType = {
   selectedApplications: number[];
   isStatusChanged: boolean;
   selectedApplicantUserId: string;
+  selectedApplicationDetail: any;
 };
 
 const initialState: selectedApplicationsType = {
   selectedApplications: [],
   isStatusChanged: false,
   selectedApplicantUserId: "",
+  selectedApplicationDetail: null,
 };
 
 export const selectedApplications = createSlice({
   name: "selectedApplications",
   initialState,
   reducers: {
+    setSelectedApplicantDetail: (state, action: PayloadAction<string>) => {
+      state.selectedApplicationDetail = action.payload;
+    },
     setSelectedApplicantUserId: (state, action: PayloadAction<string>) => {
       state.selectedApplicantUserId = action.payload;
     },
@@ -54,6 +59,7 @@ export const {
   addAllApplications,
   addSingleApplications,
   setSelectedApplicantUserId,
+  setSelectedApplicantDetail,
 } = selectedApplications.actions;
 
 export default selectedApplications.reducer;

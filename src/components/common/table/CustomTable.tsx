@@ -138,9 +138,7 @@ function CustomTable({
                             </div>
                           ) : (
                             <Dropdown
-                              position={
-                                 index > 1 ? "dropdown-top" : ""
-                              }
+                              position={index > 1 ? "dropdown-top" : ""}
                               value={el[hd.bodyKeyName]}
                               dropdownList={[
                                 {
@@ -191,9 +189,9 @@ function CustomTable({
                   })}
                   <td className="px-5 py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
                     <button
-                      onClick={() =>
-                        router.push(`/application-info/${el.applicationId}`)
-                      }
+                      onClick={() => {
+                        router.push(`/application-info/${el.applicationId}`);
+                      }}
                       className="btn w-full bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
                     >
                       View CV

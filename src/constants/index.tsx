@@ -45,3 +45,25 @@ export const SIDE_BAR_OPTIONS = [
     route: "/login",
   },
 ];
+
+//position is to decide which certificate to render based on the applied position
+export const APPLIED_POSITIONS: any = {
+  "Qualification and certificate": ["csa_psa", "others"],
+  "Registered Nurse (Australia)": ["nurse"],
+  "Enrolled Nurse/Former Enrolled Nurse (Australia)": ["enrolled-nurse"],
+  "First Aid Certificate": ["nurse", "enrolled-nurse", "csa_psa", "others"],
+  "Food Handling Certificate": ["csa_psa", "others"],
+  "Responsible Service of Alcohol Certificate": ["csa_psa", "others"],
+  "Manual Handling Certificate": ["csa_psa", "others"],
+  "Medication Certificate": ["csa_psa", "others"],
+  "Police Check": ["nurse", "enrolled-nurse", "csa_psa", "others"],
+  "Curriculum Vitae (CV)": ["nurse", "enrolled-nurse", "csa_psa", "others"],
+  "Visa Status": ["nurse", "enrolled-nurse", "csa_psa", "others"],
+  "Driver's License": ["nurse", "enrolled-nurse", "csa_psa", "others"],
+  "Vaccination Certificate (COVID-19)": [
+    "nurse",
+    "enrolled-nurse",
+    "csa_psa",
+    "others",
+  ],
+};
