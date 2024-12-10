@@ -65,11 +65,13 @@ export default function Home() {
     setDataCounts(data?.FILTERED_PENDING);
   };
 
-  const handleClickCheckBox = (id: number) => {
+  const handleClickCheckBox = (id: number, applicationStatus: string) => {
     const duplicateId = selectedApplications.find((el) => el == id);
 
     if (duplicateId == undefined) {
-      dispatch(addApplications(id));
+      dispatch(
+        addApplications({ id: id, applicationStatus: applicationStatus })
+      );
     }
     if (duplicateId) {
       dispatch(removeApplications(id));

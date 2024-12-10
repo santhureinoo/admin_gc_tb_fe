@@ -21,7 +21,6 @@ function ApplicantDetail({ applicationDetails }: ApplicantDetailProps) {
           }
           isRequired
         />
-
         <InfoField
           title="Application submitted date"
           value={dateFormat(applicationDetails?.submissionDate as string)}

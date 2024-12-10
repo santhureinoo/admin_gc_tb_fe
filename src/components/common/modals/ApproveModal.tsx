@@ -14,7 +14,7 @@ type ApproveModalProps = {
 };
 
 function ApproveModal({ modalId }: ApproveModalProps) {
-  const { selectedApplications } = useAppSelector(
+  const { selectedApplications, selectedApplicationsStatus } = useAppSelector(
     (state) => state.selectedApplications
   );
 

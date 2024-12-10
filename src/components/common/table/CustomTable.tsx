@@ -15,7 +15,7 @@ type customTableProps = {
   headersList: headerValue[];
   data: any;
   sortingOnClick: (data: any) => void;
-  checkBoxOnClick: (data: any) => void;
+  checkBoxOnClick: (data: any, applicationStatus: string) => void;
   allCheckBoxOnClick: () => void;
   selectedRowsId?: number[];
 };
@@ -34,7 +34,7 @@ function CustomTable({
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
   const router = useRouter();
-
+  console.log("*** data ***", data);
   return (
     <div className="w-full max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-360px)]">
       <div className="p-3">
@@ -107,7 +107,12 @@ function CustomTable({
                           ? false
                           : true
                       }
-                      onChange={() => checkBoxOnClick(el?.applicationId)}
+                      onChange={() =>
+                        checkBoxOnClick(
+                          el?.applicationId,
+                          el?.applicationStatus
+                        )
+                      }
                       type="checkbox"
                       className="checkbox bg-white border border-neutralGrey-grey400 [--chkbg:#15B0AC] [--chkfg:#FFFFFF] checked:border-none checkbox-sm"
                     />

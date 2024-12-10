@@ -75,7 +75,12 @@ function WorkerDetail({ applicationDetails }: WorkerDetailProps) {
           />
           <InfoField
             title="Company name"
-            value={applicationDetails?.primaryJobListed}
+            value={applicationDetails?.primaryJobListed?.split("|").join(", ")}
+            isRequired
+          />
+          <InfoField
+            title="Working Hours"
+            value={applicationDetails?.workingHours}
             isRequired
           />
         </div>
