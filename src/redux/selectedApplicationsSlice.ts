@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type selectedApplicationsType = {
+  selectedApplicationsStatus: string;
   selectedApplications: number[];
   isStatusChanged: boolean;
   selectedApplicantUserId: string;
@@ -8,6 +9,7 @@ type selectedApplicationsType = {
 };
 
 const initialState: selectedApplicationsType = {
+  selectedApplicationsStatus: "",
   selectedApplications: [],
   isStatusChanged: false,
   selectedApplicantUserId: "",
@@ -27,11 +29,15 @@ export const selectedApplications = createSlice({
     addSingleApplications: (state, action: PayloadAction<number>) => {
       state.selectedApplications = [action.payload];
     },
-    addApplications: (state, action: PayloadAction<number>) => {
+    addApplications: (
+      state,
+      action: PayloadAction<{ id: number; applicationStatus: string }>
+    ) => {
       state.selectedApplications = [
         ...state.selectedApplications,
-        action.payload,
+        action.payload.id,
       ];
+      state.selectedApplicationsStatus = action.payload.applicationStatus;
     },
     // this is for when we click the table header checkbox
     addAllApplications: (state, action: PayloadAction<number[]>) => {

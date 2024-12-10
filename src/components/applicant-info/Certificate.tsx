@@ -23,20 +23,22 @@ function Certificate({ applicationDetails }: CertificateProps) {
             <span className="text-red-500">*</span>
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Certificate III(Australia)"
-              value={
-                applicationDetails?.sec_qual_cert?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_qual_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={applicationDetails?.sec_qual_cert?.file?.s3FileKey}
-              s3FileType={applicationDetails?.sec_qual_cert?.file?.fileType}
-            />
             <InfoField title="Certificate IV(Australia)" value="Not required" />
             <InfoField title="No Certification" value="Not required" />
+            <div>
+              {applicationDetails?.sec_qual_cert?.fileList?.map(
+                (file: any, index: any) => (
+                  <InfoField
+                    title={"Certificate III(Australia)"}
+                    value={file?.originalFilename + "." + file?.fileType}
+                    isFile
+                    userId={applicationDetails?.userId}
+                    s3FileKey={file?.s3FileKey}
+                    s3FileType={file?.fileType}
+                  />
+                )
+              )}
+            </div>
           </div>
         </div>
       ) : null}
@@ -95,26 +97,24 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             First Aid Certificate <span className="text-red-500">*</span>
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Expiry date"
-              value={dateFormat(
-                applicationDetails?.sec_firstAid_cert?.expiryDate
-              )}
-            />
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_firstAid_cert?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_firstAid_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={applicationDetails?.sec_firstAid_cert?.file?.s3FileKey}
-              s3FileType={applicationDetails?.sec_firstAid_cert?.file?.fileType}
-            />
-          </div>
+          {applicationDetails?.sec_firstAid_cert?.fileList?.map((file: any) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+              <InfoField
+                title="Expiry date"
+                value={dateFormat(file?.expiryDate)}
+              />
+              <InfoField
+                title="Certificate"
+                value={
+                  file?.file?.originalFilename + "." + file?.file?.fileType
+                }
+                isFile
+                userId={applicationDetails?.userId}
+                s3FileKey={file?.file?.s3FileKey}
+                s3FileType={file?.file?.fileType}
+              />
+            </div>
+          ))}
         </div>
       ) : null}
 
@@ -150,30 +150,26 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             Food handling Certificate <span className="text-red-500">*</span>
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Expiry date"
-              value={dateFormat(
-                applicationDetails?.sec_foodHandl_cert?.expiryDate
-              )}
-            />
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_foodHandl_cert?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_foodHandl_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_foodHandl_cert?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_foodHandl_cert?.file?.fileType
-              }
-            />
-          </div>
+          {applicationDetails?.sec_foodHandl_cert?.fileList?.map(
+            (file: any) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+                <InfoField
+                  title="Expiry date"
+                  value={dateFormat(
+                    applicationDetails?.sec_foodHandl_cert?.expiryDate
+                  )}
+                />
+                <InfoField
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -185,31 +181,26 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             Responsible service of alchol Certificate
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Expiry date"
-              value={dateFormat(
-                applicationDetails?.sec_resp_alcohol_cert?.expiryDate
-              )}
-            />
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_resp_alcohol_cert?.file
-                  ?.originalFilename +
-                "." +
-                applicationDetails?.sec_resp_alcohol_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_resp_alcohol_cert?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_resp_alcohol_cert?.file?.fileType
-              }
-            />
-          </div>
+          {applicationDetails?.sec_resp_alcohol_cert?.fileList?.map(
+            (file: any) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+                <InfoField
+                  title="Expiry date"
+                  value={dateFormat(
+                    applicationDetails?.sec_resp_alcohol_cert?.expiryDate
+                  )}
+                />
+                <InfoField
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -221,25 +212,23 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             Manual handling Certificate{" "}
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_manualHandl_cert?.file
-                  ?.originalFilename +
-                "." +
-                applicationDetails?.sec_manualHandl_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_manualHandl_cert?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_manualHandl_cert?.file?.fileType
-              }
-            />
-          </div>
+          {applicationDetails?.sec_manualHandl_cert?.fileList?.map(
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
+                <InfoField
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -251,25 +240,24 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             Medication Certificate
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_medication_cert?.file
-                  ?.originalFilename +
-                "." +
-                applicationDetails?.sec_medication_cert?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_medication_cert?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_medication_cert?.file?.fileType
-              }
-            />
-          </div>
+
+          {applicationDetails?.sec_medication_cert?.fileList?.map(
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
+                <InfoField
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -288,17 +276,25 @@ function Certificate({ applicationDetails }: CertificateProps) {
               }
             />
             <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_police_check?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_police_check?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={applicationDetails?.sec_police_check?.file?.s3FileKey}
-              s3FileType={applicationDetails?.sec_police_check?.file?.fileType}
+              title="Police Check Date"
+              value={dateFormat(
+                applicationDetails?.sec_police_check?.policeCheckDate
+              )}
+              isRequired
             />
+            {applicationDetails?.sec_police_check?.fileList?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )}
           </div>
         </div>
       ) : null}
@@ -311,25 +307,23 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             Curriculum Vitae(CV) <span className="text-red-500">*</span>
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Upload CV"
-              value={
-                applicationDetails?.sec_curriculum_vitae?.file
-                  ?.originalFilename +
-                "." +
-                applicationDetails?.sec_curriculum_vitae?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_curriculum_vitae?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_curriculum_vitae?.file?.fileType
-              }
-            />
-          </div>
+          {applicationDetails?.sec_curriculum_vitae?.fileList?.map(
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
+                <InfoField
+                  title="Upload CV"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -415,18 +409,19 @@ function Certificate({ applicationDetails }: CertificateProps) {
               title="Passport or cetizenship document"
               value="Not required"
             />
-            <InfoField
-              title="Visa document"
-              value={
-                applicationDetails?.sec_visa_status?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_visa_status?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={applicationDetails?.sec_visa_status?.file?.s3FileKey}
-              s3FileType={applicationDetails?.sec_visa_status?.file?.fileType}
-            />
+            {applicationDetails?.sec_visa_status?.fileList?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Visa document"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )}
           </div>
         </div>
       ) : null}
@@ -448,6 +443,18 @@ function Certificate({ applicationDetails }: CertificateProps) {
                   : "No"
               }
             />
+            <InfoField
+              title="Do you have a car?"
+              value={
+                applicationDetails?.sec_driver_license?.hasCar == true
+                  ? "Yes"
+                  : "No"
+              }
+            />
+            <InfoField
+              title="Place of Issue"
+              value={applicationDetails?.sec_driver_license?.placeOfIssue}
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[24px]">
             <InfoField
@@ -457,22 +464,19 @@ function Certificate({ applicationDetails }: CertificateProps) {
               )}
               isRequired
             />
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_driver_license?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_driver_license?.file?.fileType
-              }
-              isFile
-              userId={applicationDetails?.userId}
-              s3FileKey={
-                applicationDetails?.sec_driver_license?.file?.s3FileKey
-              }
-              s3FileType={
-                applicationDetails?.sec_driver_license?.file?.fileType
-              }
-            />
+            {applicationDetails?.sec_driver_license?.fileList?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )}
           </div>
         </div>
       ) : null}
@@ -486,17 +490,20 @@ function Certificate({ applicationDetails }: CertificateProps) {
             Vaccination Certificate (COVID - 19){" "}
             <span className="text-red-500">*</span>
           </p>
-          <div className="grid grid-cols-3 gap-[24px]">
-            <InfoField
-              title="Certificate"
-              value={
-                applicationDetails?.sec_vacc_cert?.file?.originalFilename +
-                "." +
-                applicationDetails?.sec_vacc_cert?.file?.fileType
-              }
-              isFile
-            />
-          </div>
+          {applicationDetails?.sec_vacc_cert?.fileList?.map(
+            (file: any, index: any) => (
+              <div key={index} className="grid grid-cols-3 gap-[24px]">
+                <InfoField
+                  title="Certificate"
+                  value={file?.originalFilename + "." + file?.fileType}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
     </div>

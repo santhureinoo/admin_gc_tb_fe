@@ -13,8 +13,8 @@ function ApplicantVideo({ applicationDetails }: ApplicationVideoProps) {
       userId: applicationDetails?.userId,
       fileDetails: [
         {
-          s3FileKey: applicationDetails?.profileVideo?.s3FileKey, // FileName,if upload, s3FileKey, if download
-          fileType: applicationDetails?.profileVideo?.fileType,
+          s3FileKey: applicationDetails?.profileVideo[0]?.s3FileKey, // FileName,if upload, s3FileKey, if download
+          fileType: applicationDetails?.profileVideo[0]?.fileType,
         },
       ],
     });
@@ -25,7 +25,7 @@ function ApplicantVideo({ applicationDetails }: ApplicationVideoProps) {
     handleDownload(
       s3Url,
       fileName,
-      applicationDetails?.profileVideo?.fileType as string
+      applicationDetails?.profileVideo[0]?.fileType as string
     );
   };
 
@@ -77,7 +77,9 @@ function ApplicantVideo({ applicationDetails }: ApplicationVideoProps) {
           ></div>
           <div className="flex justify-between">
             <p className="font-[500] text-primary-pink600">
-              {applicationDetails?.profileVideo?.originalFilename}
+              {applicationDetails?.profileVideo
+                ? applicationDetails?.profileVideo[0]?.originalFilename
+                : ""}
             </p>
             <p className="font-[500] text-primary-pink800">525KB</p>
           </div>

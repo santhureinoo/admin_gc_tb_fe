@@ -75,7 +75,7 @@ export const isShow = (positions: any, certificateName: string) => {
   const appliedPositions = positions;
   const toFilterPositions = APPLIED_POSITIONS[certificateName];
   const isIncluded = toFilterPositions.some((element: any) =>
-    appliedPositions.includes(element)
+    appliedPositions?.includes(element)
   );
   return isIncluded;
 };

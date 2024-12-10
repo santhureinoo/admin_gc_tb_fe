@@ -44,7 +44,7 @@ function Dropdown({
   userId,
   applicationDetails,
 }: DropdownProps) {
-  const { selectedApplications } = useAppSelector(
+  const { selectedApplications, selectedApplicationsStatus } = useAppSelector(
     (state) => state.selectedApplications
   );
 
@@ -58,7 +58,7 @@ function Dropdown({
       elem?.blur();
     }
 
-    setSelectedValue(selectedValue);
+    // setSelectedValue(selectedValue);
 
     if (onSelect !== undefined) {
       // ***
@@ -69,6 +69,35 @@ function Dropdown({
       // *** for all status ***
       // for approved status
       if (selectedValue == "APPROVED") {
+        if (selectedApplicationsStatus == "APPROVED") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "This application is already approved!",
+            })
+          );
+          return;
+        }
+        if (value == "APPROVED") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage: "This CV is already approved",
+            })
+          );
+          return;
+        }
+        if (value == "MISSING_INFO") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "You can't change the staus of CV unitl the applicant reupload the CV",
+            })
+          );
+          return;
+        }
         if (singleFileUpload) {
           dispatch(addSingleApplications(parseInt(applicationId as string)));
         }
@@ -85,6 +114,16 @@ function Dropdown({
 
       // for missing info status
       if (selectedValue == "MISSING_INFO") {
+        if (value == "APPROVED") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "You can't change the staus to Missing info because it is already approved. You can only change it into interview",
+            })
+          );
+          return;
+        }
         dispatch(setSelectedApplicantUserId(userId as string));
         if (applicationDetails !== null) {
           dispatch(setSelectedApplicantDetail(applicationDetails));
@@ -94,6 +133,36 @@ function Dropdown({
 
       // for interview status
       if (selectedValue == "INTERVIEW") {
+        if (selectedApplicationsStatus == "PENDING") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "You have to approved first in order to change it into Interview status",
+            })
+          );
+          return;
+        }
+        if (value == "MISSING_INFO") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "You can't change the staus of CV unitl the applicant reupload the CV",
+            })
+          );
+          return;
+        }
+        if (value == "PENDING") {
+          dispatch(
+            setAlert({
+              alertType: "error",
+              alertMessage:
+                "You can't move to interview stage until you move into Approve",
+            })
+          );
+          return;
+        }
         if (singleFileUpload) {
           try {
             const data = await updateApplicationsStatus({
