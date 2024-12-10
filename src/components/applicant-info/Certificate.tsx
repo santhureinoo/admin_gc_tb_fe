@@ -29,6 +29,7 @@ function Certificate({ applicationDetails }: CertificateProps) {
               {applicationDetails?.sec_qual_cert?.fileList?.map(
                 (file: any, index: any) => (
                   <InfoField
+                    key={index}
                     title={"Certificate III(Australia)"}
                     value={file?.originalFilename + "." + file?.fileType}
                     isFile
@@ -97,24 +98,29 @@ function Certificate({ applicationDetails }: CertificateProps) {
           <p className="font-[500] text-neutralGrey600 mb-[10px]">
             First Aid Certificate <span className="text-red-500">*</span>
           </p>
-          {applicationDetails?.sec_firstAid_cert?.fileList?.map((file: any) => (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-              <InfoField
-                title="Expiry date"
-                value={dateFormat(file?.expiryDate)}
-              />
-              <InfoField
-                title="Certificate"
-                value={
-                  file?.file?.originalFilename + "." + file?.file?.fileType
-                }
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.file?.s3FileKey}
-                s3FileType={file?.file?.fileType}
-              />
-            </div>
-          ))}
+          {applicationDetails?.sec_firstAid_cert?.fileList?.map(
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
+                <InfoField
+                  title="Expiry date"
+                  value={dateFormat(file?.expiryDate)}
+                />
+                <InfoField
+                  title="Certificate"
+                  value={
+                    file?.file?.originalFilename + "." + file?.file?.fileType
+                  }
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.file?.s3FileKey}
+                  s3FileType={file?.file?.fileType}
+                />
+              </div>
+            )
+          )}
         </div>
       ) : null}
 
@@ -151,8 +157,11 @@ function Certificate({ applicationDetails }: CertificateProps) {
             Food handling Certificate <span className="text-red-500">*</span>
           </p>
           {applicationDetails?.sec_foodHandl_cert?.fileList?.map(
-            (file: any) => (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
                 <InfoField
                   title="Expiry date"
                   value={dateFormat(
@@ -182,8 +191,11 @@ function Certificate({ applicationDetails }: CertificateProps) {
             Responsible service of alchol Certificate
           </p>
           {applicationDetails?.sec_resp_alcohol_cert?.fileList?.map(
-            (file: any) => (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+            (file: any, index: any) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]"
+              >
                 <InfoField
                   title="Expiry date"
                   value={dateFormat(

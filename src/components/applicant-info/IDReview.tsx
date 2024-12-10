@@ -29,8 +29,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
           {filterPOI("FOREIGN_PASSPORT")?.length > 0 ? (
-            filterPOI("FOREIGN_PASSPORT")?.map((file: any) => (
+            filterPOI("FOREIGN_PASSPORT")?.map((file: any, index: any) => (
               <InfoField
+                key={index}
                 title="Foreign Passport (Current)"
                 value={file?.originalFilename}
                 isFile
@@ -48,8 +49,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("AUSTRALIAN_PASSPORT")?.length > 0 ? (
-            filterPOI("AUSTRALIAN_PASSPORT")?.map((file: any) => (
+            filterPOI("AUSTRALIAN_PASSPORT")?.map((file: any, index: any) => (
               <InfoField
+                key={index}
                 title="Australian Passport (current or expired last 2 years but not cancelled)"
                 value={file?.originalFilename}
                 isFile
@@ -68,8 +70,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         <div className="mt-[24px]">
           {filterPOI("AUSTRALIAN_CITIZENSHIP_CERTIFICATE")?.length > 0 ? (
             filterPOI("AUSTRALIAN_CITIZENSHIP_CERTIFICATE")?.map(
-              (file: any) => (
+              (file: any, index: any) => (
                 <InfoField
+                  key={index}
                   title="Australian Citizenship Certificate"
                   value={file?.originalFilename}
                   isFile
@@ -88,16 +91,19 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("FULL_BIRTH_CERTIFICATE")?.length > 0 ? (
-            filterPOI("FULL_BIRTH_CERTIFICATE")?.map((file: any) => (
-              <InfoField
-                title="Full Birth Certificate (not Extract)"
-                value={file?.originalFilename}
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.s3FileKey}
-                s3FileType={file?.fileType}
-              />
-            ))
+            filterPOI("FULL_BIRTH_CERTIFICATE")?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Full Birth Certificate (not Extract)"
+                  value={file?.originalFilename}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )
           ) : (
             <InfoField
               title="Full Birth Certificate (not Extract)"
@@ -107,16 +113,19 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("CERTIFICATE_OF_IDENTITY")?.length > 0 ? (
-            filterPOI("CERTIFICATE_OF_IDENTITY")?.map((file: any) => (
-              <InfoField
-                title="Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia"
-                value={file?.originalFilename}
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.s3FileKey}
-                s3FileType={file?.fileType}
-              />
-            ))
+            filterPOI("CERTIFICATE_OF_IDENTITY")?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia"
+                  value={file?.originalFilename}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )
           ) : (
             <InfoField
               title="Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia"
@@ -126,16 +135,19 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("AUSTRALIAN_DRIVER_LICENSE")?.length > 0 ? (
-            filterPOI("AUSTRALIAN_DRIVER_LICENSE")?.map((file: any) => (
-              <InfoField
-                title="Australian Driver Licence/Learner's Permit"
-                value={file?.originalFilename}
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.s3FileKey}
-                s3FileType={file?.fileType}
-              />
-            ))
+            filterPOI("AUSTRALIAN_DRIVER_LICENSE")?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Australian Driver Licence/Learner's Permit"
+                  value={file?.originalFilename}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )
           ) : (
             <InfoField
               title="Australian Driver Licence/Learner's Permit"
@@ -145,16 +157,19 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("CURRENT_AUSTRALIAN_STUDENT_CARD")?.length > 0 ? (
-            filterPOI("CURRENT_AUSTRALIAN_STUDENT_CARD")?.map((file: any) => (
-              <InfoField
-                title="Current (Australian) Tertiary Student Identification Card"
-                value={file?.originalFilename}
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.s3FileKey}
-                s3FileType={file?.fileType}
-              />
-            ))
+            filterPOI("CURRENT_AUSTRALIAN_STUDENT_CARD")?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Current (Australian) Tertiary Student Identification Card"
+                  value={file?.originalFilename}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )
           ) : (
             <InfoField
               title="Current (Australian) Tertiary Student Identification Card"
@@ -165,8 +180,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         <div className="mt-[24px]">
           {filterPOI("PHOTO_ID_CARD_FOR_AUSTRALIAN_REGULATORY")?.length > 0 ? (
             filterPOI("PHOTO_ID_CARD_FOR_AUSTRALIAN_REGULATORY")?.map(
-              (file: any) => (
+              (file: any, index: any) => (
                 <InfoField
+                  key={index}
                   title="Photo identification card issued for Australian regulatory purposes (e.g. Aviation/Martime Security identification, security industry etc)"
                   value={file?.originalFilename}
                   isFile
@@ -185,16 +201,19 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("GOVERNMENT_EMPLOYEE_ID")?.length > 0 ? (
-            filterPOI("GOVERNMENT_EMPLOYEE_ID")?.map((file: any) => (
-              <InfoField
-                title="Government employee ID (Australian Federal/State/Territory)"
-                value={file?.originalFilename}
-                isFile
-                userId={applicationDetails?.userId}
-                s3FileKey={file?.s3FileKey}
-                s3FileType={file?.fileType}
-              />
-            ))
+            filterPOI("GOVERNMENT_EMPLOYEE_ID")?.map(
+              (file: any, index: any) => (
+                <InfoField
+                  key={index}
+                  title="Government employee ID (Australian Federal/State/Territory)"
+                  value={file?.originalFilename}
+                  isFile
+                  userId={applicationDetails?.userId}
+                  s3FileKey={file?.s3FileKey}
+                  s3FileType={file?.fileType}
+                />
+              )
+            )
           ) : (
             <InfoField
               title="Government employee ID (Australian Federal/State/Territory)"
@@ -221,8 +240,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
           {/* DVA_CARD */}
 
           {filterPOI("DVA_CARD")?.length > 0 ? (
-            filterPOI("DVA_CARD")?.map((file: any) => (
+            filterPOI("DVA_CARD")?.map((file: any, index: any) => (
               <InfoField
+                key={index}
                 title="Department of Veterans' Affairs (DVA) Card"
                 value={file?.originalFilename}
                 isFile
@@ -240,8 +260,9 @@ function IDReview({ applicationDetails }: IDReviewProps) {
         </div>
         <div className="mt-[24px]">
           {filterPOI("CENTRELINK_CARD")?.length > 0 ? (
-            filterPOI("CENTRELINK_CARD")?.map((file: any) => (
+            filterPOI("CENTRELINK_CARD")?.map((file: any, index: any) => (
               <InfoField
+                key={index}
                 title="Centrelink card (with reference number)"
                 value={file?.originalFilename}
                 isFile

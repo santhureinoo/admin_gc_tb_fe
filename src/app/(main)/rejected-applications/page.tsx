@@ -44,7 +44,7 @@ function RejectedApplications() {
   const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
     if (duplicateId == undefined) {
-      dispatch(addApplications(id));
+      dispatch(addApplications({ id: id, applicationStatus: "REJECTED" }));
     }
     if (duplicateId) {
       dispatch(removeApplications(id));
