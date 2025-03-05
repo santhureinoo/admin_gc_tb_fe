@@ -1,6 +1,6 @@
 import { IoMailOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { AiOutlineFileSearch } from "react-icons/ai";
+import { AiOutlineFileSearch, AiOutlineMan } from "react-icons/ai";
 import { AiOutlineFileExcel } from "react-icons/ai";
 
 // cookie naming
@@ -28,22 +28,34 @@ export const MODALS = {
 export const SIDE_BAR_OPTIONS = [
   {
     id: 1,
-    name: "Job Applications",
+    name: "Pending Users",
     icon: AiOutlineFileSearch,
     route: "/",
   },
   {
     id: 2,
-    name: "Rejected Applications",
+    name: "Rejected Users",
     icon: AiOutlineFileExcel,
     route: "/rejected-applications",
   },
   {
     id: 3,
-    name: "Logout",
+    name: "Users",
     icon: IoIosLogOut,
     route: "/login",
   },
+  {
+    id: 4,
+    name: "User Roles",
+    icon: IoMailOutline,
+    route: "/send-email",
+  },
+  {
+    id: 5,
+    name: "Log out",
+    icon: IoMailOutline,
+    route: "/send-email",
+  }
 ];
 
 //position is to decide which certificate to render based on the applied position
