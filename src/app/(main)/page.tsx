@@ -106,28 +106,29 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
-      <button onClick={() => setShwoDrawer(true)}>Open Drawer</button>
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
       <div className="px-[24px] py-[20px]">
         <div className="flex items-center justify-between">
           <p className="text-black font-[400] text-[14px] flex-1">Users</p>
-          <ActionButton name="Upload CSV" />
         </div>
-        <UserFilterDrawer id={"user-filter-drawer"} buttonLabel={"User Filter"}>
+        {/* <UserFilterDrawer id={"user-filter-drawer"} buttonLabel={"User Filter"}>
           <li>Hello world</li>
           <li>Hello world</li>
-        </UserFilterDrawer>
-        <LicenceFilterDrawer
+        </UserFilterDrawer> */}
+        {/* <LicenceFilterDrawer
           id={"licence-filter-drawer"}
           buttonLabel={"Licence Filter"}
         >
           <li>LicenceFilterDrawer</li>
           <li>LicenceFilterDrawer world</li>
-        </LicenceFilterDrawer>
+        </LicenceFilterDrawer> */}
         <div className="bg-white p-[24px] my-[16px] min-h-screen">
-          <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
-            Users
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
+              Users
+            </h3>
+            <ActionButton name="Upload CSV" />
+          </div>
           {/* <InfoCardList infos={dashboardSummary} /> */}
           {/* <StatusBarList
             activeValue={currentStatus}
@@ -168,10 +169,72 @@ export default function Home() {
             }}
           /> */}
           <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
-            <SearchTextField
-              onChange={(value) => setSearchApplicationText(value)}
-              placeholder="Search User"
-            />
+            <div className="flex flex-row items-center justify-between">
+              <SearchTextField
+                onChange={(value) => setSearchApplicationText(value)}
+                placeholder="Search User"
+              />
+
+              <UserFilterDrawer
+                id={"user-filter-drawer"}
+                buttonLabel={"User Filter"}
+              >
+                <div className="flex flex-col gap-2 border-b py-[16px]">
+                  <h3 className="text-neutralGrey-grey600 text-[18px] font-bold">
+                    Filters
+                  </h3>
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    User Roles
+                  </h3>
+                  <select
+                    defaultValue="Pick a color"
+                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                  >
+                    <option disabled={true}>Pick a color</option>
+                    <option>Crimson</option>
+                    <option>Amber</option>
+                    <option>Velvet</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2 border-b py-[16px]">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Plan Periods
+                  </h3>
+                  <select
+                    defaultValue="Pick a color"
+                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                  >
+                    <option disabled={true}>Select plan period</option>
+                    <option>Crimson</option>
+                    <option>Amber</option>
+                    <option>Velvet</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2 border-b py-[16px]">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Created Date Filter
+                  </h3>
+                  <select
+                    defaultValue="Pick a color"
+                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                  >
+                    <option disabled={true}>Select Start date</option>
+                    <option>Crimson</option>
+                    <option>Amber</option>
+                    <option>Velvet</option>
+                  </select>
+                  <select
+                    defaultValue="Pick a color"
+                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                  >
+                    <option disabled={true}>Pick a color</option>
+                    <option>Crimson</option>
+                    <option>Amber</option>
+                    <option>Velvet</option>
+                  </select>
+                </div>
+              </UserFilterDrawer>
+            </div>
             <div className="flex items-center gap-3">
               {/* <Dropdown
                 position={"dropdown-end"}
@@ -239,7 +302,6 @@ export default function Home() {
                 name: "Status",
                 bodyKeyName: "phone",
                 sortable: true,
-                ComponentName: "Dropdown",
               },
               {
                 name: "Company name",

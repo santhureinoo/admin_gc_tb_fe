@@ -1,13 +1,20 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { ActionButton, CancelButton } from "../buttons";
 
+type UserFilterDrawerProps = {
+  id: string;
+  position?: string;
+  buttonLabel?: string;
+  children: any;
+};
 function UserFilterDrawer({
   id = "my-drawer",
   position = "end",
   buttonLabel = "Open Drawer",
   children,
-}: any) {
+}: UserFilterDrawerProps) {
   const [num, setNum] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,11 +43,14 @@ function UserFilterDrawer({
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu text-base-content min-h-full w-80 p-4 bg-white">
-          <p className="text-black">{num}</p>
-          <button onClick={() => setNum((prev: any) => prev + 1)}>Add</button>
-          {children}
-        </ul>
+        <div className="flex flex-col h-full w-[400px] p-4 bg-white">
+          <div className="flex-1 overflow-auto">{children}</div>
+
+          <div className="flex gap-2 items-center pt-[16px] border-t">
+            <CancelButton name="Reset" fullWidth />
+            <ActionButton name="Apply Filter" fullWidth />
+          </div>
+        </div>
       </div>
     </div>
   );

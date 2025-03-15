@@ -73,8 +73,7 @@ function Dropdown({
           dispatch(
             setAlert({
               alertType: "error",
-              alertMessage:
-                "This application is already approved!",
+              alertMessage: "This application is already approved!",
             })
           );
           return;

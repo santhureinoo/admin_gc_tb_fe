@@ -43,11 +43,11 @@ function LicenceFilterDrawer({
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu text-base-content min-h-full w-80 p-4 bg-white">
+        <div className="menu text-base-content min-h-full w-[400px] p-4 bg-white">
           <p className="text-black">{num}</p>
           <button onClick={() => setNum((prev: any) => prev + 1)}>Add</button>
           {children}
-        </ul>
+        </div>
       </div>
     </div>
   );
