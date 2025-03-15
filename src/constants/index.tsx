@@ -28,34 +28,40 @@ export const MODALS = {
 export const SIDE_BAR_OPTIONS = [
   {
     id: 1,
-    name: "Pending Users",
+    name: "Users",
     icon: AiOutlineFileSearch,
     route: "/",
   },
   {
     id: 2,
-    name: "Rejected Users",
-    icon: AiOutlineFileExcel,
-    route: "/rejected-applications",
+    name: "License Keys Management",
+    icon: AiOutlineFileSearch,
+    route: "/license-keys",
   },
+  // {
+  //   id: 2,
+  //   name: "Rejected Users",
+  //   icon: AiOutlineFileExcel,
+  //   route: "/rejected-applications",
+  // },
+  // {
+  //   id: 3,
+  //   name: "Users",
+  //   icon: IoIosLogOut,
+  //   route: "/login",
+  // },
+  // {
+  //   id: 4,
+  //   name: "User Roles",
+  //   icon: IoMailOutline,
+  //   route: "/send-email",
+  // },
   {
     id: 3,
-    name: "Users",
-    icon: IoIosLogOut,
-    route: "/login",
-  },
-  {
-    id: 4,
-    name: "User Roles",
-    icon: IoMailOutline,
-    route: "/send-email",
-  },
-  {
-    id: 5,
     name: "Log out",
     icon: IoMailOutline,
-    route: "/send-email",
-  }
+    route: "",
+  },
 ];
 
 //position is to decide which certificate to render based on the applied position

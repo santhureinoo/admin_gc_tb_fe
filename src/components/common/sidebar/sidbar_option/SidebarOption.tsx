@@ -45,7 +45,7 @@ function SidebarOption({
         } `}
       />
       <p
-        className={`text-[14px] hidden md:block ${
+        className={`text-[14px] hidden md:block text-nowrap ${
           isActive
             ? "font-[500] text-primary-pink600"
             : "font-[300] text-neutralGrey800"

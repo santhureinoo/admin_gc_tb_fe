@@ -4,6 +4,11 @@ import {
   getDashboarSummary,
   updateApplicationsStatus,
 } from "@/actions/applications";
+import { ActionButton } from "@/components/common/buttons";
+import {
+  LicenceFilterDrawer,
+  UserFilterDrawer,
+} from "@/components/common/drawer";
 import Dropdown from "@/components/common/dropdown";
 import { InfoCardList } from "@/components/common/info-card";
 import Pagination from "@/components/common/pagination";
@@ -25,7 +30,7 @@ import { useDispatch } from "react-redux";
 export default function Home() {
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchApplicationText, setSearchApplicationText] = useState("");
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
   const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] =
     useState<APPLICATIONS_STATUS>("PENDING");
@@ -89,26 +94,42 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchDashboardApplications();
-    fetchDashboardSummary();
+    // fetchDashboardApplications();
+    // fetchDashboardSummary();
     // dispatch(clearApplications());
   }, [searchApplicationText, isStatusChanged, isAuResident]);
 
   useEffect(() => {
-    fetchDashboardApplications();
+    // fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
+  const [showDrawer, setShwoDrawer] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
+      <button onClick={() => setShwoDrawer(true)}>Open Drawer</button>
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
       <div className="px-[24px] py-[20px]">
-        <p className="text-black font-[400] text-[14px]">Job Applications</p>
+        <div className="flex items-center justify-between">
+          <p className="text-black font-[400] text-[14px] flex-1">Users</p>
+          <ActionButton name="Upload CSV" />
+        </div>
+        <UserFilterDrawer id={"user-filter-drawer"} buttonLabel={"User Filter"}>
+          <li>Hello world</li>
+          <li>Hello world</li>
+        </UserFilterDrawer>
+        <LicenceFilterDrawer
+          id={"licence-filter-drawer"}
+          buttonLabel={"Licence Filter"}
+        >
+          <li>LicenceFilterDrawer</li>
+          <li>LicenceFilterDrawer world</li>
+        </LicenceFilterDrawer>
         <div className="bg-white p-[24px] my-[16px] min-h-screen">
           <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
-            Job Applications
+            Users
           </h3>
-          <InfoCardList infos={dashboardSummary} />
-          <StatusBarList
+          {/* <InfoCardList infos={dashboardSummary} /> */}
+          {/* <StatusBarList
             activeValue={currentStatus}
             statusBarList={[
               {
@@ -145,13 +166,14 @@ export default function Home() {
             setDataCounts={(count) => {
               setDataCounts(count);
             }}
-          />
+          /> */}
           <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
             <SearchTextField
               onChange={(value) => setSearchApplicationText(value)}
+              placeholder="Search User"
             />
             <div className="flex items-center gap-3">
-              <Dropdown
+              {/* <Dropdown
                 position={"dropdown-end"}
                 value="All applicants"
                 dropdownList={[
@@ -177,9 +199,9 @@ export default function Home() {
                   }
                 }}
                 notStatus
-              />
+              /> */}
               {/* Move to */}
-              {selectedApplications.length > 0 ? (
+              {/* {selectedApplications.length > 0 ? (
                 <Dropdown
                   fixLabel="Move To"
                   position={"dropdown-end"}
@@ -195,7 +217,7 @@ export default function Home() {
                   ]}
                   onSelect={openModal}
                 />
-              ) : null}
+              ) : null} */}
             </div>
           </div>
           <CustomTable
@@ -214,24 +236,15 @@ export default function Home() {
                 sortableType: "number",
               },
               {
-                name: "Phone Number",
+                name: "Status",
                 bodyKeyName: "phone",
                 sortable: true,
-              },
-              {
-                name: "Applied date",
-                bodyKeyName: "createdDate",
-                sortable: true,
-              },
-              {
-                name: "Status",
-                bodyKeyName: "applicationStatus",
                 ComponentName: "Dropdown",
               },
               {
-                name: "Job Position",
-                bodyKeyName: "appliedPositions",
-                ComponentName: "Badge",
+                name: "Company name",
+                bodyKeyName: "createdDate",
+                sortable: true,
               },
             ]}
             data={applications}

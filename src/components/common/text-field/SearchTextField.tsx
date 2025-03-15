@@ -2,9 +2,10 @@ import React from "react";
 
 type SearchTextFieldProps = {
   onChange: (value: string) => void;
+  placeholder: string;
 };
 
-function SearchTextField({ onChange }: SearchTextFieldProps) {
+function SearchTextField({ onChange, placeholder }: SearchTextFieldProps) {
   return (
     <label className="input bg-neutralGrey0 border-neutralGrey-grey400 input-bordered flex items-center gap-2 w-[400px] my-[20px]">
       <svg
@@ -23,7 +24,7 @@ function SearchTextField({ onChange }: SearchTextFieldProps) {
         onChange={(e) => onChange(e.target.value)}
         type="text"
         className="flex-1"
-        placeholder="Search applicants"
+        placeholder={placeholder}
       />
     </label>
   );

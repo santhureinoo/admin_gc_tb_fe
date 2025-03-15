@@ -23,6 +23,7 @@ type customTableProps = {
 import { useRouter } from "next/navigation";
 import { FaSort } from "react-icons/fa";
 import { openModal, sortByProperty } from "@/utils";
+import { ActionButton } from "../buttons";
 
 function CustomTable({
   headersList,
@@ -87,9 +88,9 @@ function CustomTable({
                     </div>
                   </th>
                 ))}
-                <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA] first:rounded-l last:rounded-r last:pl-5 last:sticky last:right-0 shadow-2xl">
+                <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA] first:rounded-l last:rounded-r last:pl-5 last:sticky last:right-0 shadow-2xl z-40">
                   <div className="flex items-center justify-between font-medium text-left text-nowrap">
-                    View CV
+                    View
                   </div>
                 </th>
               </tr>
@@ -193,13 +194,14 @@ function CustomTable({
                     }
                   })}
                   <td className="px-5 py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
+                    {/* <ActionButton /> */}
                     <button
                       onClick={() => {
                         router.push(`/application-info/${el.applicationId}`);
                       }}
                       className="btn w-full bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
                     >
-                      View CV
+                      View user details
                     </button>
                   </td>
                 </tr>

@@ -1,13 +1,22 @@
 import React from "react";
 
-function ActionButton() {
+type actionButtonProps = {
+  name: string;
+  fullWidth?: boolean;
+  icon?: any;
+};
+
+function ActionButton({ name, fullWidth, icon: Icon }: actionButtonProps) {
   return (
     <div
       //   onClick={onClick}
-      className="bg-primary inline-block rounded-md cursor-pointer border"
+      className={`${
+        fullWidth ? " w-full" : ""
+      } bg-primary inline-block rounded-md cursor-pointer border text-center`}
     >
+      {/* <Icon className={`${"text-white"} `} /> */}
       <p className="text-white py-[10px] px-[20px] text-[14px] font-[500]">
-        Send to the applicant
+        {name}
       </p>
     </div>
   );
