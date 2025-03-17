@@ -23,6 +23,7 @@ export const MODALS = {
   rejectModalId: "modal_1",
   approveModalId: "modal_2",
   logoutModalId: "modal_3",
+  generateLicenseModalId: "modal_4",
 };
 
 export const SIDE_BAR_OPTIONS = [

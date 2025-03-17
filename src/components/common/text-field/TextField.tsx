@@ -9,7 +9,7 @@ type TextFieldProps = {
   placeHolderText: string;
   extraHintText?: string;
   icon?: any;
-  register: any;
+  register?: any;
   error?: FieldError;
 };
 

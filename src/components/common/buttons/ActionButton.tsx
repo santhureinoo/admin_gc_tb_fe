@@ -4,12 +4,13 @@ type actionButtonProps = {
   name: string;
   fullWidth?: boolean;
   icon?: any;
+  onClick?: () => void;
 };
 
-function ActionButton({ name, fullWidth, icon: Icon }: actionButtonProps) {
+function ActionButton({ name, fullWidth, icon: Icon, onClick }: actionButtonProps) {
   return (
     <div
-      //   onClick={onClick}
+      onClick={onClick}
       className={`${
         fullWidth ? " w-full" : ""
       } bg-primary inline-block rounded-md cursor-pointer border text-center`}

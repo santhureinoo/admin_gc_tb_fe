@@ -25,7 +25,7 @@ import { FaSort } from "react-icons/fa";
 import { openModal, sortByProperty } from "@/utils";
 import { ActionButton } from "../buttons";
 
-function CustomTable({
+function CustomLicenseKeyTable({
   headersList,
   data,
   sortingOnClick,
@@ -199,9 +199,9 @@ function CustomTable({
                       onClick={() => {
                         router.push(`/application-info/${el.applicationId}`);
                       }}
-                      className="btn w-1/2 bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
+                      className="btn w-2/3 bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
                     >
-                      View user details
+                      View details
                     </button>
                   </td>
                 </tr>
@@ -214,4 +214,4 @@ function CustomTable({
   );
 }
 
-export default CustomTable;
+export default CustomLicenseKeyTable;

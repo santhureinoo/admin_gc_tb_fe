@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Filter from "../../../../public/svg/Right.svg"
+import Image from "next/image";
 
 type LicenceFilterDrawerProps = {
   id: string;
@@ -32,8 +34,8 @@ function LicenceFilterDrawer({
         className="drawer-toggle"
         onChange={(e) => setIsOpen(e.target.checked)}
       />
-      <div className="drawer-content">
-        <label htmlFor={id} className="drawer-button btn btn-primary">
+      <div className="drawer-content w-full">
+        <label htmlFor={id} className="drawer-button flex flex-row border border-black py-4 px-8 rounded-lg">
           {buttonLabel}
         </label>
       </div>
@@ -44,8 +46,6 @@ function LicenceFilterDrawer({
           className="drawer-overlay"
         ></label>
         <div className="menu text-base-content min-h-full w-[400px] p-4 bg-white">
-          <p className="text-black">{num}</p>
-          <button onClick={() => setNum((prev: any) => prev + 1)}>Add</button>
           {children}
         </div>
       </div>

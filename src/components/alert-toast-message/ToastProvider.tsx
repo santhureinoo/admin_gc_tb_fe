@@ -7,6 +7,7 @@ import "../../app/globals.css";
 import { ApproveModal, LogoutModal, RejectModal } from "../common/modals";
 import { MODALS } from "@/constants";
 import AlertBox from "../common/alertBox/alertBox";
+import GenerateLicenseModal from "../common/modals/GenerateLicenseModal";
 
 interface ToastProviderProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export default function ToastProvider({ children }: ToastProviderProps) {
       {/* All Modals */}
       {/* Modals (modal id must be unique) */}
       <LogoutModal modalId={MODALS.logoutModalId} />
+      <GenerateLicenseModal modalId={MODALS.generateLicenseModalId} />
       <RejectModal modalId={MODALS.rejectModalId} />
       <ApproveModal modalId={MODALS.approveModalId} />
       {/* <ToastContainer /> */}
