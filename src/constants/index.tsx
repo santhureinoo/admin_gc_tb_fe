@@ -25,7 +25,39 @@ export const MODALS = {
   logoutModalId: "modal_3",
   generateLicenseModalId: "modal_4",
 };
+export const USER_ROLES = [
+  {
+    label: "Care Worker",
+    value: "careWorker"
+  },
+  {
+    label: "Coordinator",
+    value: "coordinator"
+  },
+  {
+    label: "Consumer",
+    value: "consumer"
+  },
+];
 
+export const PLAN_PERIODS = [
+  {
+    label: "3 months",
+    value: 3
+  },
+  {
+    label: "6 months",
+    value: 6
+  },
+  {
+    label: "12 months",
+    value: 12
+  },
+  {
+    label: "24 months",
+    value: 24
+  },
+]
 export const SIDE_BAR_OPTIONS = [
   {
     id: 1,

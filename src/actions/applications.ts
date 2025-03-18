@@ -1,5 +1,11 @@
 import { fetchWrapper } from "@/helper/fetchWrapper";
 
+type GenerateLicenseKeysReq = {
+  companyName: string,
+  role: string,
+  period: number,
+  totalKeys: number
+}
 export const getApplications = async (payload: any) => {
   const response: any = await fetchWrapper.POST(
     false,
@@ -28,6 +34,7 @@ export const updateApplicationsStatus = async (payload: any) => {
   );
   return await response?.data;
 };
+
 
 export const getApplicationDetails = async (payload: any) => {
   const response: any = await fetchWrapper.POST(

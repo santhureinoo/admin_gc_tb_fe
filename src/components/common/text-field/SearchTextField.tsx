@@ -3,9 +3,10 @@ import React from "react";
 type SearchTextFieldProps = {
   onChange: (value: string) => void;
   placeholder: string;
+  handleEnterKey?: () => void;
 };
 
-function SearchTextField({ onChange, placeholder }: SearchTextFieldProps) {
+function SearchTextField({ onChange, placeholder,handleEnterKey}: SearchTextFieldProps) {
   return (
     <label className="input bg-neutralGrey0 border-neutralGrey-grey400 input-bordered flex items-center gap-2 w-[400px] my-[20px]">
       <svg
@@ -25,6 +26,12 @@ function SearchTextField({ onChange, placeholder }: SearchTextFieldProps) {
         type="text"
         className="flex-1"
         placeholder={placeholder}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault(); // Prevents form submission if inside a form
+            handleEnterKey ? handleEnterKey() : null;
+          }
+        }}
       />
     </label>
   );

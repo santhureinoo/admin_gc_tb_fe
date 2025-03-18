@@ -5,12 +5,14 @@ type actionButtonProps = {
   fullWidth?: boolean;
   icon?: any;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
 };
 
-function ActionButton({ name, fullWidth, icon: Icon, onClick }: actionButtonProps) {
+function ActionButton({ name, fullWidth, icon: Icon, onClick, type }: actionButtonProps) {
   return (
-    <div
+    <button
       onClick={onClick}
+      type={type ?? "button"}
       className={`${
         fullWidth ? " w-full" : ""
       } bg-primary inline-block rounded-md cursor-pointer border text-center`}
@@ -19,7 +21,7 @@ function ActionButton({ name, fullWidth, icon: Icon, onClick }: actionButtonProp
       <p className="text-white py-[10px] px-[20px] text-[14px] font-[500]">
         {name}
       </p>
-    </div>
+    </button>
   );
 }
 

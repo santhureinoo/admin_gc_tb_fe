@@ -9,6 +9,7 @@ type headerValue = {
   ComponentName?: "Dropdown" | "Badge" | "FixedStatus";
   sortable?: boolean;
   sortableType?: "string" | "number";
+  type?: string | null;
 };
 
 type customTableProps = {
