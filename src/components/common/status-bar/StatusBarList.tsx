@@ -6,7 +6,7 @@ import { APPLICATIONS_STATUS } from "@/constants";
 
 type StatusBarValue = {
   name: string;
-  value: APPLICATIONS_STATUS;
+  value: any;
   count?: number;
 };
 
@@ -14,7 +14,7 @@ type StatusBarListProps = {
   activeValue: string; // to check status bar is active or not
   statusBarList: StatusBarValue[];
   hasCount: boolean; // to check status bar has counts
-  setActiveStatusFunc: (statusBarName: APPLICATIONS_STATUS) => void;
+  setActiveStatusFunc: (statusBarName: any) => void;
   setDataCounts: (count: number) => void;
 };
 
@@ -34,7 +34,7 @@ function StatusBarList({
           statusBarValue={statusBar.value}
           setActiveStatusFunc={setActiveStatusFunc}
           isActive={activeValue == statusBar.value}
-          hasCount={hasCount}
+          hasCount={statusBar.count ? true : false}
           count={statusBar.count}
           setDataCounts={setDataCounts}
         />

@@ -4,6 +4,7 @@ import {
   getDashboarSummary,
   updateApplicationsStatus,
 } from "@/actions/applications";
+import { getAllUsers } from "@/actions/users";
 import { ActionButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
@@ -26,8 +27,29 @@ import { useAppSelector } from "@/redux/store";
 import { getPaginationTotalPages, openModal } from "@/utils";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const [users, setUsers] = useState<any>([
+    // {
+    //   userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
+    //   keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
+    //   name: "hello world",
+    //   userRole: "ADMIN",
+    //   email: "admin@gmail.com",
+    //   isEmailVerified: true,
+    //   hasLogin: true,
+    //   passRestRequired: true,
+    //   status: "ACTIVE",
+    //   companyName: "Company name 1",
+    //   licenseKey: "asdfkljiwjeij",
+    //   totalRedeemedKeys: 20,
+    //   expiryDate: "2025-02-26T07:45:38.604Z",
+    //   createdDate: "2025-02-26T07:45:38.604Z",
+    // },
+  ]);
+
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchApplicationText, setSearchApplicationText] = useState("");
   const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
@@ -42,6 +64,23 @@ export default function Home() {
   const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
+
+  const fetchAllUsers = async () => {
+    const data = await getAllUsers({
+      period: null,
+      role: null,
+      search: "", // seaerch by FirstName, LastName, Phone, AppliedPosition
+      createdDate: {
+        startDate: null, // yyyy-mm-dd
+        endDate: null, // yyyy-mm-dd
+      },
+      currentPage: 1, // current user seleced page
+      pageSize: 10, // number of applications to be fetch per page
+    });
+    console.log("*** user data ***", data);
+    setUsers(data);
+    setDataCounts(data?.length);
+  };
 
   const fetchDashboardApplications = async () => {
     setApplications([]);
@@ -83,6 +122,10 @@ export default function Home() {
     }
   };
 
+  const handleViewUserDetails = (userId: any) => {
+    router.push(`/userDetail/${userId}`);
+  };
+
   const handleClickAllCheckBox = () => {
     const allApplicationsId = applications.map((app: any) => app.applicationId);
 
@@ -94,6 +137,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    fetchAllUsers();
     // fetchDashboardApplications();
     // fetchDashboardSummary();
     // dispatch(clearApplications());
@@ -102,7 +146,6 @@ export default function Home() {
   useEffect(() => {
     // fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
-  const [showDrawer, setShwoDrawer] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
@@ -190,7 +233,7 @@ export default function Home() {
                     defaultValue="Pick a color"
                     className="select w-full bg-transparent border border-[#C4C4C4]"
                   >
-                    <option disabled={true}>Pick a color</option>
+                    <option disabled={true}>Select User Role</option>
                     <option>Crimson</option>
                     <option>Amber</option>
                     <option>Velvet</option>
@@ -288,34 +331,52 @@ export default function Home() {
             headersList={[
               {
                 name: "Name",
-                bodyKeyName: "applicantName",
+                bodyKeyName: "name",
                 sortable: true,
                 sortableType: "string",
               },
               {
                 name: "Email",
-                bodyKeyName: "applicantName",
+                bodyKeyName: "email",
                 sortable: true,
                 sortableType: "number",
               },
               {
                 name: "Status",
-                bodyKeyName: "phone",
+                bodyKeyName: "status",
                 sortable: true,
               },
               {
                 name: "Company name",
-                bodyKeyName: "createdDate",
+                bodyKeyName: "companyName",
                 sortable: true,
               },
+              {
+                name: "Current Licence Key",
+                bodyKeyName: "licenseKey",
+                sortable: true,
+              },
+              {
+                name: "Expiry date",
+                bodyKeyName: "expiryDate",
+                sortable: true,
+                type: "DATE",
+              },
+              {
+                name: "Created date",
+                bodyKeyName: "createdDate",
+                sortable: true,
+                type: "DATE",
+              },
             ]}
-            data={applications}
+            data={users}
             sortingOnClick={(data) => {
               const newData = data;
               setApplications(() => newData);
             }}
             checkBoxOnClick={handleClickCheckBox}
             allCheckBoxOnClick={handleClickAllCheckBox}
+            viewBtnOnClick={handleViewUserDetails}
           />
           <Pagination
             totalCounts={dataCounts}

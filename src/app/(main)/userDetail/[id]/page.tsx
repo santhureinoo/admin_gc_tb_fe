@@ -4,6 +4,7 @@ import {
   getDashboarSummary,
   updateApplicationsStatus,
 } from "@/actions/applications";
+import { getUserById } from "@/actions/users";
 import Badge from "@/components/common/badge";
 import { ActionButton } from "@/components/common/buttons";
 import {
@@ -27,14 +28,34 @@ import { useAppSelector } from "@/redux/store";
 import { getPaginationTotalPages, openModal } from "@/utils";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useParams } from "next/navigation";
 
 export default function UserDetail() {
+  const { id } = useParams();
+  const [users, setUsers] = useState<any>([
+    {
+      userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
+      keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
+      name: "hello world",
+      userRole: "ADMIN",
+      email: "admin@gmail.com",
+      isEmailVerified: true,
+      hasLogin: true,
+      passRestRequired: true,
+      status: "ACTIVE",
+      companyName: "Company name 1",
+      licenseKey: "asdfkljiwjeij",
+      totalRedeemedKeys: 20,
+      expiryDate: "2025-02-26T07:45:38.604Z",
+      createdDate: "2025-02-26T07:45:38.604Z",
+    },
+  ]);
+  const [userDetail, setUserDetail] = useState<any>();
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchApplicationText, setSearchApplicationText] = useState("");
   const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
   const [dashboardSummary, setDashboardSummary] = useState<any>({});
-  const [currentStatus, setCurrentStatus] =
-    useState<APPLICATIONS_STATUS>("PENDING");
+  const [currentStatus, setCurrentStatus] = useState<any>("USER_DETAIL");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
   const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
@@ -94,6 +115,17 @@ export default function UserDetail() {
     }
   };
 
+  const handleFetchUserDetail = async () => {
+    const data = await getUserById({
+      id: id,
+    });
+    setUserDetail(data);
+  };
+
+  useEffect(() => {
+    handleFetchUserDetail();
+  }, []);
+
   useEffect(() => {
     // fetchDashboardApplications();
     // fetchDashboardSummary();
@@ -103,9 +135,10 @@ export default function UserDetail() {
   useEffect(() => {
     // fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
-  const [showDrawer, setShwoDrawer] = useState(false);
 
-  return (
+  return userDetail == null ? (
+    <></>
+  ) : (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
       <div className="px-[24px] py-[20px]">
@@ -116,12 +149,15 @@ export default function UserDetail() {
         </div>
         <div className="bg-white p-[24px] my-[16px] min-h-screen">
           <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
-            Mark Simpson
+            {userDetail.name}
           </h3>
-          <p>Created date- 22/12/2024</p>
+          <p>
+            Created date-{" "}
+            {new Date(userDetail.createdDate).toLocaleDateString()}
+          </p>
           <div className="inline-flex items-center justify-center bg-[#EEFFDD] py-[10px] rounded-md mt-3">
             <p className="text-[#379708] text-nowrap font-[400] px-[20px]">
-              Active
+              {userDetail.status}
             </p>
           </div>
           <StatusBarList
@@ -129,12 +165,12 @@ export default function UserDetail() {
             statusBarList={[
               {
                 name: "User Details",
-                value: "PENDING",
-                count: dashboardSummary?.FILTERED_PENDING,
+                value: "USER_DETAIL",
+                // count: dashboardSummary?.FILTERED_PENDING,
               },
               {
                 name: "Redeemed History",
-                value: "MISSING_INFO",
+                value: "REDEEMED_HISTORY",
                 count: 21,
               },
             ]}
@@ -147,62 +183,140 @@ export default function UserDetail() {
               setDataCounts(count);
             }}
           />
-
-          <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px] mt-[20px]">
-            User Details
-          </h3>
-          <div className="grid grid-cols-3 gap-[30px]">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">Name</h3>
-              <p className="text-neutralGrey-grey800 font-[500]">
-                Delbin Toe Htet
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">Email</h3>
-              <p className="text-neutralGrey-grey800 font-[500]">
-                ggtoteo3@gmail.com
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">
-                Current license key
+          {currentStatus == "USER_DETAIL" ? (
+            <>
+              <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px] mt-[20px]">
+                User Details
               </h3>
-              <p className="text-neutralGrey-grey800 font-[500]">ANFJAFJ343</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">
-                User role
+              <div className="grid grid-cols-3 gap-[30px]">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">Name</h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.name}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Email
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.email}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Current license key
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.licenseKey}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    User role
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.role}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Status
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.status}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Total redeemed keys
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {userDetail.totalRedeemedKeys}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Expiry date
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {new Date(userDetail.expiryDate).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-neutralGrey-grey600 text-[16px]">
+                    Created date
+                  </h3>
+                  <p className="text-neutralGrey-grey800 font-[500]">
+                    {new Date(userDetail.createdDate).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div>
+              <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px] mt-[20px]">
+                Redeemed History
               </h3>
-              <p className="text-neutralGrey-grey800 font-[500]">Nurse</p>
+              <CustomTable
+                selectedRowsId={selectedApplications}
+                headersList={[
+                  {
+                    name: "Name",
+                    bodyKeyName: "name",
+                    sortable: true,
+                    sortableType: "string",
+                  },
+                  {
+                    name: "Email",
+                    bodyKeyName: "email",
+                    sortable: true,
+                    sortableType: "number",
+                  },
+                  {
+                    name: "Status",
+                    bodyKeyName: "status",
+                    sortable: true,
+                  },
+                  {
+                    name: "Company name",
+                    bodyKeyName: "companyName",
+                    sortable: true,
+                  },
+                  {
+                    name: "Current Licence Key",
+                    bodyKeyName: "licenseKey",
+                    sortable: true,
+                  },
+                  {
+                    name: "Expiry date",
+                    bodyKeyName: "expiryDate",
+                    sortable: true,
+                    type: "DATE",
+                  },
+                  {
+                    name: "Created date",
+                    bodyKeyName: "createdDate",
+                    sortable: true,
+                    type: "DATE",
+                  },
+                ]}
+                data={users}
+                sortingOnClick={(data) => {
+                  const newData = data;
+                  setApplications(() => newData);
+                }}
+                checkBoxOnClick={handleClickCheckBox}
+                allCheckBoxOnClick={handleClickAllCheckBox}
+                // viewBtnOnClick={handleViewUserDetails}
+              />
+              <Pagination
+                totalCounts={dataCounts}
+                setCurrentSelectedPage={setCurrentSelectedPage}
+                currentSelectedPage={currentSelectedPage}
+              />
             </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">Status</h3>
-              <p className="text-neutralGrey-grey800 font-[500]">Active</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">
-                Total redeemed keys
-              </h3>
-              <p className="text-neutralGrey-grey800 font-[500]">50</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">
-                Expiry date
-              </h3>
-              <p className="text-neutralGrey-grey800 font-[500]">
-                22/12/2025 (264 days left)
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-neutralGrey-grey600 text-[16px]">
-                Created date
-              </h3>
-              <p className="text-neutralGrey-grey800 font-[500]">
-                22/12/2024 9:23:22 PM
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

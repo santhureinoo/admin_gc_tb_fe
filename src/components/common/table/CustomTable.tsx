@@ -9,6 +9,7 @@ type headerValue = {
   ComponentName?: "Dropdown" | "Badge" | "FixedStatus";
   sortable?: boolean;
   sortableType?: "string" | "number";
+  type?: "DATE" | "TEXT";
 };
 
 type customTableProps = {
@@ -18,6 +19,7 @@ type customTableProps = {
   checkBoxOnClick: (data: any, applicationStatus: string) => void;
   allCheckBoxOnClick: () => void;
   selectedRowsId?: number[];
+  viewBtnOnClick?: (id: any) => void;
 };
 
 import { useRouter } from "next/navigation";
@@ -32,6 +34,7 @@ function CustomTable({
   checkBoxOnClick,
   selectedRowsId,
   allCheckBoxOnClick,
+  viewBtnOnClick,
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
   const router = useRouter();
@@ -88,11 +91,13 @@ function CustomTable({
                     </div>
                   </th>
                 ))}
-                <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA] first:rounded-l last:rounded-r last:pl-5 last:sticky last:right-0 shadow-2xl z-40">
-                  <div className="flex items-center justify-between font-medium text-left text-nowrap">
-                    View
-                  </div>
-                </th>
+                {viewBtnOnClick ? (
+                  <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA] first:rounded-l last:rounded-r last:pl-5 last:sticky last:right-0 shadow-2xl z-40">
+                    <div className="flex items-center justify-between font-medium text-left text-nowrap">
+                      View
+                    </div>
+                  </th>
+                ) : null}
               </tr>
             </thead>
 
@@ -126,7 +131,11 @@ function CustomTable({
                           className="px-5 py-2 border border-slate-200"
                         >
                           <div className="text-slate-500 text-nowrap">
-                            {el[hd.bodyKeyName]}
+                            {hd.type == "DATE"
+                              ? new Date(
+                                  el[hd.bodyKeyName]
+                                ).toLocaleDateString()
+                              : el[hd.bodyKeyName]}
                           </div>
                         </td>
                       );
@@ -193,17 +202,20 @@ function CustomTable({
                       );
                     }
                   })}
-                  <td className="px-5 text-center py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
-                    {/* <ActionButton /> */}
-                    <button
-                      onClick={() => {
-                        router.push(`/application-info/${el.applicationId}`);
-                      }}
-                      className="btn w-1/2 bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
-                    >
-                      View user details
-                    </button>
-                  </td>
+                  {viewBtnOnClick ? (
+                    <td className="px-5 text-center py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
+                      {/* <ActionButton /> */}
+
+                      <button
+                        onClick={() => {
+                          if (viewBtnOnClick) viewBtnOnClick(el.userId);
+                        }}
+                        className="btn bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
+                      >
+                        View user details
+                      </button>
+                    </td>
+                  ) : null}
                 </tr>
               ))}
             </tbody>
