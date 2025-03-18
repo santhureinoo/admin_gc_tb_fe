@@ -9,6 +9,16 @@ export const REFRESH_TOKEN = "_auth_gc_refresh";
 export const CURRENT_USER_ID = "_auth_gc_currentId";
 export const REFRESH_TOKEN_URL = "auth/refresh";
 
+// routes
+export const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/register",
+  "/reset-password",
+  "/forgot-password",
+  "/verify-otp",
+]
+
 export const LOGOUT_URL = "auth/logout";
 
 export const PAGINATION_PER_PAGE = 5;
@@ -71,6 +81,12 @@ export const SIDE_BAR_OPTIONS = [
     icon: AiOutlineFileSearch,
     route: "/license-keys",
   },
+  {
+    id: 3,
+    name: "Log out",
+    icon: IoIosLogOut,
+    route: "/login",
+  }
   // {
   //   id: 2,
   //   name: "Rejected Users",
@@ -89,12 +105,18 @@ export const SIDE_BAR_OPTIONS = [
   //   icon: IoMailOutline,
   //   route: "/send-email",
   // },
-  {
-    id: 3,
-    name: "Log out",
-    icon: IoMailOutline,
-    route: "",
-  },
+  // {
+  //   id: 3,
+  //   name: "Users",
+  //   icon: AiOutlineMan,
+  //   route: "/login",
+  // },
+  // {
+  //   id: 4,
+  //   name: "User Roles",
+  //   icon: IoMailOutline,
+  //   route: "/send-email",
+  // },
 ];
 
 //position is to decide which certificate to render based on the applied position

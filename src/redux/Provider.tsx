@@ -11,7 +11,7 @@ function ReduxProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const getValidateStatus = async () => {
-    const validate = await ValidateToken();
+    const validate = await ValidateToken(pathname);
     if (validate == false) {
       router.push("/login");
     }
