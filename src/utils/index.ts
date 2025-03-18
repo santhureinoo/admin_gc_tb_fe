@@ -1,6 +1,7 @@
 // import { toast, ToastContent, ToastOptions, Slide, Id } from "react-toastify";
 
 import { APPLIED_POSITIONS } from "@/constants";
+import moment from "moment";
 
 // to get file from s3
 export const createFileFromBlob = (
@@ -79,3 +80,32 @@ export const isShow = (positions: any, certificateName: string) => {
   );
   return isIncluded;
 };
+
+export const downloadCSV = (data: any, fileName: string) => {
+    const blob = new Blob([data], { type: 'text/csv' });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    
+    a.href = url;
+    a.download = `${moment().format("YYYYMMSSHHmmss")}_download_${fileName}.csv`;
+    
+    a.click();
+}
+
+const csvmaker = (data: any) => {
+    const csvRows = [];
+    const headers = Object.keys(data[0]);
+    
+    csvRows.push(headers.join(','));
+
+    data.forEach((rec: any) => {
+        const values = headers.map(e => {
+            return rec[e]
+        })
+        csvRows.push(values.join(','))
+    });
+    
+    return csvRows.join('\n');
+}
