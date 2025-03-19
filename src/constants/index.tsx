@@ -34,6 +34,7 @@ export const MODALS = {
   approveModalId: "modal_2",
   logoutModalId: "modal_3",
   generateLicenseModalId: "modal_4",
+  uploadCSVModalID: "modal_5",
 };
 export const USER_ROLES = [
   {

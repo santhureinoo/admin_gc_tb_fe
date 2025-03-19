@@ -5,7 +5,7 @@ import {
   updateApplicationsStatus,
 } from "@/actions/applications";
 import { getAllUsers } from "@/actions/users";
-import { ActionButton } from "@/components/common/buttons";
+import { ActionButton, CancelButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
   UserFilterDrawer,
@@ -16,7 +16,13 @@ import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
-import { APPLICATIONS_STATUS, PAGINATION_PER_PAGE } from "@/constants";
+import {
+  APPLICATIONS_STATUS,
+  MODALS,
+  PAGINATION_PER_PAGE,
+  PLAN_PERIODS,
+  USER_ROLES,
+} from "@/constants";
 import {
   addAllApplications,
   addApplications,
@@ -28,8 +34,24 @@ import { getPaginationTotalPages, openModal } from "@/utils";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
+type UserFilterFields = {
+  period?: number | null;
+  role?: string | null;
+  startDate?: Date | null | ""; // dd/mm/yyyy format
+  endDate?: Date | null | ""; // dd/mm/yyyy format
+};
 export default function Home() {
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<UserFilterFields>();
+
   const router = useRouter();
   const [users, setUsers] = useState<any>([
     // {
@@ -51,7 +73,7 @@ export default function Home() {
   ]);
 
   const [dataCounts, setDataCounts] = useState<number>(0);
-  const [searchApplicationText, setSearchApplicationText] = useState("");
+  const [searchUserText, setSearchUserText] = useState("");
   const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
   const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] =
@@ -66,47 +88,39 @@ export default function Home() {
   );
 
   const fetchAllUsers = async () => {
-    const data = await getAllUsers({
-      period: null,
-      role: null,
-      search: "", // seaerch by FirstName, LastName, Phone, AppliedPosition
+    const startDate = getValues("startDate");
+    const endDate = getValues("endDate");
+
+    const payload = {
+      period: Number(getValues("period")),
+      role: getValues("role"),
+      search: searchUserText, // seaerch by FirstName, LastName, Phone, AppliedPosition
       createdDate: {
-        startDate: null, // yyyy-mm-dd
-        endDate: null, // yyyy-mm-dd
+        startDate: startDate === "" || null ? null : startDate, // yyyy-mm-dd
+        endDate: endDate === "" || null ? null : endDate, // yyyy-mm-dd
       },
-      currentPage: 1, // current user seleced page
-      pageSize: 10, // number of applications to be fetch per page
-    });
-    console.log("*** user data ***", data);
+      currentPage: currentSelectedPage, // current user seleced page
+      pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
+    };
+
+    console.log("*** payload ***", payload);
+
+    // {
+    //   period: null,
+    //   role: getValues("role"),
+    //   search: searchUserText, // seaerch by FirstName, LastName, Phone, AppliedPosition
+    //   createdDate: {
+    //     startDate: getValues("startDate"), // yyyy-mm-dd
+    //     endDate: getValues("endDate"), // yyyy-mm-dd
+    //   },
+    //   currentPage: currentSelectedPage, // current user seleced page
+    //   pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
+    // }
+
+    const data = await getAllUsers(payload);
+    console.log("data", data);
     setUsers(data);
     setDataCounts(data?.length);
-  };
-
-  const fetchDashboardApplications = async () => {
-    setApplications([]);
-    const data = await getApplications({
-      filter: {
-        status: currentStatus, // application status [PENDING, MISSING_INFO, REUPLOADED, APPROVED, INTERVIEW]
-        isAuResident: isAuResident, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
-      },
-      page: {
-        currentPage: currentSelectedPage, // current user seleced page
-        pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
-      },
-      search: searchApplicationText, // seaerch by FirstName, LastName, Phone, AppliedPosition
-    });
-    setApplications(data);
-  };
-
-  const fetchDashboardSummary = async () => {
-    const data = await getDashboarSummary({
-      filter: {
-        isAuResident: isAuResident, // application resident type [null -> all, true -> AU Resident, false -> non-AU Resident]
-      },
-      search: "", // seaerch by FirstName, LastName, Phone, AppliedPosition
-    });
-    setDashboardSummary(data);
-    setDataCounts(data?.FILTERED_PENDING);
   };
 
   const handleClickCheckBox = (id: number, applicationStatus: string) => {
@@ -138,14 +152,13 @@ export default function Home() {
 
   useEffect(() => {
     fetchAllUsers();
-    // fetchDashboardApplications();
-    // fetchDashboardSummary();
-    // dispatch(clearApplications());
-  }, [searchApplicationText, isStatusChanged, isAuResident]);
+  }, [searchUserText, currentSelectedPage]);
 
-  useEffect(() => {
-    // fetchDashboardApplications();
-  }, [currentStatus, currentSelectedPage]);
+  const resetFilter = () => {
+    setValue("period", null);
+    setValue("role", null);
+    setValue("startDate", null), setValue("endDate", null);
+  };
 
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
@@ -154,71 +167,26 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <p className="text-black font-[400] text-[14px] flex-1">Users</p>
         </div>
-        {/* <UserFilterDrawer id={"user-filter-drawer"} buttonLabel={"User Filter"}>
-          <li>Hello world</li>
-          <li>Hello world</li>
-        </UserFilterDrawer> */}
-        {/* <LicenceFilterDrawer
-          id={"licence-filter-drawer"}
-          buttonLabel={"Licence Filter"}
-        >
-          <li>LicenceFilterDrawer</li>
-          <li>LicenceFilterDrawer world</li>
-        </LicenceFilterDrawer> */}
+
         <div className="bg-white p-[24px] my-[16px] min-h-screen">
           <div className="flex items-center justify-between">
             <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
               Users
             </h3>
-            <ActionButton name="Upload CSV" />
+                  <ActionButton
+                    onClick={() => openModal(MODALS.uploadCSVModalID)}
+                    name="+ Upload CSV"
+                  />
           </div>
-          {/* <InfoCardList infos={dashboardSummary} /> */}
-          {/* <StatusBarList
-            activeValue={currentStatus}
-            statusBarList={[
-              {
-                name: "Pending",
-                value: "PENDING",
-                count: dashboardSummary?.FILTERED_PENDING,
-              },
-              {
-                name: "Missing Infos",
-                value: "MISSING_INFO",
-                count: dashboardSummary?.FILTERED_MISSING_INFO,
-              },
-              {
-                name: "Reuploaded",
-                value: "REUPLOADED",
-                count: dashboardSummary?.FILTERED_REUPLOADED,
-              },
-              {
-                name: "Approved",
-                value: "APPROVED",
-                count: dashboardSummary?.FILTERED_APPROVED,
-              },
-              {
-                name: "Interview",
-                value: "INTERVIEW",
-                count: dashboardSummary?.FILTERED_INTERVIEW,
-              },
-            ]}
-            hasCount
-            setActiveStatusFunc={(status) => {
-              setCurrentStatus(status);
-              setCurrentSelectedPage(1); // This is for to reset current Selected pagination to first page (when we change active status)
-            }}
-            setDataCounts={(count) => {
-              setDataCounts(count);
-            }}
-          /> */}
           <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
             <div className="flex flex-row items-center justify-between">
               <SearchTextField
-                onChange={(value) => setSearchApplicationText(value)}
+                onChange={(value) => setSearchUserText(value)}
                 placeholder="Search User"
               />
-
-              <UserFilterDrawer
+        <form 
+        onSubmit={handleSubmit(fetchAllUsers)}>
+        <UserFilterDrawer
                 id={"user-filter-drawer"}
                 buttonLabel={"User Filter"}
               >
@@ -230,100 +198,86 @@ export default function Home() {
                     User Roles
                   </h3>
                   <select
-                    defaultValue="Pick a color"
+                    {...register("role", {
+                      required: "User role is required",
+                    })}
                     className="select w-full bg-transparent border border-[#C4C4C4]"
+                    defaultValue=""
                   >
-                    <option disabled={true}>Select User Role</option>
-                    <option>Crimson</option>
-                    <option>Amber</option>
-                    <option>Velvet</option>
+                    <option value="" disabled>
+                      Select User Role
+                    </option>
+                    {USER_ROLES.map((role) => (
+                      <option key={role.value} value={role.value}>
+                        {role.label}
+                      </option>
+                    ))}
                   </select>
+
                 </div>
                 <div className="flex flex-col gap-2 border-b py-[16px]">
                   <h3 className="text-neutralGrey-grey600 text-[16px]">
                     Plan Periods
                   </h3>
                   <select
-                    defaultValue="Pick a color"
+                    {...register("period", {
+                      required: "Period is required",
+                    })}
                     className="select w-full bg-transparent border border-[#C4C4C4]"
+                    defaultValue=""
                   >
-                    <option disabled={true}>Select plan period</option>
-                    <option>Crimson</option>
-                    <option>Amber</option>
-                    <option>Velvet</option>
+                    <option value="" disabled>
+                      Select Period
+                    </option>
+                    {PLAN_PERIODS.map((period) => (
+                      <option key={period.value} value={period.value}>
+                        {period.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex flex-col gap-2 border-b py-[16px]">
                   <h3 className="text-neutralGrey-grey600 text-[16px]">
                     Created Date Filter
                   </h3>
-                  <select
-                    defaultValue="Pick a color"
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                  <div
+                    style={{ position: "relative" }}
+                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
                   >
-                    <option disabled={true}>Select Start date</option>
-                    <option>Crimson</option>
-                    <option>Amber</option>
-                    <option>Velvet</option>
-                  </select>
-                  <select
-                    defaultValue="Pick a color"
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
+                    <input
+                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                      placeholder={"Start Date"}
+                      type={"date"}
+                      {...register("startDate")}
+                      style={{ boxShadow: "none" }}
+                    />
+                  </div>
+                  <div
+                    style={{ position: "relative" }}
+                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
                   >
-                    <option disabled={true}>Pick a color</option>
-                    <option>Crimson</option>
-                    <option>Amber</option>
-                    <option>Velvet</option>
-                  </select>
+                    <input
+                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                      placeholder={"End Date"}
+                      {...register("endDate")}
+                      type={"date"}
+                      style={{ boxShadow: "none" }}
+                    />
+                  </div>
+                </div>
+                <div className="flex w-full flex-row justify-between mt-4">
+                  <CancelButton
+                    name="Reset"
+                    onClick={() => {
+                      resetFilter();
+                      fetchAllUsers();
+                    }}
+                  />
+                  <ActionButton name="Apply Filter" type="submit" />
                 </div>
               </UserFilterDrawer>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* <Dropdown
-                position={"dropdown-end"}
-                value="All applicants"
-                dropdownList={[
-                  { name: "All applicants", value: "All applicants" },
-                  {
-                    name: "Australian Residents",
-                    value: "Australian Residents",
-                  },
-                  {
-                    name: "Non-Australian Residents",
-                    value: "Non Australian Residents",
-                  },
-                ]}
-                onSelect={(selectedValue) => {
-                  if (selectedValue == "All applicants") {
-                    setIsAuResident(null);
-                  }
-                  if (selectedValue == "Australian Residents") {
-                    setIsAuResident(true);
-                  }
-                  if (selectedValue == "Non Australian Residents") {
-                    setIsAuResident(false);
-                  }
-                }}
-                notStatus
-              /> */}
-              {/* Move to */}
-              {/* {selectedApplications.length > 0 ? (
-                <Dropdown
-                  fixLabel="Move To"
-                  position={"dropdown-end"}
-                  value=""
-                  dropdownList={[
-                    // { name: "Move To", value: "Move to" },
-                    { name: "Approve", value: "APPROVED" },
-                    {
-                      name: "Interview",
-                      value: "INTERVIEW",
-                    },
-                    { name: "Reject", value: "REJECT" },
-                  ]}
-                  onSelect={openModal}
-                />
-              ) : null} */}
+        </form>
+
             </div>
           </div>
           <CustomTable

@@ -45,11 +45,11 @@ function UserFilterDrawer({
         ></label>
         <div className="flex flex-col h-full w-[400px] p-4 bg-white">
           <div className="flex-1 overflow-auto">{children}</div>
-
+{/* 
           <div className="flex gap-2 items-center pt-[16px] border-t">
             <CancelButton name="Reset" fullWidth />
             <ActionButton name="Apply Filter" fullWidth />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

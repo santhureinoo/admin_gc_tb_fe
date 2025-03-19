@@ -19,6 +19,9 @@ type customTableProps = {
   checkBoxOnClick: (data: any, applicationStatus: string) => void;
   allCheckBoxOnClick: () => void;
   selectedRowsId?: number[];
+  actionButtonText: string;
+  viewBtnOnClick?: (id: any) => void;
+  isCopy?: boolean;
 };
 
 import { useRouter } from "next/navigation";
@@ -32,7 +35,10 @@ function CustomLicenseKeyTable({
   sortingOnClick,
   checkBoxOnClick,
   selectedRowsId,
+  actionButtonText,
+  viewBtnOnClick,
   allCheckBoxOnClick,
+  isCopy
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
   const router = useRouter();
@@ -127,7 +133,11 @@ function CustomLicenseKeyTable({
                           className="px-5 py-2 border border-slate-200"
                         >
                           <div className="text-slate-500 text-nowrap">
-                            {el[hd.bodyKeyName]}
+                           { hd.type == "DATE"
+                              ? new Date(
+                                  el[hd.bodyKeyName]
+                                ).toLocaleDateString()
+                              : el[hd.bodyKeyName]}
                           </div>
                         </td>
                       );
@@ -194,17 +204,23 @@ function CustomLicenseKeyTable({
                       );
                     }
                   })}
-                  <td className="px-5 text-center py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
-                    {/* <ActionButton /> */}
-                    <button
-                      onClick={() => {
-                        router.push(`/application-info/${el.applicationId}`);
-                      }}
-                      className="btn w-2/3 bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
-                    >
-                      View details
-                    </button>
-                  </td>
+                  {viewBtnOnClick ? (
+                    <td className="px-5 text-center py-2 last:border-none first:pl-3 last:pr-3 last:bg-gradient-to-r last:from-transparent last:to-white last:to-[12px] last:pl-5 last:sticky last:right-0">
+                      {/* <ActionButton /> */}
+
+                      <button
+                        onClick={() => {
+                          if (viewBtnOnClick) viewBtnOnClick(el.id);
+                          if(isCopy){
+                            viewBtnOnClick(el.licenseKey)
+                          }
+                        }}
+                        className="btn bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"
+                      >
+                        {actionButtonText}
+                      </button>
+                    </td>
+                  ) : null}
                 </tr>
               ))}
             </tbody>

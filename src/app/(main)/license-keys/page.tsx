@@ -1,4 +1,5 @@
 "use client";
+
 import {
   getApplications,
   getDashboarSummary,
@@ -7,7 +8,6 @@ import { ActionButton, CancelButton, DownloadCSVButton } from "@/components/comm
 import {
   LicenceFilterDrawer,
 } from "@/components/common/drawer";
-import { ApproveModal } from "@/components/common/modals";
 import Pagination from "@/components/common/pagination";
 import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTable";
 import { SearchTextField } from "@/components/common/text-field";
@@ -26,6 +26,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import GenerateLicenseModal from "@/components/common/modals/GenerateLicenseModal";
 import { getCompanyList, getLicenseCSVData, GetLicenseCSVDataReq } from "@/actions/license";
+import { useRouter } from "next/navigation";
+
 
 export default function LicenseKeys() {
   const [dataCounts, setDataCounts] = useState<number>(0);
@@ -34,6 +36,7 @@ export default function LicenseKeys() {
   const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] =
     useState<APPLICATIONS_STATUS>("PENDING");
+    const router = useRouter();
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
   const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
@@ -73,6 +76,10 @@ export default function LicenseKeys() {
     setDataCounts(data?.totalCount)
     setCompanies(data?.companyList);
     console.log("this is company data", data.companyList)
+  };
+
+  const handleViewCompanyDetails = (companyId: any) => {
+    router.push(`/companyDetail/${companyId}`);
   };
 
   const resetFilter = () => {
@@ -286,6 +293,7 @@ export default function LicenseKeys() {
             </div>
           </div>
           <CustomLicenseKeyTable
+          actionButtonText="View Details"
             selectedRowsId={selectedApplications}
             headersList={[
               {
@@ -314,7 +322,7 @@ export default function LicenseKeys() {
                 name: "Created Date",
                 bodyKeyName: "createdDate",
                 sortable: true,
-                type: "date",
+                type: "DATE",
               },
             ]}
             data={companies}
@@ -324,6 +332,7 @@ export default function LicenseKeys() {
             }}
             checkBoxOnClick={handleClickCheckBox}
             allCheckBoxOnClick={handleClickAllCheckBox}
+            viewBtnOnClick={handleViewCompanyDetails}
           />
           <Pagination
             totalCounts={dataCounts}
