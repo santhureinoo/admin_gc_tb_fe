@@ -11,7 +11,7 @@ export type UploadFileReq = {
 export const fetchWrapper = {
   POST: post,
   PUT: put,
-  GET: get
+  GET: get,
   UPLOAD_CSV: uploadCSV,
 };
 
@@ -48,8 +48,13 @@ async function get(isPublic: boolean, subUrl: string, body: any = null) {
     Object.assign(config, { Authorization: "Bearer " + userToken });
   }
 
-  const response = await axios({ method: "GET", url, data: body, headers: config});
-    return response;
+  const response = await axios({
+    method: "GET",
+    url,
+    data: body,
+    headers: config,
+  });
+  return response;
 }
 
 async function uploadCSV(requestData: UploadFileReq) {
@@ -58,7 +63,6 @@ async function uploadCSV(requestData: UploadFileReq) {
       "Content-Type": "application/octet-stream",
     },
   });
-
 
   return response;
 }
