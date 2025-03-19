@@ -3,9 +3,15 @@ import { getDecryptedAccessToken } from "@/utils";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
+export type UploadFileReq = {
+  url: string;
+  file: any;
+};
+
 export const fetchWrapper = {
   POST: post,
-  PUT: put
+  PUT: put,
+  UPLOAD_CSV: uploadCSV,
 };
 
 let userToken: string = "";
@@ -30,6 +36,15 @@ async function post(isPublic: boolean, subUrl: string, body: any = null) {
   return response;
 }
 
+async function uploadCSV(requestData: UploadFileReq) {
+  const response = await axios.post(requestData.url, requestData.file, {
+    headers: {
+      "Content-Type": "application/octet-stream",
+    },
+  });
+
+  return response;
+}
 
 async function put(isPublic: boolean, subUrl: string, body: any = null) {
   const url = process.env.NEXT_PUBLIC_API_URL + subUrl;

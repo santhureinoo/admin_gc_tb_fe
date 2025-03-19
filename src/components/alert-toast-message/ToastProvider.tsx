@@ -4,7 +4,7 @@ import ReduxProvider from "@/redux/Provider";
 // import "react-toastify/dist/ReactToastify.css";
 import "../../app/globals.css";
 // import { ToastContainer } from "react-toastify";
-import { ApproveModal, LogoutModal, RejectModal } from "../common/modals";
+import { ApproveModal, LogoutModal, RejectModal, UploadCSVModal } from "../common/modals";
 import { MODALS } from "@/constants";
 import AlertBox from "../common/alertBox/alertBox";
 import GenerateLicenseModal from "../common/modals/GenerateLicenseModal";
@@ -22,6 +22,7 @@ export default function ToastProvider({ children }: ToastProviderProps) {
       {/* Modals (modal id must be unique) */}
       <LogoutModal modalId={MODALS.logoutModalId} />
       <GenerateLicenseModal modalId={MODALS.generateLicenseModalId} />
+      <UploadCSVModal modalId={MODALS.uploadCSVModalID} />
       <RejectModal modalId={MODALS.rejectModalId} />
       <ApproveModal modalId={MODALS.approveModalId} />
       {/* <ToastContainer /> */}
