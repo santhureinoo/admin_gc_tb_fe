@@ -12,6 +12,8 @@ import { ACCESS_TOKEN, CURRENT_USER_ID, REFRESH_TOKEN } from "@/constants";
 import { getEncryptedToken } from "@/utils";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/alertSlice";
+import { useState } from "react";
+
 type loginFormData = {
   email: string;
   password: string;
@@ -28,7 +30,7 @@ function LoginForm() {
   });
 
   const router = useRouter();
-
+  const [isLoading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -39,6 +41,7 @@ function LoginForm() {
 
   const handleLogin = async (data: loginFormData) => {
     const { email, password } = data;
+    setLoading(true);
     try {
       const response = await login({ email, password });
       if (response?.access_token) {
@@ -53,16 +56,27 @@ function LoginForm() {
         setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
           maxAge: response?.refresh_expires_in,
         });
-  
+        
         dispatch(
           setAlert({
             alertType: "success",
             alertMessage: `Welcome ${response?.user_first_name}`,
           })
         );
+        setLoading(false);
         router.push("/");
       }
+      else {
+        setLoading(false);
+        dispatch(
+          setAlert({
+            alertType: "error",
+            alertMessage: "Something went wrong",
+          })
+        );
+      }
     } catch (error) {
+      setLoading(false);
       dispatch(
         setAlert({
           alertType: "error",
@@ -75,7 +89,7 @@ function LoginForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="bg-neutralGrey0 shadow-md p-[24px] rounded-2xl min-h-[80vh] min-w-[770px] max-w-[50vw] flex flex-col items-center justify-between">
+      <div className="bg-neutralGrey0 shadow-md py-[24px] px-[40px] rounded-2xl min-h-[80vh] min-w-[600px] max-w-[50vw] flex flex-col items-center justify-between">
         <div className="w-full">
           <Logo />
           <h2 className="text-center text-neutralGrey800 text-[28px] mb-[16px] font-[700]">
@@ -96,13 +110,16 @@ function LoginForm() {
               textFieldHeader="Password"
               textFieldType="password"
               placeHolderText="Enter your password"
-              extraHintText="Forgot Password?"
+              extraHintText=""
               icon={true}
               register={register("password")}
               error={errors.password}
             />
-            <button className="btn w-full bg-primary text-white hover:bg-primary border-none animate-none">
-              Log in
+            <div className="flex justify-end">
+              <p onClick={() => router.push('/forgot-password')} className="text-neutralGrey700 mt-[-20px] mb-6 font-small cursor-pointer">Forgot Password?</p>
+            </div>
+            <button className={`py-3 rounded-md w-full bg-primary border-none text-white animate-none ${isLoading ? "bg-opacity-70" : "hover:bg-primary "}`} disabled={isLoading}>
+              {isLoading ? "Loading..." : "Log in"}
             </button>
           </form>
         </div>

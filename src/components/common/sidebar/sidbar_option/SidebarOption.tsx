@@ -22,7 +22,7 @@ function SidebarOption({
   const router = useRouter();
 
   const handleNavigate = () => {
-    if (name == "Logout") {
+    if (name == "Log out") {
       openModal(MODALS.logoutModalId);
       setActivePageFunc(route);
       return;

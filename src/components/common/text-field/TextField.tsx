@@ -45,7 +45,7 @@ function TextField({
               : textFieldType
           }
           placeholder={placeHolderText}
-          className="input border-none bg-neutralGrey0 placeholder-neutralGrey400 flex-1"
+          className="input border-none bg-neutralGrey0 placeholder-neutralGrey400 flex-1 text-neutralGrey700"
         />
         {icon ? (
           <ShowPasswordIcon className="mr-[10px]" onClick={toggleShowText} />

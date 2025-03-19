@@ -28,6 +28,11 @@ export type GetLicenseKeyFilterReq = {
   pageSize: number
 }
 
+export type GetLicenseCSVDataReq = {
+  ids: number[],
+  type: string
+}
+
 export const generateLicenseKeys = async (payload: GenerateLicenseKeysReq) => {
   const response: any = await fetchWrapper.POST(
     false,
@@ -60,4 +65,11 @@ export const getLicenseKeyListByCompany = async (payload: GetLicenseKeyListByCom
   );
   return await response?.data;
 };
+
+// need to check with sam for http method for license key csv download. Currently changed to POST method : Aung Han Soe
+export const getLicenseCSVData = async (payload: GetLicenseCSVDataReq) => {
+  const response: any = await fetchWrapper.POST(false, "csv/download-csv", payload);
+
+  return await response?.data;
+}
 

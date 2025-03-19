@@ -1,6 +1,10 @@
 "use client";
 
-import { ActionButton, CancelButton } from "@/components/common/buttons";
+import {
+  getApplications,
+  getDashboarSummary,
+} from "@/actions/applications";
+import { ActionButton, CancelButton, DownloadCSVButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
 } from "@/components/common/drawer";
@@ -8,7 +12,7 @@ import Pagination from "@/components/common/pagination";
 import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTable";
 import { SearchTextField } from "@/components/common/text-field";
 import { APPLICATIONS_STATUS, MODALS, PAGINATION_PER_PAGE } from "@/constants";
-import { openModal } from "@/utils";
+import { downloadCSV, openModal } from "@/utils";
 import {
   addAllApplications,
   addApplications,
@@ -21,8 +25,9 @@ import { useAppSelector } from "@/redux/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import GenerateLicenseModal from "@/components/common/modals/GenerateLicenseModal";
-import { getCompanyList } from "@/actions/license";
+import { getCompanyList, getLicenseCSVData, GetLicenseCSVDataReq } from "@/actions/license";
 import { useRouter } from "next/navigation";
+
 
 export default function LicenseKeys() {
   const [dataCounts, setDataCounts] = useState<number>(0);
@@ -118,6 +123,23 @@ export default function LicenseKeys() {
   }, [currentStatus, currentSelectedPage]);
   const [showDrawer, setShwoDrawer] = useState(false);
 
+  const getCSVData = async () => {
+    // please replace with dynamic data
+    const payload: GetLicenseCSVDataReq = {
+        ids: [1],
+        type: "all"
+    }
+    try {
+        const data = await getLicenseCSVData(payload);
+        console.log(data);
+        
+        downloadCSV(data, "test");
+    }
+    catch(error) {
+        console.log(error);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#F6F6F6] flex-1">
       <div className="w-full bg-neutralGrey0 h-[50px]"></div>
@@ -132,6 +154,7 @@ export default function LicenseKeys() {
               onClick={() => openModal(MODALS.generateLicenseModalId)}
               name="+ Generate License Key"
             />
+            <DownloadCSVButton title="License Key" onClick={()=> getCSVData()} />
           </div>
           {/* <InfoCardList infos={dashboardSummary} /> */}
           {/* <StatusBarList
