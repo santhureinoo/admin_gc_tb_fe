@@ -56,11 +56,10 @@ function LoginForm() {
         setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
           maxAge: response?.refresh_expires_in,
         });
-        
         dispatch(
           setAlert({
             alertType: "success",
-            alertMessage: `Welcome ${response?.user_first_name}`,
+            alertMessage: `Welcome to Global Caring Handbook Admin`,
           })
         );
         setLoading(false);

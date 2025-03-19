@@ -42,13 +42,10 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
   const dispatch = useDispatch();
 
   const handleUserCSVUpload = async (data: any) => {
-    // console.log("handleUserCSVUpload");
     const { companyName, role, period, file } = data;
-    console.log("** this is file ***", file[0]);
     const formData = new FormData();
     formData.append("email", "jkljsldf");
     formData.append("file", file[0]);
-    console.log("** zzz ***", formData);
     const response = await uploadUserCSV({
       companyName: companyName,
       userRole: role,

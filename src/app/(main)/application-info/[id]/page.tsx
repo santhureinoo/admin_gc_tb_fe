@@ -40,8 +40,6 @@ function ApplicatoinInfo() {
     fetchApplicationDetails();
   }, [id, selectedApplications]);
 
-  console.log("*** application details ***", applicationDetails);
-
   const nav = [
     { href: "#section-a1", title: "Applicant Details" },
     { href: "#section-a2", title: "Worker Details" },

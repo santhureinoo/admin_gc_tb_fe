@@ -103,8 +103,6 @@ export default function Home() {
       pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
     };
 
-    console.log("*** payload ***", payload);
-
     // {
     //   period: null,
     //   role: getValues("role"),
@@ -118,7 +116,6 @@ export default function Home() {
     // }
 
     const data = await getAllUsers(payload);
-    console.log("data", data);
     setUsers(data);
     setDataCounts(data?.length);
   };

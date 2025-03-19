@@ -25,7 +25,6 @@ function InfoField({
   const [fileSize, setFileSize] = useState<any>();
 
   const fetchS3DownloadUrls = async () => {
-    console.log("s3FileKey and s3FileType", s3FileKey, s3FileType);
     const response = await getS3DownloadUrls({
       userId: userId,
       fileDetails: [
@@ -35,8 +34,6 @@ function InfoField({
         },
       ],
     });
-
-    console.log("*** getS3DownloadUrls response ***", response);
 
     const s3Url = response?.fileDetails[0]?.s3Url;
     const fileName = response?.fileDetails[0]?.originalFilename;
@@ -54,8 +51,6 @@ function InfoField({
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        // const fileData = createFileFromBlob(response, fileName, fileType);
-        // console.log("*** file data ***", fileData);
         return response.blob(); // Fetches the file as a blob
       })
       .then((blob) => {

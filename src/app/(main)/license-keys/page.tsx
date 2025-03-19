@@ -75,7 +75,6 @@ export default function LicenseKeys() {
     });
     setDataCounts(data?.totalCount)
     setCompanies(data?.companyList);
-    console.log("this is company data", data.companyList)
   };
 
   const handleViewCompanyDetails = (companyId: any) => {
@@ -131,7 +130,6 @@ export default function LicenseKeys() {
     }
     try {
         const data = await getLicenseCSVData(payload);
-        console.log(data);
         
         downloadCSV(data, "test");
     }

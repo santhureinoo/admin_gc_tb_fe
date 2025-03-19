@@ -90,11 +90,6 @@ function CheckDetail() {
     (state) => state.selectedApplications
   );
 
-  console.log(
-    "*** selected application details ***",
-    selectedApplicationDetail
-  );
-
   function getSelectedAndMissingFields(
     title: string,
     fields: any,
