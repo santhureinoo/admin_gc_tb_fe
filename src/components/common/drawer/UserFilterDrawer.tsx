@@ -32,7 +32,7 @@ function UserFilterDrawer({
         className="drawer-toggle"
         onChange={(e) => setIsOpen(e.target.checked)}
       />
-      <div className="drawer-content">
+      <div className="drawer-content w-full">
         <label htmlFor={id} className="drawer-button btn btn-primary">
           {buttonLabel}
         </label>

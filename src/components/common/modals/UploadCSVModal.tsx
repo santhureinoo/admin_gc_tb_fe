@@ -7,7 +7,7 @@ import {
   CancelButton,
   RejectButton,
 } from "../buttons";
-import { closeModal } from "@/utils";
+import { closeModal, downloadCSV } from "@/utils";
 import { useForm, Controller } from "react-hook-form";
 import { USER_ROLES, PLAN_PERIODS } from "@/constants";
 import { GenerateLicenseKeysReq } from "@/actions/license";
@@ -21,7 +21,7 @@ import { generateLicenseKeys } from "@/actions/license";
 import CSVUploader from "../Dropzone";
 import { useDropzone } from "react-dropzone";
 import { uploadUserCSV } from "@/actions/users";
-
+import UploadIcon from '../../../../public/svg/upload_icon.svg';
 type ApproveModalProps = {
   modalId: string;
 };
@@ -44,17 +44,17 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
   const handleUserCSVUpload = async (data: any) => {
     // console.log("handleUserCSVUpload");
     const { companyName, role, period, file } = data;
-    console.log("** this is file ***", file[0]);
     const formData = new FormData();
-    formData.append("email", "jkljsldf");
+    // formData.append("email", "jkljsldf");
     formData.append("file", file[0]);
-    console.log("** zzz ***", formData);
+
     const response = await uploadUserCSV({
       companyName: companyName,
       userRole: role,
       period: period,
       formData,
     });
+    downloadCSV(response, "test");
   };
 
   const onDrop = useCallback(
@@ -133,10 +133,12 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
           render={() => (
             <div
               {...getRootProps()}
-              className="border-2 border-dashed p-6 text-center cursor-pointer"
+              className="border-2 border-dashed p-6 text-center cursor-pointer flex flex-col items-center gap-[10px]"
             >
               <input {...getInputProps()} />
-              <p>Drag & drop CSV or image files here, or click to select</p>
+              <UploadIcon />
+             <p><span>Upload a file</span> or drag and drop</p>
+             <p>CSV file up to 5MB</p>
             </div>
           )}
         />

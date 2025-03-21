@@ -103,24 +103,9 @@ export default function Home() {
       pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
     };
 
-    console.log("*** payload ***", payload);
-
-    // {
-    //   period: null,
-    //   role: getValues("role"),
-    //   search: searchUserText, // seaerch by FirstName, LastName, Phone, AppliedPosition
-    //   createdDate: {
-    //     startDate: getValues("startDate"), // yyyy-mm-dd
-    //     endDate: getValues("endDate"), // yyyy-mm-dd
-    //   },
-    //   currentPage: currentSelectedPage, // current user seleced page
-    //   pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
-    // }
-
-    const data = await getAllUsers(payload);
-    console.log("data", data);
-    setUsers(data);
-    setDataCounts(data?.length);
+    const {users , totalCount} = await getAllUsers(payload);
+    setUsers(users);
+    setDataCounts(totalCount);
   };
 
   const handleClickCheckBox = (id: number, applicationStatus: string) => {
@@ -173,111 +158,108 @@ export default function Home() {
             <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
               Users
             </h3>
-                  <ActionButton
-                    onClick={() => openModal(MODALS.uploadCSVModalID)}
-                    name="+ Upload CSV"
-                  />
+            <ActionButton
+              onClick={() => openModal(MODALS.uploadCSVModalID)}
+              name="+ Upload CSV"
+            />
           </div>
-          <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
+          <div className="flex flex-col">
             <div className="flex flex-row items-center justify-between">
               <SearchTextField
                 onChange={(value) => setSearchUserText(value)}
                 placeholder="Search User"
               />
-        <form 
-        onSubmit={handleSubmit(fetchAllUsers)}>
-        <UserFilterDrawer
-                id={"user-filter-drawer"}
-                buttonLabel={"User Filter"}
-              >
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[18px] font-bold">
-                    Filters
-                  </h3>
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    User Roles
-                  </h3>
-                  <select
-                    {...register("role", {
-                      required: "User role is required",
-                    })}
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select User Role
-                    </option>
-                    {USER_ROLES.map((role) => (
-                      <option key={role.value} value={role.value}>
-                        {role.label}
+              <form onSubmit={handleSubmit(fetchAllUsers)}>
+                <UserFilterDrawer
+                  id={"user-filter-drawer"}
+                  buttonLabel={"Filters"}
+                >
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[18px] font-bold">
+                      Filters
+                    </h3>
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      User Roles
+                    </h3>
+                    <select
+                      {...register("role", {
+                        required: "User role is required",
+                      })}
+                      className="select w-full bg-transparent border border-[#C4C4C4]"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        Select User Role
                       </option>
-                    ))}
-                  </select>
-
-                </div>
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    Plan Periods
-                  </h3>
-                  <select
-                    {...register("period", {
-                      required: "Period is required",
-                    })}
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select Period
-                    </option>
-                    {PLAN_PERIODS.map((period) => (
-                      <option key={period.value} value={period.value}>
-                        {period.label}
+                      {USER_ROLES.map((role) => (
+                        <option key={role.value} value={role.value}>
+                          {role.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      Plan Periods
+                    </h3>
+                    <select
+                      {...register("period", {
+                        required: "Period is required",
+                      })}
+                      className="select w-full bg-transparent border border-[#C4C4C4]"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        Select Period
                       </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    Created Date Filter
-                  </h3>
-                  <div
-                    style={{ position: "relative" }}
-                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
-                  >
-                    <input
-                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
-                      placeholder={"Start Date"}
-                      type={"date"}
-                      {...register("startDate")}
-                      style={{ boxShadow: "none" }}
-                    />
+                      {PLAN_PERIODS.map((period) => (
+                        <option key={period.value} value={period.value}>
+                          {period.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <div
-                    style={{ position: "relative" }}
-                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
-                  >
-                    <input
-                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
-                      placeholder={"End Date"}
-                      {...register("endDate")}
-                      type={"date"}
-                      style={{ boxShadow: "none" }}
-                    />
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      Created Date Filter
+                    </h3>
+                    <div
+                      style={{ position: "relative" }}
+                      className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
+                    >
+                      <input
+                        className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                        placeholder={"Start Date"}
+                        type={"date"}
+                        {...register("startDate")}
+                        style={{ boxShadow: "none" }}
+                      />
+                    </div>
+                    <div
+                      style={{ position: "relative" }}
+                      className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
+                    >
+                      <input
+                        className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                        placeholder={"End Date"}
+                        {...register("endDate")}
+                        type={"date"}
+                        style={{ boxShadow: "none" }}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="flex w-full flex-row justify-between mt-4">
-                  <CancelButton
-                    name="Reset"
-                    onClick={() => {
-                      resetFilter();
-                      fetchAllUsers();
-                    }}
-                  />
-                  <ActionButton name="Apply Filter" type="submit" />
-                </div>
-              </UserFilterDrawer>
-        </form>
-
+                  <div className="flex w-full flex-row justify-between mt-4">
+                    <CancelButton
+                      name="Reset"
+                      onClick={() => {
+                        resetFilter();
+                        fetchAllUsers();
+                      }}
+                    />
+                    <ActionButton name="Apply Filter" type="submit" />
+                  </div>
+                </UserFilterDrawer>
+              </form>
             </div>
           </div>
           <CustomTable
