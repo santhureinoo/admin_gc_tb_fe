@@ -4,7 +4,7 @@ import {
   getDashboarSummary,
   updateApplicationsStatus,
 } from "@/actions/applications";
-import { getUserById } from "@/actions/users";
+import { getRedemmedListByUserId, getUserById } from "@/actions/users";
 import Badge from "@/components/common/badge";
 import { ActionButton } from "@/components/common/buttons";
 import {
@@ -32,24 +32,26 @@ import { useParams } from "next/navigation";
 
 export default function UserDetail() {
   const { id } = useParams();
-  const [users, setUsers] = useState<any>([
-    {
-      userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
-      keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
-      name: "hello world",
-      userRole: "ADMIN",
-      email: "admin@gmail.com",
-      isEmailVerified: true,
-      hasLogin: true,
-      passRestRequired: true,
-      status: "ACTIVE",
-      companyName: "Company name 1",
-      licenseKey: "asdfkljiwjeij",
-      totalRedeemedKeys: 20,
-      expiryDate: "2025-02-26T07:45:38.604Z",
-      createdDate: "2025-02-26T07:45:38.604Z",
-    },
-  ]);
+  // const [users, setUsers] = useState<any>([
+  //   {
+  //     userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
+  //     keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
+  //     name: "hello world",
+  //     userRole: "ADMIN",
+  //     email: "admin@gmail.com",
+  //     isEmailVerified: true,
+  //     hasLogin: true,
+  //     passRestRequired: true,
+  //     status: "ACTIVE",
+  //     companyName: "Company name 1",
+  //     licenseKey: "asdfkljiwjeij",
+  //     totalRedeemedKeys: 20,
+  //     expiryDate: "2025-02-26T07:45:38.604Z",
+  //     createdDate: "2025-02-26T07:45:38.604Z",
+  //   },
+  // ]);
+  const [licenseList, setLicenseList] = useState<any>([]);
+  const [totalLicenseCount, setTotalLicenseCount] = useState(0);
   const [userDetail, setUserDetail] = useState<any>();
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchApplicationText, setSearchApplicationText] = useState("");
@@ -119,6 +121,16 @@ export default function UserDetail() {
     const data = await getUserById({
       id: id,
     });
+
+    const { licenseList, totalCount } = await getRedemmedListByUserId({
+      userId: id,
+      currentPage: 1,
+      pageSize: 20,
+    });
+
+    setLicenseList(licenseList);
+    setTotalLicenseCount(totalCount);
+
     setUserDetail(data);
   };
 
@@ -135,7 +147,7 @@ export default function UserDetail() {
   useEffect(() => {
     // fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
-
+  console.log("** user detail **", userDetail);
   return userDetail == null ? (
     <></>
   ) : (
@@ -171,7 +183,7 @@ export default function UserDetail() {
               {
                 name: "Redeemed History",
                 value: "REDEEMED_HISTORY",
-                count: 21,
+                count: totalLicenseCount,
               },
             ]}
             hasCount
@@ -266,12 +278,14 @@ export default function UserDetail() {
                     bodyKeyName: "name",
                     sortable: true,
                     sortableType: "string",
+                    value: userDetail?.name,
                   },
                   {
                     name: "Email",
                     bodyKeyName: "email",
                     sortable: true,
                     sortableType: "number",
+                    // value:
                   },
                   {
                     name: "Status",
@@ -301,7 +315,7 @@ export default function UserDetail() {
                     type: "DATE",
                   },
                 ]}
-                data={users}
+                data={licenseList}
                 sortingOnClick={(data) => {
                   const newData = data;
                   setApplications(() => newData);
@@ -311,7 +325,7 @@ export default function UserDetail() {
                 // viewBtnOnClick={handleViewUserDetails}
               />
               <Pagination
-                totalCounts={dataCounts}
+                totalCounts={totalLicenseCount}
                 setCurrentSelectedPage={setCurrentSelectedPage}
                 currentSelectedPage={currentSelectedPage}
               />

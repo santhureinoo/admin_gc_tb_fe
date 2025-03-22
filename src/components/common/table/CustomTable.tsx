@@ -10,6 +10,7 @@ type headerValue = {
   sortable?: boolean;
   sortableType?: "string" | "number";
   type?: "DATE" | "TEXT";
+  value?: any;
 };
 
 type customTableProps = {
