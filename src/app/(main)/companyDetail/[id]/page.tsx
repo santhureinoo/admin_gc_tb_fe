@@ -17,6 +17,7 @@ import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
+import { useRouter } from "next/navigation";
 import { APPLICATIONS_STATUS, MODALS, PAGINATION_PER_PAGE } from "@/constants";
 import {
   addAllApplications,
@@ -30,7 +31,7 @@ import { useParams } from "next/navigation";
 import { getCompanyDetail, getLicenseCSVData, GetLicenseCSVDataReq, getLicenseKeyListByCompany } from "@/actions/license";
 import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTable";
 import { setAlert } from "@/redux/alertSlice";
-import { removeAllIds } from "@/redux/licenseSlice";
+import {  addIds } from "@/redux/licenseSlice";
 
 export default function companyDetail() {
   const { id } = useParams();
@@ -49,13 +50,12 @@ export default function companyDetail() {
   const [currentStatus, setCurrentStatus] = useState<any>("COMPANY_DETAIL");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
+  const router = useRouter();
   // redux
   const dispatch = useDispatch();
   const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
-
-
 
   const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
@@ -103,7 +103,7 @@ export default function companyDetail() {
     handleFetchCompanyDetail();
     handleFetchRedeemedLicenseKeys();
     handleFetchAvailableLicenseKeys();
-    dispatch(removeAllIds());
+    dispatch(addIds([+id]));
   }, []);
 
 
@@ -267,7 +267,7 @@ export default function companyDetail() {
                 handleEnterKey={handleFetchRedeemedLicenseKeys}
               />
               <CustomLicenseKeyTable
-                actionButtonText="Copy Key"
+                actionButtonText="View User Detail"
                 isCopy={true}
                 idProps="licenseKey"
                 hasCheckbox={false}
@@ -279,12 +279,22 @@ export default function companyDetail() {
                   },
                   {
                     name: "User role",
-                    bodyKeyName: "email",
+                    bodyKeyName: "role",
                   },
                   {
                     name: "Plan period",
-                    bodyKeyName: "status",
+                    bodyKeyName: "period",
                   },
+                  {
+                    name: "Activated Date",
+                    bodyKeyName: "activationDate",
+                    type: "DATE",
+                  },
+                  {
+                    name: "Expiry Date",
+                    bodyKeyName: "expiryDate",
+                    type: "DATE",
+                  }
                  
                 ]}
                 data={redeemedKeys}
@@ -294,7 +304,8 @@ export default function companyDetail() {
                 }}
                 checkBoxOnClick={handleClickCheckBox}
                 allCheckBoxOnClick={handleClickAllCheckBox}
-                viewBtnOnClick={(value) => copyKey(value)}
+                isUserDetailRedirect={true}
+                viewBtnOnClick={(value) => router.push(`/userDetail/${value}`)}
               />
               <Pagination
                 totalCounts={dataCounts}

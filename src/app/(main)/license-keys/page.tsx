@@ -325,7 +325,6 @@ export default function LicenseKeys() {
               {
                 name: "Created Date",
                 bodyKeyName: "createdDate",
-               
                 type: "DATE",
               },
             ]}

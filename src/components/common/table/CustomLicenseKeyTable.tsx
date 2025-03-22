@@ -24,6 +24,7 @@ type customTableProps = {
   idProps: string;
   viewBtnOnClick?: (id: any) => void;
   isCopy?: boolean;
+  isUserDetailRedirect?: boolean;
 };
 
 import { useRouter } from "next/navigation";
@@ -40,6 +41,7 @@ function CustomLicenseKeyTable({
   actionButtonText,
   viewBtnOnClick,
   allCheckBoxOnClick,
+  isUserDetailRedirect,
   idProps,
   hasCheckbox,
   isCopy
@@ -222,6 +224,9 @@ function CustomLicenseKeyTable({
                           if (viewBtnOnClick) viewBtnOnClick(el.id);
                           if(isCopy){
                             viewBtnOnClick(el.licenseKey)
+                          }
+                          if(isUserDetailRedirect) {
+                            viewBtnOnClick(el.userId)
                           }
                         }}
                         className="btn bg-primary text-white hover:bg-primary border-none animate-none text-nowrap"

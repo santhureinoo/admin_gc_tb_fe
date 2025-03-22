@@ -79,8 +79,24 @@ export const PLAN_PERIODS = [
     value: 6
   },
   {
+    label: "9 months",
+    value: 9
+  },
+  {
     label: "12 months",
     value: 12
+  },
+  {
+    label: "15 months",
+    value: 15
+  },
+  {
+    label: "18 months",
+    value: 18
+  },
+  {
+    label: "21 months",
+    value: 21
   },
   {
     label: "24 months",
