@@ -38,7 +38,22 @@ export const MODALS = {
   logoutModalId: "modal_3",
   generateLicenseModalId: "modal_4",
   uploadCSVModalID: "modal_5",
+  downloadCSVModalId: "modal_6",
 };
+export const DOWNLOAD_CSV_OPTIONS = [
+  {
+    label: "All License Keys",
+    value: "all"
+  },
+  {
+    label: "Only Available Keys",
+    value: "avail"
+  },
+  {
+    label: "Only redeemed Keys",
+    value: "redeem"
+  },
+]
 export const USER_ROLES = [
   {
     label: "Care Worker",

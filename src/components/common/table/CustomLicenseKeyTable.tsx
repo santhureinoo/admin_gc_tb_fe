@@ -15,11 +15,13 @@ type headerValue = {
 type customTableProps = {
   headersList: headerValue[];
   data: any;
+  hasCheckbox?: boolean;
   sortingOnClick: (data: any) => void;
-  checkBoxOnClick: (data: any, applicationStatus: string) => void;
+  checkBoxOnClick: (data: any) => void;
   allCheckBoxOnClick: () => void;
   selectedRowsId?: number[];
   actionButtonText: string;
+  idProps: string;
   viewBtnOnClick?: (id: any) => void;
   isCopy?: boolean;
 };
@@ -38,6 +40,8 @@ function CustomLicenseKeyTable({
   actionButtonText,
   viewBtnOnClick,
   allCheckBoxOnClick,
+  idProps,
+  hasCheckbox,
   isCopy
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
@@ -50,7 +54,8 @@ function CustomLicenseKeyTable({
           <table className="table-auto w-full border-collapse border border-slate-200">
             <thead className="text-[13px] sticky top-0 z-40">
               <tr className="border border-slate-200">
-                <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA]">
+                {hasCheckbox && (
+                  <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA]">
                   <div className="font-medium text-left">
                     <input
                       onChange={() => allCheckBoxOnClick()}
@@ -64,6 +69,8 @@ function CustomLicenseKeyTable({
                     />
                   </div>
                 </th>
+                )}
+                
                 {headersList.map((tableHeader, index) => (
                   <th
                     key={index}
@@ -106,25 +113,27 @@ function CustomLicenseKeyTable({
             <tbody className="text-sm font-medium">
               {data?.map((el: any, index: any) => (
                 <tr className="border border-slate-200" key={index}>
-                  <td className="pl-5">
+                  {hasCheckbox && (
+                    <td className="pl-5">
                     <input
                       checked={
                         selectedRowsId?.find(
-                          (rowId) => rowId == el?.applicationId
+                          (rowId) => rowId == el[idProps]
                         ) == undefined
                           ? false
                           : true
                       }
                       onChange={() =>
                         checkBoxOnClick(
-                          el?.applicationId,
-                          el?.applicationStatus
+                          el[idProps],
                         )
                       }
                       type="checkbox"
                       className="checkbox bg-white border border-neutralGrey-grey400 [--chkbg:#15B0AC] [--chkfg:#FFFFFF] checked:border-none checkbox-sm"
                     />
-                  </td>
+                    </td>
+                  )}
+                 
                   {headersList.map((hd, idx) => {
                     if (hd.ComponentName == null) {
                       return (

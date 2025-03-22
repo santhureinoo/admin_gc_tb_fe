@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import GenerateLicenseModal from "@/components/common/modals/GenerateLicenseModal";
 import { getCompanyList, getLicenseCSVData, GetLicenseCSVDataReq } from "@/actions/license";
 import { useRouter } from "next/navigation";
+import { addIds, removeAllIds, removeId } from "@/redux/licenseSlice";
 
 
 export default function LicenseKeys() {
@@ -38,13 +39,17 @@ export default function LicenseKeys() {
     useState<APPLICATIONS_STATUS>("PENDING");
     const router = useRouter();
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
-
+  const [showDownloadCSV, setShowDownloadCSV] = useState(false);
   const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
   // redux
   const dispatch = useDispatch();
-  const { selectedApplications, isStatusChanged } = useAppSelector(
-    (state) => state.selectedApplications
+  const { ids } = useAppSelector(
+    (state) => state.license
   );
+  useEffect(() => {
+    if(ids.length > 0) setShowDownloadCSV(true);
+    else setShowDownloadCSV(false);
+  }, [ids]);
   type LicenseFilterFields = {
     period?: number | null,
     role?: string | null,
@@ -78,7 +83,12 @@ export default function LicenseKeys() {
     console.log("this is company data", data.companyList)
   };
 
+  useEffect(() => {
+    dispatch(removeAllIds())
+  }, []);
+
   const handleViewCompanyDetails = (companyId: any) => {
+    dispatch(addIds([companyId]));
     router.push(`/companyDetail/${companyId}`);
   };
 
@@ -90,31 +100,31 @@ export default function LicenseKeys() {
   }
   //set default value for filter
   useEffect(() => {
-    setValue('period', PLAN_PERIODS[0].value)
-    setValue('role', USER_ROLES[0].value)
+    setValue('period', null)
+    setValue('role', null)
     setValue('startDate', null),
     setValue('endDate', null)
   },[])
-  const handleClickCheckBox = (id: number, applicationStatus: string) => {
-    const duplicateId = selectedApplications.find((el) => el == id);
+  const handleClickCheckBox = (id: number) => {
+    const duplicateId = ids.find((el) => el == id);
 
     if (duplicateId == undefined) {
       dispatch(
-        addApplications({ id: id, applicationStatus: applicationStatus })
+        addIds([...ids, id])
       );
     }
     if (duplicateId) {
-      dispatch(removeApplications(id));
+      dispatch(removeId(id));
     }
   };
 
   const handleClickAllCheckBox = () => {
-    const allApplicationsId = companies.map((app: any) => app.applicationId);
+    const allCompaniesId = companies.map((app: any) => app.id);
 
-    if (selectedApplications.length > 0) {
-      dispatch(clearApplications());
+    if (ids.length > 0) {
+      dispatch(removeAllIds());
     } else {
-      dispatch(addAllApplications(allApplicationsId));
+      dispatch(addIds(allCompaniesId));
     }
   };
 
@@ -126,7 +136,7 @@ export default function LicenseKeys() {
   const getCSVData = async () => {
     // please replace with dynamic data
     const payload: GetLicenseCSVDataReq = {
-        ids: [1],
+        ids: ids,
         type: "all"
     }
     try {
@@ -154,7 +164,8 @@ export default function LicenseKeys() {
               onClick={() => openModal(MODALS.generateLicenseModalId)}
               name="+ Generate License Key"
             />
-            <DownloadCSVButton title="License Key" onClick={()=> getCSVData()} />
+            
+            {/* <DownloadCSVButton title="License Key" onClick={()=> getCSVData()} /> */}
           </div>
           {/* <InfoCardList infos={dashboardSummary} /> */}
           {/* <StatusBarList
@@ -195,15 +206,17 @@ export default function LicenseKeys() {
               setDataCounts(count);
             }}
           /> */}
-          <div className="flex flex-col  items-start xl:flex-row xl:items-center justify-between">
-            <div className="flex flex-row w-full items-center justify-between">
+          <div className="flex flex-col">
+            <div className="flex flex-row items-center justify-between">
               <SearchTextField
                 onChange={(value) => setCompanyNameSearch(value)}
                 placeholder="Search Company"
                 handleEnterKey={fetchCompanyList}
               />
+              <div className="flex flex-row gap-4">
+               {showDownloadCSV && <DownloadCSVButton title="Download CSV" onClick={()=> openModal(MODALS.downloadCSVModalId)} />}
               <form
-                className="w-[200px]"
+                className=""
                 onSubmit={handleSubmit(fetchCompanyList)}
               >
                 <LicenceFilterDrawer
@@ -259,10 +272,12 @@ export default function LicenseKeys() {
                     <h3 className="text-neutralGrey-grey600 text-[16px]">
                       Created Date Filter
                     </h3>
+                    <label>Start Date</label>
                     <div
                       style={{ position: "relative" }}
                       className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
                     >
+                      
                       <input
                         className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
                         placeholder={"Start Date"}
@@ -271,6 +286,7 @@ export default function LicenseKeys() {
                         style={{ boxShadow: "none" }}
                       />
                     </div>
+                    <label>End Date</label>
                     <div
                       style={{ position: "relative" }}
                       className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
@@ -290,38 +306,39 @@ export default function LicenseKeys() {
                   </div>
                 </LicenceFilterDrawer>
               </form>
+              </div>
             </div>
           </div>
           <CustomLicenseKeyTable
+          hasCheckbox={true}
           actionButtonText="View Details"
-            selectedRowsId={selectedApplications}
+          idProps="id"
+            // selectedRowsId={selectedApplications}
             headersList={[
               {
                 name: "Company Name",
                 bodyKeyName: "companyName",
-                sortable: true,
-                sortableType: "string",
+                
               },
               {
                 name: "User Role",
                 bodyKeyName: "role",
-                sortable: true,
-                sortableType: "number",
+                
               },
               {
                 name: "Plan Period",
                 bodyKeyName: "period",
-                sortable: true,
+               
               },
               {
                 name: "Total License Keys",
                 bodyKeyName: "totalKeys",
-                sortable: true,
+
               },
               {
                 name: "Created Date",
                 bodyKeyName: "createdDate",
-                sortable: true,
+               
                 type: "DATE",
               },
             ]}
@@ -330,6 +347,7 @@ export default function LicenseKeys() {
               const newData = data;
               setCompanies(() => newData);
             }}
+            selectedRowsId={ids}
             checkBoxOnClick={handleClickCheckBox}
             allCheckBoxOnClick={handleClickAllCheckBox}
             viewBtnOnClick={handleViewCompanyDetails}

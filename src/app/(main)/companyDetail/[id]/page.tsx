@@ -6,7 +6,7 @@ import {
 } from "@/actions/applications";
 import { getUserById } from "@/actions/users";
 import Badge from "@/components/common/badge";
-import { ActionButton } from "@/components/common/buttons";
+import { ActionButton, DownloadCSVButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
   UserFilterDrawer,
@@ -17,21 +17,20 @@ import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
-import { APPLICATIONS_STATUS, PAGINATION_PER_PAGE } from "@/constants";
+import { APPLICATIONS_STATUS, MODALS, PAGINATION_PER_PAGE } from "@/constants";
 import {
   addAllApplications,
-  addApplications,
   clearApplications,
-  removeApplications,
 } from "@/redux/selectedApplicationsSlice";
 import { useAppSelector } from "@/redux/store";
-import { getPaginationTotalPages, openModal } from "@/utils";
+import { downloadCSV, getPaginationTotalPages, openModal } from "@/utils";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
-import { getCompanyDetail, getLicenseKeyListByCompany, GetLicenseKeyListByCompanyReq } from "@/actions/license";
+import { getCompanyDetail, getLicenseCSVData, GetLicenseCSVDataReq, getLicenseKeyListByCompany } from "@/actions/license";
 import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTable";
 import { setAlert } from "@/redux/alertSlice";
+import { removeAllIds } from "@/redux/licenseSlice";
 
 export default function companyDetail() {
   const { id } = useParams();
@@ -58,17 +57,10 @@ export default function companyDetail() {
   );
 
 
-  const handleClickCheckBox = (id: number, applicationStatus: string) => {
+
+  const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
 
-    if (duplicateId == undefined) {
-      dispatch(
-        addApplications({ id: id, applicationStatus: applicationStatus })
-      );
-    }
-    if (duplicateId) {
-      dispatch(removeApplications(id));
-    }
   };
 
   const handleClickAllCheckBox = () => {
@@ -111,6 +103,7 @@ export default function companyDetail() {
     handleFetchCompanyDetail();
     handleFetchRedeemedLicenseKeys();
     handleFetchAvailableLicenseKeys();
+    dispatch(removeAllIds());
   }, []);
 
 
@@ -131,6 +124,23 @@ export default function companyDetail() {
       })
     );
   }
+  const getCSVData = async () => {
+      // please replace with dynamic data
+      const payload: GetLicenseCSVDataReq = {
+          ids: [+id],
+          type: "all"
+      }
+      try {
+          const data = await getLicenseCSVData(payload);
+          console.log(data);
+          
+          downloadCSV(data, "test");
+      }
+      catch(error) {
+          console.log(error);
+      }
+    }
+    
   return companyDetail == null ? (
     <></>
   ) : (
@@ -146,15 +156,14 @@ export default function companyDetail() {
           <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
             {companyDetail.companyName}
           </h3>
-          <p>
-            Created date-{" "}
-            {new Date(companyDetail.createdDate).toLocaleDateString()}
-          </p>
-          <div className="inline-flex items-center justify-center bg-[#EEFFDD] py-[10px] rounded-md mt-3">
-            {/* <p className="text-[#379708] text-nowrap font-[400] px-[20px]">
-              {userDetail.status}
-            </p> */}
+          <div className="flex flex-row w-full justify-between items-center">
+            <p>
+              Created date-{" "}
+              {new Date(companyDetail.createdDate).toLocaleDateString()}
+            </p>
+            <DownloadCSVButton title="Download CSV" onClick={() => openModal(MODALS.downloadCSVModalId)} />
           </div>
+         
           <StatusBarList
             activeValue={currentStatus}
             statusBarList={[
@@ -260,24 +269,21 @@ export default function companyDetail() {
               <CustomLicenseKeyTable
                 actionButtonText="Copy Key"
                 isCopy={true}
+                idProps="licenseKey"
+                hasCheckbox={false}
                 selectedRowsId={selectedApplications}
                 headersList={[
                   {
                     name: "License Key",
                     bodyKeyName: "licenseKey",
-                    sortable: true,
-                    sortableType: "string",
                   },
                   {
                     name: "User role",
                     bodyKeyName: "email",
-                    sortable: true,
-                    sortableType: "number",
                   },
                   {
                     name: "Plan period",
                     bodyKeyName: "status",
-                    sortable: true,
                   },
                  
                 ]}
@@ -308,25 +314,22 @@ export default function companyDetail() {
               />
               <CustomLicenseKeyTable
                 actionButtonText="Copy Key"
+                idProps="licenseKey"
+                hasCheckbox={false}
                 isCopy={true}
                 selectedRowsId={selectedApplications}
                 headersList={[
                   {
                     name: "License Key",
                     bodyKeyName: "licenseKey",
-                    sortable: true,
-                    sortableType: "string",
                   },
                   {
                     name: "User role",
                     bodyKeyName: "role",
-                    sortable: true,
-                    sortableType: "number",
                   },
                   {
                     name: "Plan period",
                     bodyKeyName: "period",
-                    sortable: true,
                   },
                  
                 ]}
