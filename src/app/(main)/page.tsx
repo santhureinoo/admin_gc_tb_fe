@@ -53,39 +53,17 @@ export default function Home() {
   } = useForm<UserFilterFields>();
 
   const router = useRouter();
-  const [users, setUsers] = useState<any>([
-    // {
-    //   userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
-    //   keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
-    //   name: "hello world",
-    //   userRole: "ADMIN",
-    //   email: "admin@gmail.com",
-    //   isEmailVerified: true,
-    //   hasLogin: true,
-    //   passRestRequired: true,
-    //   status: "ACTIVE",
-    //   companyName: "Company name 1",
-    //   licenseKey: "asdfkljiwjeij",
-    //   totalRedeemedKeys: 20,
-    //   expiryDate: "2025-02-26T07:45:38.604Z",
-    //   createdDate: "2025-02-26T07:45:38.604Z",
-    // },
-  ]);
-
+  const [users, setUsers] = useState<any>([]);
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchUserText, setSearchUserText] = useState("");
-  const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
-  const [dashboardSummary, setDashboardSummary] = useState<any>({});
-  const [currentStatus, setCurrentStatus] =
-    useState<APPLICATIONS_STATUS>("PENDING");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
-  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
   // redux
   const dispatch = useDispatch();
   const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
+  const { hasNewData } = useAppSelector((state) => state.userList);
 
   const fetchAllUsers = async () => {
     const startDate = getValues("startDate");
@@ -103,7 +81,7 @@ export default function Home() {
       pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
     };
 
-    const {users , totalCount} = await getAllUsers(payload);
+    const { users, totalCount } = await getAllUsers(payload);
     setUsers(users);
     setDataCounts(totalCount);
   };
@@ -125,19 +103,11 @@ export default function Home() {
     router.push(`/userDetail/${userId}`);
   };
 
-  const handleClickAllCheckBox = () => {
-    const allApplicationsId = applications.map((app: any) => app.applicationId);
-
-    if (selectedApplications.length > 0) {
-      dispatch(clearApplications());
-    } else {
-      dispatch(addAllApplications(allApplicationsId));
-    }
-  };
+  const handleClickAllCheckBox = () => {};
 
   useEffect(() => {
     fetchAllUsers();
-  }, [searchUserText, currentSelectedPage]);
+  }, [searchUserText, currentSelectedPage, hasNewData]);
 
   const resetFilter = () => {
     setValue("period", null);
@@ -306,10 +276,7 @@ export default function Home() {
               },
             ]}
             data={users}
-            sortingOnClick={(data) => {
-              const newData = data;
-              setApplications(() => newData);
-            }}
+            sortingOnClick={(data) => {}}
             checkBoxOnClick={handleClickCheckBox}
             allCheckBoxOnClick={handleClickAllCheckBox}
             viewBtnOnClick={handleViewUserDetails}
