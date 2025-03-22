@@ -4,25 +4,21 @@ import { AiOutlineClose } from "react-icons/ai";
 import { ActionButton, ApproveButton, CancelButton, RejectButton } from "../buttons";
 import { closeModal } from "@/utils";
 import { useForm } from "react-hook-form";
-import { USER_ROLES, PLAN_PERIODS } from "@/constants";
-import { GenerateLicenseKeysReq } from "@/actions/license";
+import { USER_ROLES, PLAN_PERIODS, PAGINATION_PER_PAGE } from "@/constants";
+import { GenerateLicenseKeysReq, getCompanyList } from "@/actions/license";
 import { useAppSelector } from "@/redux/store";
-import { updateApplicationsStatus } from "@/actions/applications";
 import { useDispatch } from "react-redux";
 import { clearApplications } from "@/redux/selectedApplicationsSlice";
 import { setAlert } from "@/redux/alertSlice";
 import { SearchTextField, TextField } from "../text-field";
 import { generateLicenseKeys } from "@/actions/license";
+import { setCompanies, setTotalCompanyCount } from "@/redux/licenseSlice";
 
 type ApproveModalProps = {
   modalId: string;
 };
 
-
 function GenerateLicenseModal({ modalId }: ApproveModalProps) {
-  const { selectedApplications, selectedApplicationsStatus } = useAppSelector(
-    (state) => state.selectedApplications
-  );
   const {
     register,
     handleSubmit,
@@ -38,7 +34,7 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
     let period = Number(getValues('period'))
     let totalKeys = Number(getValues('totalKeys'))
     try {
-      await generateLicenseKeys({
+      const companies = await generateLicenseKeys({
         companyName,
         role,
         period,
@@ -48,6 +44,24 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
       setValue('role', '')
       setValue('totalKeys', 0)
       closeModal(modalId);
+
+      //refetch company list
+      const data = await getCompanyList({
+          period: null,
+          role: null,
+          createdDate: {
+            startDate: null,
+            endDate: null,
+          },
+          currentPage: 1, // current user seleced page
+          pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page 
+          search: "", // seaerch by FirstName, LastName, Phone, AppliedPosition
+      });
+      //update redux company list
+      dispatch(setCompanies(data.companyList));
+      dispatch(setTotalCompanyCount(data.totalCount));
+
+      //alert message
       dispatch(
         setAlert({
           alertType: "success",

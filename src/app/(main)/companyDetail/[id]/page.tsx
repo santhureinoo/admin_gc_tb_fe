@@ -42,14 +42,13 @@ export default function companyDetail() {
   const [redeemedKeySearch, setRedeemedKeySearch] = useState("");
   const [availableKeySearch, setAvailableKeySearch] = useState("");
   const [availableKeys, setAvailableKeys] = useState<any>([]);
+  const [redeemedKyeCount, setRedeemedKeyCount] = useState<number>(0);
+  const [availableKeyCount, setAvailableKeyCount] = useState<number>(0);
   const [dataCounts, setDataCounts] = useState<number>(0);
-  const [searchApplicationText, setSearchApplicationText] = useState("");
   const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
-  const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] = useState<any>("COMPANY_DETAIL");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
-  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
   // redux
   const dispatch = useDispatch();
   const { selectedApplications, isStatusChanged } = useAppSelector(
@@ -60,9 +59,7 @@ export default function companyDetail() {
 
   const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
-
   };
-
   const handleClickAllCheckBox = () => {
     const allApplicationsId = applications.map((app: any) => app.applicationId);
 
@@ -80,7 +77,9 @@ export default function companyDetail() {
       pageSize: 20,
       isRedeemed: true
   })
+  console.log("this is data", data)
   setRedeemedKeys(data?.licenseList)
+  setRedeemedKeyCount(data?.totalCount)
 }
   const handleFetchAvailableLicenseKeys = async () => {
     const data = await getLicenseKeyListByCompany({
@@ -91,6 +90,7 @@ export default function companyDetail() {
       isRedeemed: false
   })
   setAvailableKeys(data?.licenseList)
+  setAvailableKeyCount(data?.totalCount)
 }
   const handleFetchCompanyDetail = async () => {
     const data = await getCompanyDetail({
@@ -175,12 +175,12 @@ export default function companyDetail() {
               {
                 name: "Redeemed keys",
                 value: "REDEEMED_KEYS",
-                count: 21, //TODO
+                count: redeemedKyeCount, //TODO
               },
               {
                 name: "Available keys",
                 value: "Available_KEYS",
-                count: 21, //TODO
+                count: availableKeyCount, //TODO
               },
             ]}
             hasCount

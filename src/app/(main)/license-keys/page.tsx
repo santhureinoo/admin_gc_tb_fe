@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  getApplications,
-  getDashboarSummary,
-} from "@/actions/applications";
 import { ActionButton, CancelButton, DownloadCSVButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
@@ -13,12 +9,6 @@ import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTab
 import { SearchTextField } from "@/components/common/text-field";
 import { APPLICATIONS_STATUS, MODALS, PAGINATION_PER_PAGE } from "@/constants";
 import { downloadCSV, openModal } from "@/utils";
-import {
-  addAllApplications,
-  addApplications,
-  clearApplications,
-  removeApplications,
-} from "@/redux/selectedApplicationsSlice";
 import { PLAN_PERIODS, USER_ROLES } from "@/constants";
 import { useForm } from "react-hook-form";
 import { useAppSelector } from "@/redux/store";
@@ -27,23 +17,20 @@ import { useDispatch } from "react-redux";
 import GenerateLicenseModal from "@/components/common/modals/GenerateLicenseModal";
 import { getCompanyList, getLicenseCSVData, GetLicenseCSVDataReq } from "@/actions/license";
 import { useRouter } from "next/navigation";
-import { addIds, removeAllIds, removeId } from "@/redux/licenseSlice";
+import { addIds, removeAllIds, removeId, setCompanies, setTotalCompanyCount } from "@/redux/licenseSlice";
 
 
 export default function LicenseKeys() {
-  const [dataCounts, setDataCounts] = useState<number>(0);
   const [companyNameSearch, setCompanyNameSearch] = useState("");
-  const [companies, setCompanies] = useState([]);
-  const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] =
     useState<APPLICATIONS_STATUS>("PENDING");
     const router = useRouter();
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
   const [showDownloadCSV, setShowDownloadCSV] = useState(false);
-  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
+
   // redux
   const dispatch = useDispatch();
-  const { ids } = useAppSelector(
+  const { ids, companies, totalCompanyCount } = useAppSelector(
     (state) => state.license
   );
   useEffect(() => {
@@ -68,18 +55,18 @@ export default function LicenseKeys() {
   const fetchCompanyList = async () => {
     let period = getValues('period')
     const data = await getCompanyList({
-    period: Number(period),
-    role: getValues('role'),
-    createdDate: {
-      startDate: getValues('startDate'),
-      endDate: getValues('endDate'),
-    },
-    currentPage: currentSelectedPage, // current user seleced page
-    pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page 
-    search: companyNameSearch, // seaerch by FirstName, LastName, Phone, AppliedPosition
+      period: Number(period),
+      role: getValues('role'),
+      createdDate: {
+        startDate: getValues('startDate'),
+        endDate: getValues('endDate'),
+      },
+      currentPage: currentSelectedPage, // current user seleced page
+      pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page 
+      search: companyNameSearch, // seaerch by FirstName, LastName, Phone, AppliedPosition
     });
-    setDataCounts(data?.totalCount)
-    setCompanies(data?.companyList);
+    dispatch(setTotalCompanyCount(data?.totalCount));
+    dispatch(setCompanies(data?.companyList));
     console.log("this is company data", data.companyList)
   };
 
@@ -345,7 +332,7 @@ export default function LicenseKeys() {
             data={companies}
             sortingOnClick={(data) => {
               const newData = data;
-              setCompanies(() => newData);
+              dispatch(setCompanies(newData));
             }}
             selectedRowsId={ids}
             checkBoxOnClick={handleClickCheckBox}
@@ -353,7 +340,7 @@ export default function LicenseKeys() {
             viewBtnOnClick={handleViewCompanyDetails}
           />
           <Pagination
-            totalCounts={dataCounts}
+            totalCounts={totalCompanyCount}
             setCurrentSelectedPage={setCurrentSelectedPage}
             currentSelectedPage={currentSelectedPage}
           />
