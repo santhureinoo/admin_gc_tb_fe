@@ -24,7 +24,6 @@ async function post(isPublic: boolean, subUrl: string, body: any = null) {
   const url = process.env.NEXT_PUBLIC_API_URL + subUrl;
 
   let encryptToken = (await getCookie(ACCESS_TOKEN)) ?? "";
-  console.log("** enctypt token **", encryptToken);
   if (!isPublic) {
     userToken = (await getDecryptedAccessToken(encryptToken)) ?? "";
     Object.assign(config, { Authorization: "Bearer " + userToken });

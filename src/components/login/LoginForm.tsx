@@ -44,7 +44,6 @@ function LoginForm() {
     setLoading(true);
     try {
       const response = await login({ email, password });
-      console.log("this is login response", response);
       if (response?.access_token) {
         setCookie(ACCESS_TOKEN, await getEncryptedToken(response?.access_token), {
           maxAge: response?.expires_in,
