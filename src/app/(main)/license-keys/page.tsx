@@ -50,7 +50,11 @@ export default function LicenseKeys() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<LicenseFilterFields>();
+  } = useForm<LicenseFilterFields>({
+    defaultValues: {
+      period: 12, // Default value set to 12 months
+    },
+  });
 
   const fetchCompanyList = async () => {
     let period = getValues('period')
@@ -241,7 +245,6 @@ export default function LicenseKeys() {
                         required: "Period is required",
                       })}
                       className="select w-full bg-transparent border border-[#C4C4C4]"
-                      defaultValue=""
                     >
                       <option value="" disabled>
                         Select Period

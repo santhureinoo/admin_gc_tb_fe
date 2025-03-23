@@ -50,7 +50,11 @@ export default function Home() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<UserFilterFields>();
+  } = useForm<UserFilterFields>({
+    defaultValues: {
+      period: 12, // Default value set to 12 months
+    },
+  });
 
   const router = useRouter();
   const [users, setUsers] = useState<any>([]);
@@ -177,7 +181,6 @@ export default function Home() {
                         required: "Period is required",
                       })}
                       className="select w-full bg-transparent border border-[#C4C4C4]"
-                      defaultValue=""
                     >
                       <option value="" disabled>
                         Select Period
