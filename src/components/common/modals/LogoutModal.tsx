@@ -39,7 +39,7 @@ function LogoutModal({ modalId }: LogoutModalProps) {
           your work and completed any ongoing tasks.
         </p>
         <div className="flex items-center justify-end mt-[24px] gap-3">
-          <CancelButton onClick={() => closeModal(modalId)} />
+          <CancelButton onClick={() => closeModal(modalId)} name="Cancel"/>
           <RejectButton title="Confirm to logout" onClick={handleLogout} />
         </div>
       </div>

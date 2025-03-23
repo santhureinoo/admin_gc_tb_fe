@@ -38,7 +38,6 @@ export default async function ValidateToken(pathname: string) {
           }
         );
         if (response.ok && userId != "") {
-          console.log("accessToken renewing");
           // update accessToken
           const data = await response.json();
           deleteCookie(ACCESS_TOKEN);
@@ -65,7 +64,6 @@ export default async function ValidateToken(pathname: string) {
       }
     } else {
       // delete all token and remove current User
-      console.log("decryptedRefreshToken null");
       deleteCookie(ACCESS_TOKEN);
       deleteCookie(REFRESH_TOKEN);
       deleteCookie(CURRENT_USER_ID);

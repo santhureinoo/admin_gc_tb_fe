@@ -26,7 +26,6 @@ export const license = createSlice({
       state.ids = state.ids.filter((id) => id !== action.payload);
     },
     setCompanies: (state, action: PayloadAction<any[]>) => {
-      console.log("this is redux companies", action)
       state.companies = action.payload;
     },
     setTotalCompanyCount:   (state, action: PayloadAction<number>) => {

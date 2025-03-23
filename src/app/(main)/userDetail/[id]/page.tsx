@@ -147,7 +147,6 @@ export default function UserDetail() {
   useEffect(() => {
     // fetchDashboardApplications();
   }, [currentStatus, currentSelectedPage]);
-  console.log("** user detail **", userDetail);
   return userDetail == null ? (
     <></>
   ) : (

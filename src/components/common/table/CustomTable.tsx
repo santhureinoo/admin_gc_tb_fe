@@ -39,7 +39,6 @@ function CustomTable({
 }: customTableProps) {
   const [isAscending, setIsAscending] = useState(true);
   const router = useRouter();
-  console.log("*** data ***", data);
   return (
     <div className="w-full max-w-[calc(100vw-150px)] md:max-w-[calc(100vw-360px)]">
       <div className="p-3">

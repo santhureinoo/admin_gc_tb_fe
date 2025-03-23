@@ -62,7 +62,7 @@ function ApproveModal({ modalId }: ApproveModalProps) {
           list.
         </p>
         <div className="flex items-center justify-end mt-[24px] gap-3">
-          <CancelButton onClick={() => closeModal(modalId)} />
+          <CancelButton onClick={() => closeModal(modalId)} name="Cancel"/>
           <ApproveButton title="Approve All" onClick={handleApprove} />
         </div>
       </div>

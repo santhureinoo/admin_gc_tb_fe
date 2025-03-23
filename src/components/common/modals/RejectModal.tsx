@@ -44,7 +44,7 @@ function RejectModal({ modalId }: RejectModalProps) {
           edit applicant’s information anymore.
         </p>
         <div className="flex items-center justify-end mt-[24px] gap-3">
-          <CancelButton onClick={() => closeModal(modalId)} />
+          <CancelButton onClick={() => closeModal(modalId)} name="Cancel"/>
           <RejectButton title="Reject" onClick={handleReject} />
         </div>
       </div>

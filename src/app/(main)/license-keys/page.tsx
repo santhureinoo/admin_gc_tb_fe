@@ -67,7 +67,6 @@ export default function LicenseKeys() {
     });
     dispatch(setTotalCompanyCount(data?.totalCount));
     dispatch(setCompanies(data?.companyList));
-    console.log("this is company data", data.companyList)
   };
 
   useEffect(() => {
@@ -128,7 +127,6 @@ export default function LicenseKeys() {
     }
     try {
         const data = await getLicenseCSVData(payload);
-        console.log(data);
         
         downloadCSV(data, "test");
     }

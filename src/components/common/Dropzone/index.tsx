@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 
 const CSVUploader = () => {
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log("Accepted files:", acceptedFiles);
+    
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({

@@ -44,7 +44,6 @@ function LoginForm() {
     setLoading(true);
     try {
       const response = await login({ email, password });
-      console.log("this is login response", response);
       if (response?.access_token) {
         setCookie(ACCESS_TOKEN, await getEncryptedToken(response?.access_token), {
           maxAge: response?.expires_in,
@@ -57,11 +56,10 @@ function LoginForm() {
         setCookie(CURRENT_USER_ID, await getEncryptedToken(response?.user_id), {
           maxAge: response?.refresh_expires_in,
         });
-        
         dispatch(
           setAlert({
             alertType: "success",
-            alertMessage: `Welcome ${response?.user_first_name}`,
+            alertMessage: `Welcome to Global Caring Handbook Admin`,
           })
         );
         setLoading(false);

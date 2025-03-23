@@ -120,7 +120,6 @@ export default function VerifyOTP() {
 
         try {
             const response = await resendOTP(resendOtpReq);
-            console.log(response);
             // setCountdown(90); 
             if(response) {
                 dispatch(

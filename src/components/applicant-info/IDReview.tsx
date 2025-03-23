@@ -6,7 +6,6 @@ type IDReviewProps = {
   applicationDetails: any;
 };
 function IDReview({ applicationDetails }: IDReviewProps) {
-  console.log("applicationDetails?.poiDetails", applicationDetails?.poiDetails);
 
   const filterPOI = (documentCategory: string) => {
     const filteredValue = applicationDetails?.poiDetails?.filter(
@@ -14,7 +13,6 @@ function IDReview({ applicationDetails }: IDReviewProps) {
     );
     return filteredValue;
   };
-  console.log("poi", filterPOI("FOREIGN_PASSPORT"));
   return (
     <div
       id={"section-a9"}

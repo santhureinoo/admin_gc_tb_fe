@@ -77,7 +77,6 @@ export default function companyDetail() {
       pageSize: 20,
       isRedeemed: true
   })
-  console.log("this is data", data)
   setRedeemedKeys(data?.licenseList)
   setRedeemedKeyCount(data?.totalCount)
 }
@@ -132,7 +131,6 @@ export default function companyDetail() {
       }
       try {
           const data = await getLicenseCSVData(payload);
-          console.log(data);
           
           downloadCSV(data, "test");
       }
