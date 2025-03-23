@@ -53,39 +53,17 @@ export default function Home() {
   } = useForm<UserFilterFields>();
 
   const router = useRouter();
-  const [users, setUsers] = useState<any>([
-    // {
-    //   userId: "fe43cd8d-af9a-4bc1-b7bd-fa337977afbb",
-    //   keycloakId: "9e22ca26-0989-45ba-b491-2aecd1e98f11",
-    //   name: "hello world",
-    //   userRole: "ADMIN",
-    //   email: "admin@gmail.com",
-    //   isEmailVerified: true,
-    //   hasLogin: true,
-    //   passRestRequired: true,
-    //   status: "ACTIVE",
-    //   companyName: "Company name 1",
-    //   licenseKey: "asdfkljiwjeij",
-    //   totalRedeemedKeys: 20,
-    //   expiryDate: "2025-02-26T07:45:38.604Z",
-    //   createdDate: "2025-02-26T07:45:38.604Z",
-    // },
-  ]);
-
+  const [users, setUsers] = useState<any>([]);
   const [dataCounts, setDataCounts] = useState<number>(0);
   const [searchUserText, setSearchUserText] = useState("");
-  const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
-  const [dashboardSummary, setDashboardSummary] = useState<any>({});
-  const [currentStatus, setCurrentStatus] =
-    useState<APPLICATIONS_STATUS>("PENDING");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
-  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
   // redux
   const dispatch = useDispatch();
   const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
+  const { hasNewData } = useAppSelector((state) => state.userList);
 
   const fetchAllUsers = async () => {
     const startDate = getValues("startDate");
@@ -103,21 +81,9 @@ export default function Home() {
       pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
     };
 
-    // {
-    //   period: null,
-    //   role: getValues("role"),
-    //   search: searchUserText, // seaerch by FirstName, LastName, Phone, AppliedPosition
-    //   createdDate: {
-    //     startDate: getValues("startDate"), // yyyy-mm-dd
-    //     endDate: getValues("endDate"), // yyyy-mm-dd
-    //   },
-    //   currentPage: currentSelectedPage, // current user seleced page
-    //   pageSize: PAGINATION_PER_PAGE, // number of applications to be fetch per page
-    // }
-
-    const data = await getAllUsers(payload);
-    setUsers(data);
-    setDataCounts(data?.length);
+    const { users, totalCount } = await getAllUsers(payload);
+    setUsers(users);
+    setDataCounts(totalCount);
   };
 
   const handleClickCheckBox = (id: number, applicationStatus: string) => {
@@ -137,19 +103,11 @@ export default function Home() {
     router.push(`/userDetail/${userId}`);
   };
 
-  const handleClickAllCheckBox = () => {
-    const allApplicationsId = applications.map((app: any) => app.applicationId);
-
-    if (selectedApplications.length > 0) {
-      dispatch(clearApplications());
-    } else {
-      dispatch(addAllApplications(allApplicationsId));
-    }
-  };
+  const handleClickAllCheckBox = () => {};
 
   useEffect(() => {
     fetchAllUsers();
-  }, [searchUserText, currentSelectedPage]);
+  }, [searchUserText, currentSelectedPage, hasNewData]);
 
   const resetFilter = () => {
     setValue("period", null);
@@ -170,111 +128,108 @@ export default function Home() {
             <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
               Users
             </h3>
-                  <ActionButton
-                    onClick={() => openModal(MODALS.uploadCSVModalID)}
-                    name="+ Upload CSV"
-                  />
+            <ActionButton
+              onClick={() => openModal(MODALS.uploadCSVModalID)}
+              name="+ Upload CSV"
+            />
           </div>
-          <div className="flex flex-col items-start xl:flex-row xl:items-center justify-between">
+          <div className="flex flex-col">
             <div className="flex flex-row items-center justify-between">
               <SearchTextField
                 onChange={(value) => setSearchUserText(value)}
                 placeholder="Search User"
               />
-        <form 
-        onSubmit={handleSubmit(fetchAllUsers)}>
-        <UserFilterDrawer
-                id={"user-filter-drawer"}
-                buttonLabel={"User Filter"}
-              >
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[18px] font-bold">
-                    Filters
-                  </h3>
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    User Roles
-                  </h3>
-                  <select
-                    {...register("role", {
-                      required: "User role is required",
-                    })}
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select User Role
-                    </option>
-                    {USER_ROLES.map((role) => (
-                      <option key={role.value} value={role.value}>
-                        {role.label}
+              <form onSubmit={handleSubmit(fetchAllUsers)}>
+                <UserFilterDrawer
+                  id={"user-filter-drawer"}
+                  buttonLabel={"Filters"}
+                >
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[18px] font-bold">
+                      Filters
+                    </h3>
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      User Roles
+                    </h3>
+                    <select
+                      {...register("role", {
+                        required: "User role is required",
+                      })}
+                      className="select w-full bg-transparent border border-[#C4C4C4]"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        Select User Role
                       </option>
-                    ))}
-                  </select>
-
-                </div>
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    Plan Periods
-                  </h3>
-                  <select
-                    {...register("period", {
-                      required: "Period is required",
-                    })}
-                    className="select w-full bg-transparent border border-[#C4C4C4]"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select Period
-                    </option>
-                    {PLAN_PERIODS.map((period) => (
-                      <option key={period.value} value={period.value}>
-                        {period.label}
+                      {USER_ROLES.map((role) => (
+                        <option key={role.value} value={role.value}>
+                          {role.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      Plan Periods
+                    </h3>
+                    <select
+                      {...register("period", {
+                        required: "Period is required",
+                      })}
+                      className="select w-full bg-transparent border border-[#C4C4C4]"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        Select Period
                       </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2 border-b py-[16px]">
-                  <h3 className="text-neutralGrey-grey600 text-[16px]">
-                    Created Date Filter
-                  </h3>
-                  <div
-                    style={{ position: "relative" }}
-                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
-                  >
-                    <input
-                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
-                      placeholder={"Start Date"}
-                      type={"date"}
-                      {...register("startDate")}
-                      style={{ boxShadow: "none" }}
-                    />
+                      {PLAN_PERIODS.map((period) => (
+                        <option key={period.value} value={period.value}>
+                          {period.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <div
-                    style={{ position: "relative" }}
-                    className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
-                  >
-                    <input
-                      className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
-                      placeholder={"End Date"}
-                      {...register("endDate")}
-                      type={"date"}
-                      style={{ boxShadow: "none" }}
-                    />
+                  <div className="flex flex-col gap-2 border-b py-[16px]">
+                    <h3 className="text-neutralGrey-grey600 text-[16px]">
+                      Created Date Filter
+                    </h3>
+                    <div
+                      style={{ position: "relative" }}
+                      className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
+                    >
+                      <input
+                        className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                        placeholder={"Start Date"}
+                        type={"date"}
+                        {...register("startDate")}
+                        style={{ boxShadow: "none" }}
+                      />
+                    </div>
+                    <div
+                      style={{ position: "relative" }}
+                      className={`rounded-corner-radius-corner-radius-4 border-[1px] border-solid flex flex-row items-center justify-start py-[9px] px-[11px] gap-3 text-sm text-neutral-500 font-paragraph-small-regular mq450:flex-wrap w-full`}
+                    >
+                      <input
+                        className="border-none outline-none bg-transparent h-[26px] w-full flex-1 flex flex-row items-center justify-start font-body-2 font-medium text-base text-neutral-grey-700"
+                        placeholder={"End Date"}
+                        {...register("endDate")}
+                        type={"date"}
+                        style={{ boxShadow: "none" }}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="flex w-full flex-row justify-between mt-4">
-                  <CancelButton
-                    name="Reset"
-                    onClick={() => {
-                      resetFilter();
-                      fetchAllUsers();
-                    }}
-                  />
-                  <ActionButton name="Apply Filter" type="submit" />
-                </div>
-              </UserFilterDrawer>
-        </form>
-
+                  <div className="flex w-full flex-row justify-between mt-4">
+                    <CancelButton
+                      name="Reset"
+                      onClick={() => {
+                        resetFilter();
+                        fetchAllUsers();
+                      }}
+                    />
+                    <ActionButton name="Apply Filter" type="submit" />
+                  </div>
+                </UserFilterDrawer>
+              </form>
             </div>
           </div>
           <CustomTable
@@ -321,10 +276,7 @@ export default function Home() {
               },
             ]}
             data={users}
-            sortingOnClick={(data) => {
-              const newData = data;
-              setApplications(() => newData);
-            }}
+            sortingOnClick={(data) => {}}
             checkBoxOnClick={handleClickCheckBox}
             allCheckBoxOnClick={handleClickAllCheckBox}
             viewBtnOnClick={handleViewUserDetails}

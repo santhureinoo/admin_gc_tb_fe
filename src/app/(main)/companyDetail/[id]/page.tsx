@@ -6,7 +6,7 @@ import {
 } from "@/actions/applications";
 import { getUserById } from "@/actions/users";
 import Badge from "@/components/common/badge";
-import { ActionButton } from "@/components/common/buttons";
+import { ActionButton, DownloadCSVButton } from "@/components/common/buttons";
 import {
   LicenceFilterDrawer,
   UserFilterDrawer,
@@ -17,21 +17,21 @@ import Pagination from "@/components/common/pagination";
 import { StatusBarList } from "@/components/common/status-bar";
 import CustomTable from "@/components/common/table";
 import { SearchTextField } from "@/components/common/text-field";
-import { APPLICATIONS_STATUS, PAGINATION_PER_PAGE } from "@/constants";
+import { useRouter } from "next/navigation";
+import { APPLICATIONS_STATUS, MODALS, PAGINATION_PER_PAGE } from "@/constants";
 import {
   addAllApplications,
-  addApplications,
   clearApplications,
-  removeApplications,
 } from "@/redux/selectedApplicationsSlice";
 import { useAppSelector } from "@/redux/store";
-import { getPaginationTotalPages, openModal } from "@/utils";
+import { downloadCSV, getPaginationTotalPages, openModal } from "@/utils";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "next/navigation";
-import { getCompanyDetail, getLicenseKeyListByCompany, GetLicenseKeyListByCompanyReq } from "@/actions/license";
+import { getCompanyDetail, getLicenseCSVData, GetLicenseCSVDataReq, getLicenseKeyListByCompany } from "@/actions/license";
 import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTable";
 import { setAlert } from "@/redux/alertSlice";
+import {  addIds } from "@/redux/licenseSlice";
 
 export default function companyDetail() {
   const { id } = useParams();
@@ -43,34 +43,23 @@ export default function companyDetail() {
   const [redeemedKeySearch, setRedeemedKeySearch] = useState("");
   const [availableKeySearch, setAvailableKeySearch] = useState("");
   const [availableKeys, setAvailableKeys] = useState<any>([]);
+  const [redeemedKyeCount, setRedeemedKeyCount] = useState<number>(0);
+  const [availableKeyCount, setAvailableKeyCount] = useState<number>(0);
   const [dataCounts, setDataCounts] = useState<number>(0);
-  const [searchApplicationText, setSearchApplicationText] = useState("");
   const [applications, setApplications] = useState([1, 2, 2, 3, 3, 3, 4, 4]);
-  const [dashboardSummary, setDashboardSummary] = useState<any>({});
   const [currentStatus, setCurrentStatus] = useState<any>("COMPANY_DETAIL");
   const [currentSelectedPage, setCurrentSelectedPage] = useState<number>(1);
 
-  const [isAuResident, setIsAuResident] = useState<null | boolean>(null);
+  const router = useRouter();
   // redux
   const dispatch = useDispatch();
   const { selectedApplications, isStatusChanged } = useAppSelector(
     (state) => state.selectedApplications
   );
 
-
-  const handleClickCheckBox = (id: number, applicationStatus: string) => {
+  const handleClickCheckBox = (id: number) => {
     const duplicateId = selectedApplications.find((el) => el == id);
-
-    if (duplicateId == undefined) {
-      dispatch(
-        addApplications({ id: id, applicationStatus: applicationStatus })
-      );
-    }
-    if (duplicateId) {
-      dispatch(removeApplications(id));
-    }
   };
-
   const handleClickAllCheckBox = () => {
     const allApplicationsId = applications.map((app: any) => app.applicationId);
 
@@ -88,7 +77,9 @@ export default function companyDetail() {
       pageSize: 20,
       isRedeemed: true
   })
+  console.log("this is data", data)
   setRedeemedKeys(data?.licenseList)
+  setRedeemedKeyCount(data?.totalCount)
 }
   const handleFetchAvailableLicenseKeys = async () => {
     const data = await getLicenseKeyListByCompany({
@@ -99,6 +90,7 @@ export default function companyDetail() {
       isRedeemed: false
   })
   setAvailableKeys(data?.licenseList)
+  setAvailableKeyCount(data?.totalCount)
 }
   const handleFetchCompanyDetail = async () => {
     const data = await getCompanyDetail({
@@ -111,6 +103,7 @@ export default function companyDetail() {
     handleFetchCompanyDetail();
     handleFetchRedeemedLicenseKeys();
     handleFetchAvailableLicenseKeys();
+    dispatch(addIds([+id]));
   }, []);
 
 
@@ -131,6 +124,23 @@ export default function companyDetail() {
       })
     );
   }
+  const getCSVData = async () => {
+      // please replace with dynamic data
+      const payload: GetLicenseCSVDataReq = {
+          ids: [+id],
+          type: "all"
+      }
+      try {
+          const data = await getLicenseCSVData(payload);
+          console.log(data);
+          
+          downloadCSV(data, "test");
+      }
+      catch(error) {
+          console.log(error);
+      }
+    }
+    
   return companyDetail == null ? (
     <></>
   ) : (
@@ -146,15 +156,14 @@ export default function companyDetail() {
           <h3 className="text-neutralGrey800 text-[20px] font-[700] mb-[24px]">
             {companyDetail.companyName}
           </h3>
-          <p>
-            Created date-{" "}
-            {new Date(companyDetail.createdDate).toLocaleDateString()}
-          </p>
-          <div className="inline-flex items-center justify-center bg-[#EEFFDD] py-[10px] rounded-md mt-3">
-            {/* <p className="text-[#379708] text-nowrap font-[400] px-[20px]">
-              {userDetail.status}
-            </p> */}
+          <div className="flex flex-row w-full justify-between items-center">
+            <p>
+              Created date-{" "}
+              {new Date(companyDetail.createdDate).toLocaleDateString()}
+            </p>
+            <DownloadCSVButton title="Download CSV" onClick={() => openModal(MODALS.downloadCSVModalId)} />
           </div>
+         
           <StatusBarList
             activeValue={currentStatus}
             statusBarList={[
@@ -166,12 +175,12 @@ export default function companyDetail() {
               {
                 name: "Redeemed keys",
                 value: "REDEEMED_KEYS",
-                count: 21, //TODO
+                count: redeemedKyeCount, //TODO
               },
               {
                 name: "Available keys",
                 value: "Available_KEYS",
-                count: 21, //TODO
+                count: availableKeyCount, //TODO
               },
             ]}
             hasCount
@@ -258,27 +267,34 @@ export default function companyDetail() {
                 handleEnterKey={handleFetchRedeemedLicenseKeys}
               />
               <CustomLicenseKeyTable
-                actionButtonText="Copy Key"
+                actionButtonText="View User Detail"
                 isCopy={true}
+                idProps="licenseKey"
+                hasCheckbox={false}
                 selectedRowsId={selectedApplications}
                 headersList={[
                   {
                     name: "License Key",
                     bodyKeyName: "licenseKey",
-                    sortable: true,
-                    sortableType: "string",
                   },
                   {
                     name: "User role",
-                    bodyKeyName: "email",
-                    sortable: true,
-                    sortableType: "number",
+                    bodyKeyName: "role",
                   },
                   {
                     name: "Plan period",
-                    bodyKeyName: "status",
-                    sortable: true,
+                    bodyKeyName: "period",
                   },
+                  {
+                    name: "Activated Date",
+                    bodyKeyName: "activationDate",
+                    type: "DATE",
+                  },
+                  {
+                    name: "Expiry Date",
+                    bodyKeyName: "expiryDate",
+                    type: "DATE",
+                  }
                  
                 ]}
                 data={redeemedKeys}
@@ -288,7 +304,8 @@ export default function companyDetail() {
                 }}
                 checkBoxOnClick={handleClickCheckBox}
                 allCheckBoxOnClick={handleClickAllCheckBox}
-                viewBtnOnClick={(value) => copyKey(value)}
+                isUserDetailRedirect={true}
+                viewBtnOnClick={(value) => router.push(`/userDetail/${value}`)}
               />
               <Pagination
                 totalCounts={dataCounts}
@@ -308,25 +325,22 @@ export default function companyDetail() {
               />
               <CustomLicenseKeyTable
                 actionButtonText="Copy Key"
+                idProps="licenseKey"
+                hasCheckbox={false}
                 isCopy={true}
                 selectedRowsId={selectedApplications}
                 headersList={[
                   {
                     name: "License Key",
                     bodyKeyName: "licenseKey",
-                    sortable: true,
-                    sortableType: "string",
                   },
                   {
                     name: "User role",
                     bodyKeyName: "role",
-                    sortable: true,
-                    sortableType: "number",
                   },
                   {
                     name: "Plan period",
                     bodyKeyName: "period",
-                    sortable: true,
                   },
                  
                 ]}

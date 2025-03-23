@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { ActionButton, CancelButton } from "../buttons";
+import Filter from "../../../../public/svg/Right.svg"
 
 type UserFilterDrawerProps = {
   id: string;
@@ -32,9 +33,9 @@ function UserFilterDrawer({
         className="drawer-toggle"
         onChange={(e) => setIsOpen(e.target.checked)}
       />
-      <div className="drawer-content">
-        <label htmlFor={id} className="drawer-button btn btn-primary">
-          {buttonLabel}
+      <div className="drawer-content w-full">
+      <label htmlFor={id} className="drawer-button border border-black py-2 px-4 rounded-lg flex flex-row items-center gap-2">
+          {buttonLabel} <Filter />
         </label>
       </div>
       <div className="drawer-side">

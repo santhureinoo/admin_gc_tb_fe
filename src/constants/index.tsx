@@ -1,6 +1,9 @@
 import { IoMailOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 import { AiOutlineFileSearch, AiOutlineMan } from "react-icons/ai";
+import { FaRegUser } from "react-icons/fa";
+import { LuKeySquare } from "react-icons/lu";
+import KeyIcon from '../../public/svg/key_icon.svg';
 import { AiOutlineFileExcel } from "react-icons/ai";
 
 // cookie naming
@@ -35,7 +38,22 @@ export const MODALS = {
   logoutModalId: "modal_3",
   generateLicenseModalId: "modal_4",
   uploadCSVModalID: "modal_5",
+  downloadCSVModalId: "modal_6",
 };
+export const DOWNLOAD_CSV_OPTIONS = [
+  {
+    label: "All License Keys",
+    value: "all"
+  },
+  {
+    label: "Only Available Keys",
+    value: "avail"
+  },
+  {
+    label: "Only redeemed Keys",
+    value: "redeem"
+  },
+]
 export const USER_ROLES = [
   {
     label: "Care Worker",
@@ -61,8 +79,24 @@ export const PLAN_PERIODS = [
     value: 6
   },
   {
+    label: "9 months",
+    value: 9
+  },
+  {
     label: "12 months",
     value: 12
+  },
+  {
+    label: "15 months",
+    value: 15
+  },
+  {
+    label: "18 months",
+    value: 18
+  },
+  {
+    label: "21 months",
+    value: 21
   },
   {
     label: "24 months",
@@ -73,13 +107,13 @@ export const SIDE_BAR_OPTIONS = [
   {
     id: 1,
     name: "Users",
-    icon: AiOutlineFileSearch,
+    icon: FaRegUser,
     route: "/",
   },
   {
     id: 2,
     name: "License Keys Management",
-    icon: AiOutlineFileSearch,
+    icon: LuKeySquare,
     route: "/license-keys",
   },
   {
@@ -88,36 +122,6 @@ export const SIDE_BAR_OPTIONS = [
     icon: IoIosLogOut,
     route: "/login",
   }
-  // {
-  //   id: 2,
-  //   name: "Rejected Users",
-  //   icon: AiOutlineFileExcel,
-  //   route: "/rejected-applications",
-  // },
-  // {
-  //   id: 3,
-  //   name: "Users",
-  //   icon: IoIosLogOut,
-  //   route: "/login",
-  // },
-  // {
-  //   id: 4,
-  //   name: "User Roles",
-  //   icon: IoMailOutline,
-  //   route: "/send-email",
-  // },
-  // {
-  //   id: 3,
-  //   name: "Users",
-  //   icon: AiOutlineMan,
-  //   route: "/login",
-  // },
-  // {
-  //   id: 4,
-  //   name: "User Roles",
-  //   icon: IoMailOutline,
-  //   route: "/send-email",
-  // },
 ];
 
 //position is to decide which certificate to render based on the applied position

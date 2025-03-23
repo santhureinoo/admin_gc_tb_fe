@@ -10,6 +10,7 @@ type headerValue = {
   sortable?: boolean;
   sortableType?: "string" | "number";
   type?: "DATE" | "TEXT";
+  value?: any;
 };
 
 type customTableProps = {
@@ -45,7 +46,7 @@ function CustomTable({
           <table className="table-auto w-full border-collapse border border-slate-200">
             <thead className="text-[13px] sticky top-0 z-40">
               <tr className="border border-slate-200">
-                <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA]">
+                {/* <th className="px-5 py-4  border border-slate-200 bg-[#FAFAFA]">
                   <div className="font-medium text-left">
                     <input
                       onChange={() => allCheckBoxOnClick()}
@@ -58,7 +59,7 @@ function CustomTable({
                       className="checkbox bg-white border border-neutralGrey-grey400 [--chkbg:#15B0AC] [--chkfg:#FFFFFF] checked:border-none checkbox-sm"
                     />
                   </div>
-                </th>
+                </th> */}
                 {headersList.map((tableHeader, index) => (
                   <th
                     key={index}
@@ -71,7 +72,7 @@ function CustomTable({
                     <div className="flex items-center justify-between font-medium text-left text-nowrap">
                       {tableHeader.name}
 
-                      {tableHeader.sortable == true ? (
+                      {/* {tableHeader.sortable == true ? (
                         <FaSort
                           className="cursor-pointer ml-[40px]"
                           onClick={() => {
@@ -86,7 +87,7 @@ function CustomTable({
                             setIsAscending((prev) => !prev);
                           }}
                         />
-                      ) : null}
+                      ) : null} */}
                     </div>
                   </th>
                 ))}
@@ -103,7 +104,7 @@ function CustomTable({
             <tbody className="text-sm font-medium">
               {data?.map((el: any, index: any) => (
                 <tr className="border border-slate-200" key={index}>
-                  <td className="pl-5">
+                  {/* <td className="pl-5">
                     <input
                       checked={
                         selectedRowsId?.find(
@@ -121,7 +122,7 @@ function CustomTable({
                       type="checkbox"
                       className="checkbox bg-white border border-neutralGrey-grey400 [--chkbg:#15B0AC] [--chkfg:#FFFFFF] checked:border-none checkbox-sm"
                     />
-                  </td>
+                  </td> */}
                   {headersList.map((hd, idx) => {
                     if (hd.ComponentName == null) {
                       return (

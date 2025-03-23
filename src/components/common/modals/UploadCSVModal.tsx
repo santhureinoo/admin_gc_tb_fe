@@ -1,35 +1,24 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-  ActionButton,
-  ApproveButton,
-  CancelButton,
-  RejectButton,
-} from "../buttons";
+import { ActionButton, CancelButton } from "../buttons";
 import { closeModal } from "@/utils";
 import { useForm, Controller } from "react-hook-form";
 import { USER_ROLES, PLAN_PERIODS } from "@/constants";
-import { GenerateLicenseKeysReq } from "@/actions/license";
 import { useAppSelector } from "@/redux/store";
-import { updateApplicationsStatus } from "@/actions/applications";
 import { useDispatch } from "react-redux";
-import { clearApplications } from "@/redux/selectedApplicationsSlice";
-import { setAlert } from "@/redux/alertSlice";
-import { SearchTextField, TextField } from "../text-field";
-import { generateLicenseKeys } from "@/actions/license";
-import CSVUploader from "../Dropzone";
+import { TextField } from "../text-field";
 import { useDropzone } from "react-dropzone";
 import { uploadUserCSV } from "@/actions/users";
+import UploadIcon from "../../../../public/svg/upload_icon.svg";
 
+import { FaRegTrashCan } from "react-icons/fa6";
+import { toggleHasNewData } from "@/redux/userListSlice";
 type ApproveModalProps = {
   modalId: string;
 };
 
 function UploadCSVModal({ modalId }: ApproveModalProps) {
-  const { selectedApplications, selectedApplicationsStatus } = useAppSelector(
-    (state) => state.selectedApplications
-  );
   const {
     register,
     handleSubmit,
@@ -38,13 +27,12 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
     getValues,
     formState: { errors },
   } = useForm<any>();
-
   const dispatch = useDispatch();
+  const file = getValues("file");
 
   const handleUserCSVUpload = async (data: any) => {
     const { companyName, role, period, file } = data;
     const formData = new FormData();
-    formData.append("email", "jkljsldf");
     formData.append("file", file[0]);
     const response = await uploadUserCSV({
       companyName: companyName,
@@ -52,6 +40,9 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
       period: period,
       formData,
     });
+    dispatch(toggleHasNewData());
+    closeModal(modalId);
+    resetData();
   };
 
   const onDrop = useCallback(
@@ -69,6 +60,17 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
     multiple: true,
   });
 
+  const resetData = () => {
+    setValue("companyName", "");
+    setValue("period", "");
+    setValue("role", "");
+    setValue("file", null, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
   return (
     <dialog id={modalId} className="modal">
       <form
@@ -81,7 +83,10 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
           </p>
           <AiOutlineClose
             className="cursor-pointer"
-            onClick={() => closeModal(modalId)}
+            onClick={() => {
+              closeModal(modalId);
+              resetData();
+            }}
           />
         </div>
         <TextField
@@ -124,27 +129,51 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
             ))}
           </select>
         </div>
-        <Controller
-          name="file"
-          control={control}
-          render={() => (
-            <div
-              {...getRootProps()}
-              className="border-2 border-dashed p-6 text-center cursor-pointer"
-            >
-              <input {...getInputProps()} />
-              <p>Drag & drop CSV or image files here, or click to select</p>
-            </div>
-          )}
-        />
+        {file == undefined || null ? (
+          <Controller
+            name="file"
+            control={control}
+            render={() => (
+              <div
+                {...getRootProps()}
+                className="border-2 border-dashed p-6 text-center cursor-pointer flex flex-col items-center gap-[10px]"
+              >
+                <input {...getInputProps()} />
+                <UploadIcon />
+                <p>
+                  <span>Upload a file</span> or drag and drop
+                </p>
+                <p>CSV file up to 5MB</p>
+              </div>
+            )}
+          />
+        ) : (
+          <div className="flex items-center justify-between">
+            <p>{file[0].name}</p>
+            <FaRegTrashCan
+              className="cursor-pointer"
+              onClick={() => {
+                setValue("file", null, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              }}
+            />
+          </div>
+        )}
+
         <div className="flex items-center justify-end mt-[24px] gap-3">
-          <CancelButton onClick={() => closeModal(modalId)} name="Cancel" />
+          <CancelButton
+            onClick={() => {
+              closeModal(modalId);
+              resetData();
+            }}
+            name="Cancel"
+          />
           <ActionButton name="Confirm" type="submit" />
         </div>
       </form>
-      {/* <form method="dialog" className="modal-backdrop">
-        <button>close</button>
-      </form> */}
     </dialog>
   );
 }
