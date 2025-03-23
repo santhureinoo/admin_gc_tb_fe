@@ -122,14 +122,14 @@ function LoginForm() {
             </button>
           </form>
         </div>
-        <div className="flex gap-1">
+        {/* <div className="flex gap-1">
           <h3 className="text-neutralGrey800-light text-[18px]">
             For more information?
           </h3>
           <p className="text-primary underline text-[18px] cursor-pointer">
             Email us
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
