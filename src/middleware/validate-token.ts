@@ -21,7 +21,7 @@ export default async function ValidateToken(pathname: string) {
   const decryptedAccessToken = await getDecryptedAccessToken(accessToken);
   const decryptedRefreshToken = await getDecryptedRefreshToken(refreshToken);
 
-  if(!PUBLIC_ROUTES.includes('/' + pathname.split('/')[1]) && pathname != "/") {
+  if(!PUBLIC_ROUTES.includes('/' + pathname.split('/')[1]) || pathname == "/") {
     if (decryptedRefreshToken) {
       if (!decryptedAccessToken) {
         // refresh access token
