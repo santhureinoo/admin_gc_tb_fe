@@ -33,7 +33,7 @@ import CustomLicenseKeyTable from "@/components/common/table/CustomLicenseKeyTab
 import { setAlert } from "@/redux/alertSlice";
 import {  addIds } from "@/redux/licenseSlice";
 
-export default function companyDetail() {
+export default function CompanyDetail() {
   const { id } = useParams();
   const [users, setUsers] = useState<any>([
 
@@ -103,7 +103,7 @@ export default function companyDetail() {
     handleFetchRedeemedLicenseKeys();
     handleFetchAvailableLicenseKeys();
     dispatch(addIds([+id]));
-  }, []);
+  }, [id]);
 
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export default function companyDetail() {
       <div className="px-[24px] py-[20px]">
         <div className="flex items-center justify-between">
           <p className="text-black font-[400] text-[14px] flex-1">
-            License Keys Management / Company Key's Details
+            License Keys Management / Company Key&apos;s Details
           </p>
         </div>
         <div className="bg-white p-[24px] my-[16px] min-h-screen">

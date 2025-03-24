@@ -159,7 +159,7 @@ export default function VerifyOTP() {
                         Verify OTP Code
                     </h2>
                     <p className="text-center text-neutralGrey800-light text-[16px] mb-[48px] font-[500]">
-                        Enter the OTP code that we've sent to your email
+                        Enter the OTP code that we&apos;ve sent to your email
                     </p>
                     <form onSubmit={handleSubmit(verifyOtpCode)}>
                         <TextField
