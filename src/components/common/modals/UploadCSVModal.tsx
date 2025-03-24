@@ -27,11 +27,7 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<any>({
-    defaultValues: {
-      period: 12, // Default value set to 12 months
-    },
-  });
+  } = useForm<any>();
   const dispatch = useDispatch();
   const file = getValues("file");
 
@@ -152,6 +148,7 @@ function UploadCSVModal({ modalId }: ApproveModalProps) {
               <select
                 {...register("period", { required: "Period is required" })}
                 className="select w-full bg-transparent border border-[#C4C4C4]"
+                defaultValue={12}
               >
                 <option value="" disabled>
                   Select Period

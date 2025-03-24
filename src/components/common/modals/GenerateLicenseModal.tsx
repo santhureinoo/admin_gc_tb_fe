@@ -26,11 +26,7 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<GenerateLicenseKeysReq>({
-    defaultValues: {
-      period: 12, // Default value set to 12 months
-    },
-  });
+  } = useForm<GenerateLicenseKeysReq>();
   const dispatch = useDispatch();
   const handleGenerateKeys = async () => {
     let companyName = getValues('companyName')
@@ -124,6 +120,7 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
           <select
             {...register("period", { required: "Period is required" })}
             className="select w-full bg-transparent border border-[#C4C4C4]"
+            defaultValue={12}
           >
             <option value="" disabled>
               Select Period
