@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { ActionButton, ApproveButton, CancelButton, RejectButton } from "../buttons";
 import { closeModal } from "@/utils";
@@ -27,23 +27,37 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
     getValues,
     formState: { errors },
   } = useForm<GenerateLicenseKeysReq>();
+
   const dispatch = useDispatch();
+
+  const [emailValid, setEmailValid] = useState(true);
+
   const handleGenerateKeys = async () => {
     let companyName = getValues('companyName')
+    let companyEmail = getValues('companyEmail')
     let role = getValues('role')
     let period = Number(getValues('period'))
     let totalKeys = Number(getValues('totalKeys'))
     try {
+      if(companyEmail != "") {
+        if(!validateEmail(companyEmail ?? "")){
+          setEmailValid(false);
+          return;
+        }
+      }
       const companies = await generateLicenseKeys({
         companyName,
+        companyEmail,
         role,
         period,
         totalKeys,
       });
       setValue('companyName', '')
+      setValue('companyEmail', '')
       setValue('role', '')
       setValue('totalKeys', 0)
       closeModal(modalId);
+
 
       //refetch company list
       const data = await getCompanyList({
@@ -80,6 +94,11 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
     }
   };
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   return (
     <dialog id={modalId} className="modal">
       <form className="modal-box bg-white" onSubmit={handleSubmit(handleGenerateKeys)}>
@@ -98,6 +117,13 @@ function GenerateLicenseModal({ modalId }: ApproveModalProps) {
           placeHolderText={"Company Name"}
           register={register("companyName")}
         />
+        <TextField
+          textFieldHeader={"Company Email"}
+          textFieldType={"text"}
+          placeHolderText={"Company Email"}
+          register={register("companyEmail")}
+        />
+        {!emailValid ? <p className="text-red-500 mt-[-20px]">{"test"}</p> : <></>}
         <div className="flex flex-col gap-2 border-b py-[16px]">
           <h3 className="text-neutralGrey-grey600 text-[16px]">User Roles</h3>
           <select

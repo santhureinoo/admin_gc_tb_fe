@@ -2,6 +2,7 @@ import { fetchWrapper } from "@/helper/fetchWrapper";
 
 export type GenerateLicenseKeysReq = {
   companyName: string,
+  companyEmail?: string,
   role: string,
   period: number,
   totalKeys: number
